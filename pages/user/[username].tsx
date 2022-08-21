@@ -7,7 +7,6 @@ import Section from '../../components/Section';
 import SongCard from '../../components/SongCard';
 import getCurrentSong from '../../fe_controller/song/getCurrentSong';
 import getTopSongs from '../../fe_controller/song/getTopSongs';
-import PromisifyAxiosResponse from '../../util/PromisifyAxiosResponse';
 
 type UsersProps = {
 	user: any;
@@ -16,18 +15,27 @@ type UsersProps = {
 export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
-	const r = await PromisifyAxiosResponse(
-		{
-			user: axios.get(`http://localhost:3000/api/user/${username}`),
-		},
-		'data'
-	);
+	try {
+		const user = await axios.get(`/api/user/${username}`);
+		const rtn = user.data.data;
 
-	return {
-		props: {
-			...r,
-		},
-	};
+		if (!rtn.spotify_users) {
+			throw new Error('No spotify user found');
+		}
+
+		return {
+			props: {
+				user: rtn,
+			},
+		};
+	} catch (error) {
+		return {
+			redirect: {
+				destination: '/users',
+				permanent: false,
+			},
+		};
+	}
 }
 
 const UserPage = ({ user }: UsersProps) => {
