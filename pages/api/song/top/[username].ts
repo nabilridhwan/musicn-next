@@ -59,7 +59,10 @@ export default async function handler(
 		).handleResponse(res);
 	} catch (error: any) {
 		if (error instanceof AxiosError) {
-			if (error.response?.status === 401) {
+			if (
+				error.response?.status === 401 ||
+				error.response?.status === 403
+			) {
 				return new SpotifyInvalidPermissionResponse().handleResponse(
 					res
 				);
