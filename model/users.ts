@@ -1,8 +1,17 @@
-import { PrismaClient } from '@prisma/client';
-const prisma = new PrismaClient();
+import prisma from '../util/PrismaClient';
 
-export async function getAllUsers() {
+export async function getNewUsers(limit: number) {
 	const data = await prisma.app_users.findMany({
+		orderBy: {
+			created_at: 'desc',
+		},
+
+		where: {
+			spotify_users: {
+				isNot: null,
+			},
+		},
+
 		select: {
 			name: true,
 			email: true,
@@ -13,6 +22,31 @@ export async function getAllUsers() {
 					profile_pic_url: true,
 					spotify_userid: true,
 				},
+			},
+		},
+		take: limit,
+	});
+
+	return data || [];
+}
+
+export async function getAllUsers() {
+	const data = await prisma.app_users.findMany({
+		select: {
+			name: true,
+			username: true,
+			spotify_users: {
+				select: {
+					name: true,
+					profile_pic_url: true,
+					spotify_userid: true,
+				},
+			},
+		},
+
+		orderBy: {
+			spotify_users: {
+				name: 'asc',
 			},
 		},
 	});
@@ -44,6 +78,32 @@ export async function getUserByUsername(input: string) {
 		},
 		include: {
 			spotify_users: true,
+		},
+	});
+
+	return data || [];
+}
+
+export async function getUserByUsername_public(input: string) {
+	const data = await prisma.app_users.findMany({
+		select: {
+			name: true,
+			username: true,
+			spotify_users: {
+				select: {
+					name: true,
+					profile_pic_url: true,
+					spotify_userid: true,
+				},
+			},
+		},
+		where: {
+			username: input,
+		},
+		orderBy: {
+			spotify_users: {
+				name: 'asc',
+			},
 		},
 	});
 
