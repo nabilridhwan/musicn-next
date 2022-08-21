@@ -1,6 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
 import InternalServerError from '../../../class/InternalServerError';
+import SuccessResponse from '../../../class/SuccessResponse';
 import { getAllUsers } from '../../../model/users';
 
 (BigInt.prototype as any).toJSON = function () {
@@ -13,7 +14,7 @@ export default async function handler(
 ) {
 	try {
 		const data = await getAllUsers();
-		res.status(200).json({ data });
+		return new SuccessResponse('Success', data).handleResponse(res);
 	} catch (error: any) {
 		return new InternalServerError(error.message).handleResponse(res);
 	}
