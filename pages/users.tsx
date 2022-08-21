@@ -1,15 +1,15 @@
-import axios from 'axios';
 import Link from 'next/link';
 import CenterStage from '../components/CenterStage';
 import Container from '../components/Container';
 import Section from '../components/Section';
+import axiosInstance from '../util/axiosInstance';
 
 type UsersProps = {
 	users: any[];
 };
 
 export async function getServerSideProps() {
-	const users = await axios.get('http://localhost:3000/api/user');
+	const users = await axiosInstance.get(`/api/user`);
 
 	return {
 		props: {
