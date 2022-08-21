@@ -1,5 +1,4 @@
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
 import Link from 'next/link';
 import Container from '../../components/Container';
 import MusicPlayer from '../../components/MusicPlayer';
@@ -7,6 +6,7 @@ import Section from '../../components/Section';
 import SongCard from '../../components/SongCard';
 import getCurrentSong from '../../fe_controller/song/getCurrentSong';
 import getTopSongs from '../../fe_controller/song/getTopSongs';
+import axiosInstance from '../../util/axiosInstance';
 
 type UsersProps = {
 	user: any;
@@ -16,7 +16,7 @@ export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		const user = await axios.get(`/api/user/${username}`);
+		const user = await axiosInstance.get(`/api/user/${username}`);
 		const rtn = user.data.data;
 
 		if (!rtn.spotify_users) {
@@ -29,6 +29,7 @@ export async function getServerSideProps(context: any) {
 			},
 		};
 	} catch (error) {
+		console.log(error);
 		return {
 			redirect: {
 				destination: '/users',
