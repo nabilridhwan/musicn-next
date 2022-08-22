@@ -7,7 +7,7 @@ import NotFoundResponse from '../../../../class/NotFoundResponse';
 import SpotifyInvalidPermissionResponse from '../../../../class/SpotifyInvalidPermissionResponse';
 import SuccessResponse from '../../../../class/SuccessResponse';
 import { getUserByUsername } from '../../../../model/users';
-import { edgeCacheInSeconds } from '../../../../util/setCacheOptions';
+import Cache from '../../../../util/Cache';
 import Spotify from '../../../../util/Spotify';
 
 (BigInt.prototype as any).toJSON = function () {
@@ -18,7 +18,7 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
-	edgeCacheInSeconds(res, 25);
+	Cache.inEdgeServer(res, 30);
 	try {
 		const schema = yup.object().shape({
 			username: yup.string().required('Username required'),

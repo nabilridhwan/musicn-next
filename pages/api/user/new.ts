@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import InternalServerError from '../../../class/InternalServerError';
 import SuccessResponse from '../../../class/SuccessResponse';
 import { getNewUsers } from '../../../model/users';
-import { revalidateBackgroundCache } from '../../../util/setCacheOptions';
+import Cache from '../../../util/Cache';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
@@ -14,7 +14,8 @@ export default async function handler(
 	res: NextApiResponse<any>
 ) {
 	// Cache results in the background and show the 'old' data
-	revalidateBackgroundCache(res);
+	Cache.revalidateInBackground(res);
+
 	try {
 		const data = await getNewUsers(3);
 		return new SuccessResponse('Success', data).handleResponse(res);
