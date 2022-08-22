@@ -1,4 +1,4 @@
-import axiosInstance from '../../util/axiosInstance';
+import axiosInstance from './axiosInstance';
 
 export default async function getCurrentSong(username: string) {
 	const result = await axiosInstance.get(`api/song/current/${username}`);

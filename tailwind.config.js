@@ -13,6 +13,7 @@ module.exports = {
 				background: 'black',
 				text: 'white',
 				primary: '#00bcd4',
+				spotify: '#1DB954',
 			},
 		},
 	},

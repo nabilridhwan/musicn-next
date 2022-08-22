@@ -1,48 +1,59 @@
+import absoluteUrl from 'next-absolute-url';
 import Link from 'next/link';
 import CenterStage from '../components/CenterStage';
 import Container from '../components/Container';
 import Section from '../components/Section';
-import axiosInstance from '../util/axiosInstance';
+import getAllUsers from '../fe_controller/song/getAllUsers';
 
 type UsersProps = {
 	users: any[];
 };
 
 export async function getServerSideProps(context: any) {
-	const users = await axiosInstance.get(`/api/user`);
+	const { origin } = absoluteUrl(context.req);
+	console.log(origin);
+	const users = await getAllUsers();
 
 	return {
 		props: {
-			users: users.data.data,
+			users,
 		},
 	};
 }
 
 const Users = ({ users }: UsersProps) => {
-	console.log(users);
 	return (
 		<CenterStage>
 			<Container>
 				<Section>
 					{users.map((user, index) => {
 						return (
-							<div key={index}>
-								<h1>{decodeURI(user.name)}</h1>
-								<p>@{user.username}</p>
+							<div
+								key={index}
+								className="border border-white/50 break-all my-10 p-5 rounded-xl"
+							>
+								<h2 className="text-2xl font-bold">
+									{decodeURI(user.name)}
+								</h2>
+								<p className="muted text-sm">
+									@{user.username}
+								</p>
 
 								{user.spotify_users && (
 									<div>
-										<p>
+										{/* <p>
 											Spotify name:{' '}
 											{user.spotify_users.name}
 										</p>
 										<p>
 											Spotify user id:{' '}
 											{user.spotify_users.spotify_userid}
-										</p>
+										</p> */}
 
 										<Link href={`/user/${user.username}`}>
-											<a>Profile</a>
+											<a className="btn btn-full my-2">
+												Profile
+											</a>
 										</Link>
 									</div>
 								)}

@@ -1,0 +1,7 @@
+.section {
+	@apply my-20;
+}
+
+.name {
+	@apply text-2xl font-bold;
+}

@@ -1,4 +1,5 @@
 import type { NextPage } from 'next';
+import Link from 'next/link';
 import CenterStage from '../components/CenterStage';
 import Container from '../components/Container';
 import Section from '../components/Section';
@@ -16,9 +17,11 @@ const Home: NextPage = () => {
 							listening to, and create your own Musicn profile.
 						</p>
 
-						<button className="btn btn-full mt-10">
-							Get started
-						</button>
+						<Link href={'/users'}>
+							<button className="btn btn-full mt-10">
+								Get started
+							</button>
+						</Link>
 					</div>
 				</Section>
 			</CenterStage>

@@ -1,12 +1,21 @@
 import { useQuery } from '@tanstack/react-query';
+import { motion } from 'framer-motion';
 import Head from 'next/head';
-import Link from 'next/link';
+import { useState } from 'react';
+import { FaSpotify } from 'react-icons/fa';
 import Container from '../../components/Container';
-import MusicPlayer from '../../components/MusicPlayer';
+import DefaultProfilePicture from '../../components/DefaultProfilePicture';
+import {
+	MusicPlayer,
+	MusicPlayerError,
+	MusicPlayerNotPlaying,
+} from '../../components/MusicPlayer';
 import Section from '../../components/Section';
 import SongCard from '../../components/SongCard';
 import getCurrentSong from '../../fe_controller/song/getCurrentSong';
-import axiosInstance from '../../util/axiosInstance';
+import getTopSongs from '../../fe_controller/song/getTopSongs';
+import getUserDetails from '../../fe_controller/song/getUserDetails';
+import styles from '../../styles/UserPage.module.css';
 
 type UsersProps = {
 	user: any;
@@ -17,20 +26,17 @@ export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		const user = await axiosInstance.get(`/api/user/${username}`);
-		const top = await axiosInstance.get(`/api/song/top/${username}`);
+		const user = await getUserDetails(username);
+		const top = await getTopSongs(username);
 
-		const userRtn = user.data.data;
-		const topRtn = top.data.data;
-
-		if (!userRtn.spotify_users) {
+		if (!user.spotify_users) {
 			throw new Error('No spotify user found');
 		}
 
 		return {
 			props: {
-				user: userRtn,
-				top: topRtn,
+				user,
+				top,
 			},
 		};
 	} catch (error) {
@@ -45,9 +51,7 @@ export async function getServerSideProps(context: any) {
 }
 
 const UserPage = ({ user, top }: UsersProps) => {
-	console.log(user);
-	console.log(top);
-
+	const [imageLoadError, setImageLoadError] = useState(false);
 	// const {
 	// 	data: recentSongsData,
 	// 	isLoading: isRecentSongsLoading,
@@ -67,7 +71,8 @@ const UserPage = ({ user, top }: UsersProps) => {
 		status: currentSongStatus,
 	} = useQuery(
 		['currentSongs', user.username],
-		async () => await getCurrentSong(user.username)
+		async () => await getCurrentSong(user.username),
+		{ retry: 2 }
 	);
 
 	// const {
@@ -85,7 +90,7 @@ const UserPage = ({ user, top }: UsersProps) => {
 	return (
 		<>
 			<Head>
-				<title>{decodeURI(user.name)}&apos;s Profile</title>
+				<title>{decodeURI(user.username)}&apos;s Profile</title>
 
 				<meta
 					name="description"
@@ -97,75 +102,126 @@ const UserPage = ({ user, top }: UsersProps) => {
 			</Head>
 			<Container>
 				<Section>
-					{/* Profile Picture */}
-					{user.spotify_users &&
-						user.spotify_users.profile_pic_url && (
+					<div
+						className={
+							styles.section +
+							' flex items-center justify-center gap-5'
+						}
+					>
+						{/* Profile Picture */}
+						{user.spotify_users &&
+						user.spotify_users.profile_pic_url &&
+						!imageLoadError ? (
 							<img
-								className="rounded-full w-40"
+								onError={() => setImageLoadError(true)}
+								className="rounded-full w-28 h-28"
 								src={user.spotify_users.profile_pic_url}
 								alt={user.spotify_users.name}
 							/>
+						) : (
+							<DefaultProfilePicture />
 						)}
 
-					{/* Name */}
-					<h2>{decodeURI(user.name)}</h2>
+						<div>
+							{/* Name */}
+							<h2 className={styles.name + ' break-all'}>
+								{decodeURI(user.name)}
+							</h2>
 
-					{/* Username */}
-					<p>@{user.username}</p>
+							{/* Username */}
+							<p className="text-sm text-text/70">
+								@{user.username}
+							</p>
 
-					{/* Spotify link */}
-					{user.spotify_users && (
-						<>
-							<Link
-								href={`https://open.spotify.com/user/${user.spotify_users.spotify_userid}`}
-							>
-								<a>Spotify</a>
-							</Link>
-						</>
-					)}
+							{/* Spotify link */}
+							{user.spotify_users && (
+								<>
+									<motion.a
+										href={`https://open.spotify.com/user/${user.spotify_users.spotify_userid}`}
+										whileHover={{
+											scale: 1.1,
+										}}
+										whileTap={{
+											scale: 0.9,
+										}}
+										className="cursor-pointer flex items-center w-min gap-1 bg-spotify p-2 px-4 rounded-lg my-2"
+									>
+										<FaSpotify />
+										Spotify
+									</motion.a>
+								</>
+							)}
+						</div>
+					</div>
 
-					{currentSongStatus === 'success' &&
-						Object.keys(currentSongData).length > 0 && (
+					<div
+						className={
+							styles.section +
+							' flex flex-col items-center text-center'
+						}
+					>
+						{currentSongStatus === 'success' && (
 							<>
-								<p>Currently Listening to</p>
-								<MusicPlayer
-									name={currentSongData.item.name}
-									artists={currentSongData.item.artists
-										.map((a: any) => a.name)
-										.join(', ')}
-									imageUrl={
-										currentSongData.item.album.images[2].url
-									}
-									spotifyLink={
-										currentSongData.item.external_urls
-											?.spotify
-									}
-								/>
+								<p className="text-text/70 mb-5 text-sm">
+									I&apos;m currently listening to
+								</p>
+								{Object.keys(currentSongData).length > 0 ? (
+									<>
+										<MusicPlayer
+											name={currentSongData.item.name}
+											artists={currentSongData.item.artists
+												.map((a: any) => a.name)
+												.join(', ')}
+											imageUrl={
+												currentSongData.item.album
+													.images[2].url
+											}
+											spotifyLink={
+												currentSongData.item
+													.external_urls?.spotify
+											}
+										/>
+									</>
+								) : (
+									<MusicPlayerNotPlaying />
+								)}
 							</>
 						)}
 
-					{/* {topSongsStatus === 'success' &&
+						{currentSongStatus === 'error' && (
+							<>
+								<p className="text-text/70 mb-5 text-sm">
+									I&apos;m currently listening to
+								</p>
+								<MusicPlayerError />
+							</>
+						)}
+					</div>
+
+					<div className={styles.section}>
+						{/* {topSongsStatus === 'success' &&
 					topSongsData &&
 					topSongsData.length > 0 && ( */}
-					<>
-						<h2>Top Songs</h2>
-						<div className="grid grid-cols-2 md:grid-cols-5 gap-5">
-							{top.map((currentSong: any) => (
-								<SongCard
-									key={currentSong.id}
-									name={currentSong.name}
-									artists={currentSong.artists
-										.map((a: any) => a.name)
-										.join(', ')}
-									imageUrl={currentSong.album_art}
-									spotifyLink={
-										currentSong.external_urls?.spotify
-									}
-								/>
-							))}
-						</div>
-					</>
-					{/* )} */}
+						<>
+							<h2 className={styles.name + ' mb-5'}>
+								Top Songs of the month
+							</h2>
+							<div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+								{top.map((currentSong: any) => (
+									<SongCard
+										key={currentSong.id}
+										name={currentSong.name}
+										artists={currentSong.artists
+											.map((a: any) => a.name)
+											.join(', ')}
+										imageUrl={currentSong.album_art}
+										spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
+									/>
+								))}
+							</div>
+						</>
+						{/* )} */}
+					</div>
 				</Section>
 			</Container>
 		</>
