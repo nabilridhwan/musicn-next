@@ -30,9 +30,21 @@ export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		const user = await getUserDetails(username);
-		const top = await getTopSongs(username);
-		const spotify = await getSpotifyUserDetails(username);
+		let user, top, spotify;
+
+		let userPromise = getUserDetails(username);
+		let topPromise = getTopSongs(username);
+		let spotifyPromise = getSpotifyUserDetails(username);
+
+		const promiseResults = await Promise.all([
+			userPromise,
+			topPromise,
+			spotifyPromise,
+		]);
+
+		user = promiseResults[0];
+		top = promiseResults[1];
+		spotify = promiseResults[2];
 
 		if (!user.spotify_users) {
 			throw new Error('No spotify user found');
