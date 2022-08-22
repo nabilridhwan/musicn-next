@@ -56,20 +56,22 @@ export default async function handler(
 			accessToken
 		);
 
-		const cps_data = currentlyPlayingSong.item;
-		currentlyPlayingSong = {
-			id: cps_data.id,
-			name: cps_data.name,
-			artists: cps_data.artists.map((a: any) => ({
-				name: a.name,
-				id: a.id,
-			})),
-			album: cps_data.album.name,
-			album_art: cps_data.album.images[0]?.url,
-			popularity: cps_data.popularity,
-			duration: cps_data.duration_ms,
-			uri: cps_data.uri,
-		};
+		if (Object.keys(currentlyPlayingSong).length > 0) {
+			const cps_data = currentlyPlayingSong.item;
+			currentlyPlayingSong = {
+				id: cps_data.id,
+				name: cps_data.name,
+				artists: cps_data.artists.map((a: any) => ({
+					name: a.name,
+					id: a.id,
+				})),
+				album: cps_data.album.name,
+				album_art: cps_data.album.images[0]?.url,
+				popularity: cps_data.popularity,
+				duration: cps_data.duration_ms,
+				uri: cps_data.uri,
+			};
+		}
 
 		return new SuccessResponse(
 			'Success',
