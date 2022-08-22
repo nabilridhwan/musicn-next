@@ -82,4 +82,20 @@ export default class Spotify {
 
 		return response.data.items;
 	}
+
+	static async getUserProfile(user_id: string, accessToken: string) {
+		const response = await axios({
+			method: 'GET',
+			url: `https://api.spotify.com/v1/users/${user_id}`,
+			headers: {
+				Authorization: `Bearer ${accessToken}`,
+			},
+		});
+
+		if (!response.data || !Object.keys(response.data).length) {
+			return {};
+		}
+
+		return response.data;
+	}
 }
