@@ -55,16 +55,27 @@ export default async function handler(
 			refresh_token
 		);
 
-		const currentlyPlayingSong = await Spotify.getTopSongs(
-			accessToken,
-			15,
-			'short_term'
-		);
+		let topSongs = await Spotify.getTopSongs(accessToken, 15, 'short_term');
 
-		return new SuccessResponse(
-			'Success',
-			currentlyPlayingSong
-		).handleResponse(res);
+		// conAsole.log();
+		// Filter data to include relevant data!
+		topSongs = topSongs.map((song: any) => {
+			return {
+				id: song.id,
+				name: song.name,
+				artists: song.artists.map((a: any) => ({
+					name: a.name,
+					id: a.id,
+				})),
+				album: song.album.name,
+				album_art: song.album.images[0]?.url,
+				popularity: song.popularity,
+				duration: song.duration_ms,
+				uri: song.uri,
+			};
+		});
+
+		return new SuccessResponse('Success', topSongs).handleResponse(res);
 	} catch (error: any) {
 		if (error instanceof AxiosError) {
 			if (
