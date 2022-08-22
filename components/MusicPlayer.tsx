@@ -1,6 +1,8 @@
 import { motion } from 'framer-motion';
 import Link from 'next/link';
 
+import { Audio } from 'react-loader-spinner';
+
 type MusicPlayerProps = {
 	name: string;
 	spotifyLink: string;
@@ -25,11 +27,20 @@ export const MusicPlayer = ({
 			}}
 		>
 			<Link href={spotifyLink}>
-				<div className="flex items-center gap-2 border border-white/50 w-fit p-2 px-2 rounded-lg">
-					<img className="w-12 h-12" src={imageUrl} />
+				<div className="flex items-center gap-2 border border-white/50 w-fit rounded-lg">
+					<img
+						className="w-12 h-12 rounded-tl-lg rounded-bl-lg"
+						src={imageUrl}
+					/>
 
-					<section>
-						<p className="font-bold">
+					<section className="px-2">
+						<p className="font-bold text-sm flex items-center justify-center gap-1">
+							<Audio
+								height="15"
+								width="15"
+								color="white"
+								ariaLabel="three-dots-loading"
+							/>
 							{name.length > 25
 								? (name as string).slice(0, 25) + '...'
 								: name}
