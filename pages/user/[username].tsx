@@ -15,12 +15,6 @@ type UsersProps = {
 export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
-	// Add whatever `Cache-Control` value you want here
-	context.res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=300, stale-while-revalidate=1770'
-	);
-
 	try {
 		const user = await axiosInstance.get(`/api/user/${username}`);
 		const rtn = user.data.data;

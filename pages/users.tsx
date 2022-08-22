@@ -9,12 +9,6 @@ type UsersProps = {
 };
 
 export async function getServerSideProps(context: any) {
-	// Add whatever `Cache-Control` value you want here
-	context.res.setHeader(
-		'Cache-Control',
-		'public, s-maxage=300, stale-while-revalidate=1770'
-	);
-
 	const users = await axiosInstance.get(`/api/user`);
 
 	return {
