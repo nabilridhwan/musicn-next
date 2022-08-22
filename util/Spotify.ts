@@ -50,7 +50,7 @@ export default class Spotify {
 	static async getTopSongs(
 		accessToken: string,
 		limit: number = 15,
-		term: SpotifyTerm = 'long_term'
+		term: SpotifyTerm = 'short_term'
 	) {
 		const response = await axios({
 			method: 'GET',
