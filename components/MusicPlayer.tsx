@@ -16,6 +16,7 @@ export const MusicPlayer = ({
 }: MusicPlayerProps) => {
 	return (
 		<motion.div
+			className="cursor-pointer"
 			whileHover={{
 				scale: 1.1,
 			}}
