@@ -27,9 +27,7 @@ export default async function handler(
 			},
 			{ abortEarly: false }
 		);
-		const data = (await getUserByUsername_public(
-			validatedData.username
-		)) as any;
+		const data = await getUserByUsername_public(validatedData.username);
 
 		if (data.length === 0) {
 			return new NotFoundResponse().handleResponse(res);

@@ -13,12 +13,16 @@ import {
 import Section from '../../components/Section';
 import SongCard from '../../components/SongCard';
 import getCurrentSong from '../../fe_controller/song/getCurrentSong';
+import getSpotifyUserDetails, {
+	SpotifyUserDetails,
+} from '../../fe_controller/song/getSpotifyUserDetails';
 import getTopSongs from '../../fe_controller/song/getTopSongs';
 import getUserDetails from '../../fe_controller/song/getUserDetails';
 import styles from '../../styles/UserPage.module.css';
 
 type UsersProps = {
 	user: any;
+	spotify: SpotifyUserDetails;
 	top: any;
 };
 
@@ -28,6 +32,7 @@ export async function getServerSideProps(context: any) {
 	try {
 		const user = await getUserDetails(username);
 		const top = await getTopSongs(username);
+		const spotify = await getSpotifyUserDetails(username);
 
 		if (!user.spotify_users) {
 			throw new Error('No spotify user found');
@@ -37,6 +42,7 @@ export async function getServerSideProps(context: any) {
 			props: {
 				user,
 				top,
+				spotify,
 			},
 		};
 	} catch (error) {
@@ -50,7 +56,7 @@ export async function getServerSideProps(context: any) {
 	}
 }
 
-const UserPage = ({ user, top }: UsersProps) => {
+const UserPage = ({ user, top, spotify }: UsersProps) => {
 	const [imageLoadError, setImageLoadError] = useState(false);
 	// const {
 	// 	data: recentSongsData,
@@ -109,15 +115,17 @@ const UserPage = ({ user, top }: UsersProps) => {
 						}
 					>
 						{/* Profile Picture */}
-						{user.spotify_users &&
-						user.spotify_users.profile_pic_url &&
+						{Object.keys(spotify).length > 0 &&
+						spotify.profile_pic_url &&
 						!imageLoadError ? (
-							<img
-								onError={() => setImageLoadError(true)}
-								className="rounded-full w-28 h-28"
-								src={user.spotify_users.profile_pic_url}
-								alt={user.spotify_users.name}
-							/>
+							<picture>
+								<img
+									onError={() => setImageLoadError(true)}
+									className="rounded-full w-28 h-28"
+									src={spotify.profile_pic_url}
+									alt={spotify.display_name}
+								/>
+							</picture>
 						) : (
 							<DefaultProfilePicture />
 						)}
