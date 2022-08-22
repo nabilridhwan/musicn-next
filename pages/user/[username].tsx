@@ -193,7 +193,7 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 												.map((a: any) => a.name)
 												.join(', ')}
 											imageUrl={currentSongData.album_art}
-											spotifyLink={`https://open.spotify.com/track/${currentSongData.spotify_id}`}
+											spotifyLink={`https://open.spotify.com/track/${currentSongData.id}`}
 										/>
 									</>
 								) : (

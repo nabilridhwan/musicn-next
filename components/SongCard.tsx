@@ -15,6 +15,7 @@ const SongCard = ({ name, spotifyLink, artists, imageUrl }: SongCardProps) => {
 			whileTap={{
 				scale: 0.9,
 			}}
+			className="cursor-pointer"
 		>
 			<Link href={spotifyLink ?? ''}>
 				<div className="flex flex-col items-center text-center border border-white/20 rounded-lg">
