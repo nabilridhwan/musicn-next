@@ -112,12 +112,14 @@ const UserPage = ({ user, top }: UsersProps) => {
 						{user.spotify_users &&
 						user.spotify_users.profile_pic_url &&
 						!imageLoadError ? (
-							<img
-								onError={() => setImageLoadError(true)}
-								className="rounded-full w-28 h-28"
-								src={user.spotify_users.profile_pic_url}
-								alt={user.spotify_users.name}
-							/>
+							<picture>
+								<img
+									onError={() => setImageLoadError(true)}
+									className="rounded-full w-28 h-28"
+									src={user.spotify_users.profile_pic_url}
+									alt={user.spotify_users.name}
+								/>
+							</picture>
 						) : (
 							<DefaultProfilePicture />
 						)}
