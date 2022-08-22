@@ -20,9 +20,6 @@ export default class Cache {
 		res: NextApiResponse,
 		expiresAfterSeconds: number
 	): void {
-		res.setHeader(
-			this.headerName,
-			`max-age=0, s-maxage=${expiresAfterSeconds}`
-		);
+		res.setHeader(this.headerName, `s-maxage=${expiresAfterSeconds}`);
 	}
 }
