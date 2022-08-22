@@ -27,22 +27,19 @@ export const MusicPlayer = ({
 			}}
 		>
 			<Link href={spotifyLink}>
-				<div className="flex items-center gap-2 border border-white/50 w-fit rounded-lg">
-					<img
-						className="w-12 h-12 rounded-tl-lg rounded-bl-lg"
-						src={imageUrl}
-					/>
+				<div className="flex items-center gap-3 border border-white/20 w-fit rounded-lg p-2">
+					<picture>
+						<img
+							alt={'album-cover'}
+							className="w-14 h-14"
+							src={imageUrl}
+						/>
+					</picture>
 
 					<section className="px-2">
-						<p className="font-bold text-sm flex items-center justify-center gap-1">
-							<Audio
-								height="15"
-								width="15"
-								color="white"
-								ariaLabel="three-dots-loading"
-							/>
-							{name.length > 25
-								? (name as string).slice(0, 25) + '...'
+						<p className="font-bold flex items-center justify-center gap-1">
+							{name.length > 23
+								? (name as string).slice(0, 23) + '...'
 								: name}
 						</p>
 						<p className="muted text-sm mb-0">
@@ -51,6 +48,14 @@ export const MusicPlayer = ({
 								: artists}
 						</p>
 					</section>
+
+					<Audio
+						height="18"
+						width="18"
+						color="rgba(255,255,255,0.7)"
+						wrapperClass="mr-1"
+						ariaLabel="three-dots-loading"
+					/>
 				</div>
 			</Link>
 		</motion.div>
