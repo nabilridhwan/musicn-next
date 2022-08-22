@@ -52,14 +52,27 @@ export default async function handler(
 			refresh_token
 		);
 
-		const currentlyPlayingSong = await Spotify.getRecentlyPlayedSongs(
-			accessToken
-		);
+		let recentSongs = await Spotify.getRecentlyPlayedSongs(accessToken);
 
-		return new SuccessResponse(
-			'Success',
-			currentlyPlayingSong
-		).handleResponse(res);
+		console.log(recentSongs);
+
+		recentSongs = recentSongs.map((song: any) => {
+			return {
+				id: song.track.id,
+				name: song.track.name,
+				artists: song.track.artists.map((a: any) => ({
+					name: a.name,
+					id: a.id,
+				})),
+				album: song.track.album.name,
+				album_art: song.track.album.images[0]?.url,
+				popularity: song.track.popularity,
+				duration: song.track.duration_ms,
+				uri: song.track.uri,
+			};
+		});
+
+		return new SuccessResponse('Success', recentSongs).handleResponse(res);
 	} catch (error: any) {
 		if (error instanceof AxiosError) {
 			if (

@@ -168,18 +168,12 @@ const UserPage = ({ user, top }: UsersProps) => {
 								{Object.keys(currentSongData).length > 0 ? (
 									<>
 										<MusicPlayer
-											name={currentSongData.item.name}
-											artists={currentSongData.item.artists
+											name={currentSongData.name}
+											artists={currentSongData.artists
 												.map((a: any) => a.name)
 												.join(', ')}
-											imageUrl={
-												currentSongData.item.album
-													.images[2].url
-											}
-											spotifyLink={
-												currentSongData.item
-													.external_urls?.spotify
-											}
+											imageUrl={currentSongData.album_art}
+											spotifyLink={`https://open.spotify.com/track/${currentSongData.spotify_id}`}
 										/>
 									</>
 								) : (
