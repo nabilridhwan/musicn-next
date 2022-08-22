@@ -18,7 +18,9 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
-	Cache.revalidateInBackground(res);
+	// Cache results in edge server for 2 days
+	Cache.inEdgeServer(res, 60 * 60 * 24 * 2);
+
 	try {
 		const schema = yup.object().shape({
 			username: yup.string().required('Username required'),
@@ -53,7 +55,11 @@ export default async function handler(
 			refresh_token
 		);
 
-		const currentlyPlayingSong = await Spotify.getTopSongs(accessToken);
+		const currentlyPlayingSong = await Spotify.getTopSongs(
+			accessToken,
+			15,
+			'short_term'
+		);
 
 		return new SuccessResponse(
 			'Success',
