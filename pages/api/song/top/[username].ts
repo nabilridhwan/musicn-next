@@ -7,7 +7,7 @@ import NotFoundResponse from '../../../../class/NotFoundResponse';
 import SpotifyInvalidPermissionResponse from '../../../../class/SpotifyInvalidPermissionResponse';
 import SuccessResponse from '../../../../class/SuccessResponse';
 import { getUserByUsername } from '../../../../model/users';
-import { setCacheOptions } from '../../../../util/setCacheOptions';
+import { revalidateBackgroundCache } from '../../../../util/setCacheOptions';
 import Spotify from '../../../../util/Spotify';
 
 (BigInt.prototype as any).toJSON = function () {
@@ -18,7 +18,7 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
-	setCacheOptions(res);
+	revalidateBackgroundCache(res);
 	try {
 		const schema = yup.object().shape({
 			username: yup.string().required('Username required'),

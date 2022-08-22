@@ -3,7 +3,7 @@ import type { NextApiRequest, NextApiResponse } from 'next';
 import InternalServerError from '../../../class/InternalServerError';
 import SuccessResponse from '../../../class/SuccessResponse';
 import { getAllUsers } from '../../../model/users';
-import { setCacheOptions } from '../../../util/setCacheOptions';
+import { edgeCacheInSeconds } from '../../../util/setCacheOptions';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
@@ -13,7 +13,9 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
-	setCacheOptions(res);
+	// Cache results for a minute
+	edgeCacheInSeconds(res, 60);
+
 	try {
 		const data = await getAllUsers();
 		return new SuccessResponse('Success', data).handleResponse(res);

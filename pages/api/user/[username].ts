@@ -5,7 +5,7 @@ import InternalServerError from '../../../class/InternalServerError';
 import NotFoundResponse from '../../../class/NotFoundResponse';
 import SuccessResponse from '../../../class/SuccessResponse';
 import { getUserByUsername_public } from '../../../model/users';
-import { setCacheOptions } from '../../../util/setCacheOptions';
+import { revalidateBackgroundCache } from '../../../util/setCacheOptions';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
@@ -15,7 +15,7 @@ export default async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
-	setCacheOptions(res);
+	revalidateBackgroundCache(res);
 	try {
 		const schema = yup.object().shape({
 			username: yup.string().required('Username required'),
