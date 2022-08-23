@@ -31,7 +31,7 @@ export const MusicPlayer = ({
 					<picture>
 						<img
 							alt={'album-cover'}
-							className="w-14 h-14"
+							className="w-10 h-10"
 							src={imageUrl}
 						/>
 					</picture>
