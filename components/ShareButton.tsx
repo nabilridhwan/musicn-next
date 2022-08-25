@@ -2,14 +2,14 @@ import { motion } from 'framer-motion';
 import { IoShare } from 'react-icons/io5';
 
 type ShareButtonProps = {
-	url: string;
 	overrideText?: string;
 };
 
-const ShareButton = ({ url, overrideText }: ShareButtonProps) => {
+const ShareButton = ({ overrideText }: ShareButtonProps) => {
 	const handleShare = () => {
-		// Open share window sharing current page
+		let url = window.location.href;
 
+		// Open share window sharing current page
 		if (navigator.canShare({ url })) {
 			navigator.share({ url });
 		}

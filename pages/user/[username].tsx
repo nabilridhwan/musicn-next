@@ -11,6 +11,7 @@ import {
 	MusicPlayerNotPlaying,
 } from '../../components/MusicPlayer';
 import Section from '../../components/Section';
+import ShareButton from '../../components/ShareButton';
 import SongCard from '../../components/SongCard';
 import getCurrentSong from '../../fe_controller/song/getCurrentSong';
 import getSpotifyUserDetails, {
@@ -238,9 +239,7 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 					</div>
 				</Section>
 			</Container>
-			{/* {typeof window !== 'undefined' && (
-				<ShareButton url={window.location.href} />
-			)} */}
+			<ShareButton overrideText="Share" />
 		</>
 	);
 };
