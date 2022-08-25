@@ -64,7 +64,7 @@ export const MusicPlayer = ({
 
 export const MusicPlayerNotPlaying = () => {
 	return (
-		<div className="flex items-center gap-2 border border-white/50 w-fit p-2 px-2 rounded-lg">
+		<div className="flex items-center gap-2 border border-white/50 w-fit p-3 px-6 rounded-lg">
 			{/* <img className="w-12 h-12" src={imageUrl} /> */}
 
 			{/* <section>
