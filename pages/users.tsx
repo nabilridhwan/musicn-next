@@ -29,10 +29,18 @@ const Users = ({ users }: UsersProps) => {
 		<CenterStage>
 			<Container>
 				<Section>
+					{/* Page header */}
 					<header className="my-10">
 						<h1>Musicn Users</h1>
 						<p className="muted">All Musicn users</p>
+
+						<i className="muted text-xs mt-20 block">
+							If your profile does not have the Profile / Spotify
+							buttons. Link your Spotify account in your profile
+							page.
+						</i>
 					</header>
+
 					<div className="grid md:grid-cols-2 gap-5">
 						{users.map((user, index) => {
 							return (
