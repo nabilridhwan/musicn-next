@@ -56,6 +56,7 @@ export default async function handler(
 		);
 
 		let topSongs = await Spotify.getTopSongs(accessToken, 15, 'short_term');
+		console.log(topSongs);
 
 		// conAsole.log();
 		// Filter data to include relevant data!
@@ -71,6 +72,7 @@ export default async function handler(
 				album_art: song.album.images[0]?.url,
 				popularity: song.popularity,
 				duration: song.duration_ms,
+				preview: song.preview_url ?? null,
 				uri: song.uri,
 			};
 		});

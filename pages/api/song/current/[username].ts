@@ -69,6 +69,7 @@ export default async function handler(
 				album_art: cps_data.album.images[0]?.url,
 				popularity: cps_data.popularity,
 				duration: cps_data.duration_ms,
+				preview: cps_data.preview_url ?? null,
 				uri: cps_data.uri,
 			};
 		}

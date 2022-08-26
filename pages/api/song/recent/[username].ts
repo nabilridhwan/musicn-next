@@ -68,6 +68,7 @@ export default async function handler(
 				album_art: song.track.album.images[0]?.url,
 				popularity: song.track.popularity,
 				duration: song.track.duration_ms,
+				preview: song.track.preview_url ?? null,
 				uri: song.track.uri,
 			};
 		});
