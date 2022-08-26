@@ -5,6 +5,30 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 last_updated: '2022-08-26'
 ---
 
+## [0.2.2] - 2022-08-26
+
+### Added
+
+-   Add a new icon for Musicn! (New favicon)
+-   Add title for every page in the Head tag
+
+### Changed
+
+-   None
+
+### Fixed
+
+-   Fixed `prisma is undefined` which causes users not to be able to access other users' profiles.
+    -   This is fixed by adding a model function to update the profile picture and calling it in `/api/user/:username` instead of updating it directly from the route!
+
+### Removed
+
+-   None
+
+### Security
+
+-   None
+
 ## [0.2.1] - 2022-08-26
 
 ### Added

@@ -4,6 +4,7 @@ import type { AppProps } from 'next/app';
 import '../styles/globals.css';
 
 // Progress bar: https://stackoverflow.com/a/60755417
+import Head from 'next/head';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
@@ -33,13 +34,20 @@ const queryClient = new QueryClient({
 
 function MyApp({ Component, pageProps }: AppProps) {
 	return (
-		<QueryClientProvider client={queryClient}>
-			<MusicPreviewDialogProvider>
-				<NavigationBar />
-				<Component {...pageProps} />
-			</MusicPreviewDialogProvider>
-			<ReactQueryDevtools initialIsOpen={false} />
-		</QueryClientProvider>
+		<>
+			<Head>
+				<title>
+					Musicn - Discover what other people are listening to
+				</title>
+			</Head>
+			<QueryClientProvider client={queryClient}>
+				<MusicPreviewDialogProvider>
+					<NavigationBar />
+					<Component {...pageProps} />
+				</MusicPreviewDialogProvider>
+				<ReactQueryDevtools initialIsOpen={false} />
+			</QueryClientProvider>
+		</>
 	);
 }
 
