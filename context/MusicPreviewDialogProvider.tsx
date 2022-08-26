@@ -4,18 +4,19 @@ interface MusicPreviewDialogProviderProps {
 	children?: ReactNode;
 }
 
+type MusicPreviewDialogState = {
+	showSongPreview: (song: MusicPreview) => void;
+	hideSongPreview: () => void;
+	songDetails: MusicPreview | null;
+	setVolume: (volume: number) => void;
+};
+
 export type MusicPreview = {
 	title: string;
 	artist: string;
 	image: string;
 	preview?: string;
 	url: string;
-};
-type MusicPreviewDialogState = {
-	showSongPreview: (song: MusicPreview) => void;
-	hideSongPreview: () => void;
-	songDetails: MusicPreview | null;
-	setVolume: (volume: number) => void;
 };
 
 export const MusicPreviewDialogContext = React.createContext<any>(null);

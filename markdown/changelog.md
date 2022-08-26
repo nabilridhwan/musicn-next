@@ -5,6 +5,35 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 last_updated: '2022-08-26'
 ---
 
+## [0.2.1] - 2022-08-26
+
+### Added
+
+-   Added changelog page (you're looking at it now!)
+-   All Spotify buttons that open songs will now open the song in the Spotify application instead of the browser!
+-   Users with no top songs will show 'No top songs' on their page.
+-   **[IN TESTING]** Profile picture now shows in the users page!
+
+### Changed
+
+-   Buttons in the users page (Profile and Spotify) will not be bolded anymore!
+-   **[IN TESTING]** The User API will return the latest profile picture and set the profile picture into the database again (speed will be monitored!)
+
+### Fixed
+
+-   The Music Preview window will not slap you in the face and will now have proper animations!
+-   Buttons in the home page will now have proper hover and tap animations!
+
+### Removed
+
+-   None
+
+### Security
+
+-   None
+
+---
+
 ## [0.2.0] - 2022-08-26
 
 ### Added
@@ -20,5 +49,9 @@ last_updated: '2022-08-26'
 -   None
 
 ### Removed
+
+-   None
+
+### Security
 
 -   None

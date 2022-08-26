@@ -18,26 +18,28 @@ const Home: NextPage = () => {
 							With Musicn, you can discover what other people are listening to, and create your own Musicn profile.
 						</p>
 
-						<Link href={'/users'}>
-							<button className=" bg-white text-black font-bold shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-full flex items-center justify-center gap-2 mt-10">
-								Get started
-								{/* Arrow */}
-								<motion.div
-									initial={{ x: 0 }}
-									animate={{
-										x: 10,
-										transition: {
-											ease: 'easeInOut',
-											duration: 0.8,
-											repeat: Infinity,
-											repeatType: 'reverse',
-										},
-									}}
-								>
-									<IoArrowForward size={16} />
-								</motion.div>
-							</button>
-						</Link>
+						<motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.05 }}>
+							<Link href={'/users'}>
+								<button className=" bg-white text-black font-bold shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-full flex items-center justify-center gap-2 mt-10">
+									Get started
+									{/* Arrow */}
+									<motion.div
+										initial={{ x: 0 }}
+										animate={{
+											x: 10,
+											transition: {
+												ease: 'easeInOut',
+												duration: 0.8,
+												repeat: Infinity,
+												repeatType: 'reverse',
+											},
+										}}
+									>
+										<IoArrowForward size={16} />
+									</motion.div>
+								</button>
+							</Link>
+						</motion.div>
 
 						<p className="mt-5 text-xs muted">
 							Login, sign-ups and more coming soon. Read more{' '}
@@ -49,13 +51,19 @@ const Home: NextPage = () => {
 					</div>
 
 					<div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
-						<Link href={'/changelog'}>
-							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">What&apos;s new? ✨</button>
-						</Link>
+						<motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.05 }}>
+							<Link href={'/changelog'}>
+								<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">What&apos;s new? ✨</button>
+							</Link>
+						</motion.div>
 
-						<Link href={'/blog/introducing-the-new-musicn'}>
-							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">Read: Some words from me</button>
-						</Link>
+						<motion.div whileTap={{ scale: 0.9 }} whileHover={{ scale: 1.05 }}>
+							<Link href={'/blog/introducing-the-new-musicn'}>
+								<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">
+									Read: Some words from me
+								</button>
+							</Link>
+						</motion.div>
 					</div>
 				</Section>
 			</CenterStage>

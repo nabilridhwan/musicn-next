@@ -6,7 +6,11 @@ import { useContext, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
 import Container from '../../components/Container';
 import DefaultProfilePicture from '../../components/DefaultProfilePicture';
-import { MusicPlayer, MusicPlayerError, MusicPlayerNotPlaying } from '../../components/MusicPlayer';
+import {
+	MusicPlayer,
+	MusicPlayerError,
+	MusicPlayerNotPlaying,
+} from '../../components/MusicPlayer';
 import MusicPreviewDialog from '../../components/MusicPreviewDialog';
 import Section from '../../components/Section';
 import ShareButton from '../../components/ShareButton';
@@ -14,13 +18,11 @@ import SongCard from '../../components/SongCard';
 import { MusicPreviewDialogContext } from '../../context/MusicPreviewDialogProvider';
 import getCurrentSong from '../../frontend-api/song/getCurrentSong';
 import getTopSongs from '../../frontend-api/song/getTopSongs';
-import getSpotifyUserDetails, { SpotifyUserDetails } from '../../frontend-api/user/getSpotifyUserDetails';
 import getUserDetails from '../../frontend-api/user/getUserDetails';
 import styles from '../../styles/UserPage.module.css';
 
 type UsersProps = {
 	user: any;
-	spotify: SpotifyUserDetails;
 	top: any;
 };
 
@@ -28,7 +30,10 @@ export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		const [user, spotify, top] = await axios.all([getUserDetails(username), getSpotifyUserDetails(username), getTopSongs(username)]);
+		const [user, top] = await axios.all([
+			getUserDetails(username),
+			getTopSongs(username),
+		]);
 
 		if (!user.spotify_users) {
 			throw new Error('No spotify user found');
@@ -37,7 +42,6 @@ export async function getServerSideProps(context: any) {
 		return {
 			props: {
 				user,
-				spotify,
 				top,
 			},
 		};
@@ -52,8 +56,15 @@ export async function getServerSideProps(context: any) {
 	}
 }
 
-const UserPage = ({ user, top, spotify }: UsersProps) => {
-	const { showDialog, showSongPreview, hideSongPreview, songDetails, setVolume, volume } = useContext(MusicPreviewDialogContext);
+const UserPage = ({ user, top }: UsersProps) => {
+	const {
+		showDialog,
+		showSongPreview,
+		hideSongPreview,
+		songDetails,
+		setVolume,
+		volume,
+	} = useContext(MusicPreviewDialogContext);
 
 	const [imageLoadError, setImageLoadError] = useState(false);
 	// const {
@@ -73,7 +84,11 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 		isError: isCurrentSongError,
 		isSuccess: isCurrentSongSuccess,
 		status: currentSongStatus,
-	} = useQuery(['currentSongs', user.username], async () => await getCurrentSong(user.username), { retry: 2 });
+	} = useQuery(
+		['currentSongs', user.username],
+		async () => await getCurrentSong(user.username),
+		{ retry: 2 }
+	);
 
 	// const {
 	// 	data: topSongsData,
@@ -102,15 +117,22 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 			</Head>
 			<Container>
 				<Section>
-					<div className={styles.section + ' flex items-center justify-center gap-5'}>
+					<div
+						className={
+							styles.section +
+							' flex items-center justify-center gap-5'
+						}
+					>
 						{/* Profile Picture */}
-						{Object.keys(spotify).length > 0 && spotify.profile_pic_url && !imageLoadError ? (
+						{user.spotify_users &&
+						user.spotify_users.profile_pic_url &&
+						!imageLoadError ? (
 							<picture>
 								<img
 									onError={() => setImageLoadError(true)}
 									className="rounded-full w-28 h-28"
-									src={spotify.profile_pic_url}
-									alt={spotify.display_name}
+									src={user.spotify_users.profile_pic_url}
+									alt={user.name}
 								/>
 							</picture>
 						) : (
@@ -119,16 +141,20 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 
 						<div>
 							{/* Name */}
-							<h2 className={styles.name + ' break-all'}>{decodeURI(user.name)}</h2>
+							<h2 className={styles.name + ' break-all'}>
+								{decodeURI(user.name)}
+							</h2>
 
 							{/* Username */}
-							<p className="text-sm text-text/70">@{user.username}</p>
+							<p className="text-sm text-text/70">
+								@{user.username}
+							</p>
 
 							{/* Spotify link */}
 							{user.spotify_users && (
 								<>
 									<motion.a
-										href={`https://open.spotify.com/user/${user.spotify_users.spotify_userid}`}
+										href={`https://open.spotify.com/user/${user.spotify_users.spotify_userid}?go=1`}
 										whileHover={{
 											scale: 1.1,
 										}}
@@ -145,15 +171,24 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 						</div>
 					</div>
 
-					<div className={styles.section + ' flex flex-col items-center text-center'}>
+					<div
+						className={
+							styles.section +
+							' flex flex-col items-center text-center'
+						}
+					>
 						{currentSongStatus === 'success' && (
 							<>
-								<p className="text-text/70 mb-5 text-sm">I&apos;m currently listening to</p>
+								<p className="text-text/70 mb-5 text-sm">
+									I&apos;m currently listening to
+								</p>
 								{Object.keys(currentSongData).length > 0 ? (
 									<>
 										<MusicPlayer
 											name={currentSongData.name}
-											artists={currentSongData.artists.map((a: any) => a.name).join(', ')}
+											artists={currentSongData.artists
+												.map((a: any) => a.name)
+												.join(', ')}
 											imageUrl={currentSongData.album_art}
 											spotifyLink={`https://open.spotify.com/track/${currentSongData.id}`}
 											preview={currentSongData.preview}
@@ -167,7 +202,9 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 
 						{currentSongStatus === 'error' && (
 							<>
-								<p className="text-text/70 mb-5 text-sm">I&apos;m currently listening to</p>
+								<p className="text-text/70 mb-5 text-sm">
+									I&apos;m currently listening to
+								</p>
 								<MusicPlayerError />
 							</>
 						)}
@@ -178,19 +215,27 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 					topSongsData &&
 					topSongsData.length > 0 && ( */}
 						<>
-							<h2 className={styles.name + ' mb-5'}>Top Songs of the month</h2>
+							<h2 className={styles.name + ' mb-5'}>
+								Top Songs of the month
+							</h2>
 							<div className="grid grid-cols-2 md:grid-cols-5 gap-5">
 								{top.map((currentSong: any) => (
 									<SongCard
 										key={currentSong.id}
 										name={currentSong.name}
-										artists={currentSong.artists.map((a: any) => a.name).join(', ')}
+										artists={currentSong.artists
+											.map((a: any) => a.name)
+											.join(', ')}
 										imageUrl={currentSong.album_art}
 										preview={currentSong.preview}
 										spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
 									/>
 								))}
 							</div>
+
+							{top.length === 0 && (
+								<Nothing text={'No top songs :('} />
+							)}
 						</>
 						{/* )} */}
 					</div>
@@ -203,5 +248,13 @@ const UserPage = ({ user, top, spotify }: UsersProps) => {
 		</>
 	);
 };
+
+function Nothing({ text }: { text: string }) {
+	return (
+		<div className="text-text/50 text-center my-20">
+			<p>{text}</p>
+		</div>
+	);
+}
 
 export default UserPage;

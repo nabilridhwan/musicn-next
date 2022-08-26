@@ -4,7 +4,8 @@ import BaseErrorResponse from '../../../class/Responses/BaseErrorResponse';
 import InternalServerError from '../../../class/Responses/InternalServerError';
 import NotFoundResponse from '../../../class/Responses/NotFoundResponse';
 import SuccessResponse from '../../../class/Responses/SuccessResponse';
-import { getUserByUsername_public } from '../../../model/users';
+import Spotify from '../../../class/Spotify';
+import { getUserByUsername } from '../../../model/users';
 import Cache from '../../../util/Cache';
 
 (BigInt.prototype as any).toJSON = function () {
@@ -27,7 +28,7 @@ export default async function handler(
 			},
 			{ abortEarly: false }
 		);
-		const data = await getUserByUsername_public(validatedData.username);
+		const data = await getUserByUsername(validatedData.username);
 
 		if (data.length === 0) {
 			return new NotFoundResponse().handleResponse(res);
@@ -44,7 +45,54 @@ export default async function handler(
 			).handleResponse(res);
 		}
 
-		return new SuccessResponse('Success', user).handleResponse(res);
+		let rtnData: {
+			name: string;
+			username: string;
+			spotify_users: {
+				name: string;
+				profile_pic_url: string | null;
+				spotify_userid: string;
+			};
+		} = {
+			name: user.name || '',
+			username: user.username,
+			spotify_users: {
+				name: user.spotify_users.name,
+				profile_pic_url: user.spotify_users.profile_pic_url || null,
+				spotify_userid: user.spotify_users.spotify_userid,
+			},
+		};
+
+		// Get profile picture
+		const spotify_userid = user.spotify_users.spotify_userid;
+		const refresh_token = user.spotify_users?.refresh_token;
+		const access_token = await Spotify.getAccessTokenFromRefreshToken(
+			refresh_token
+		);
+		const spotify_user = await Spotify.getUserProfile(
+			spotify_userid,
+			access_token
+		);
+
+		if (spotify_user.images.length > 0) {
+			// Update profile picture (in the background)
+			prisma?.app_users.update({
+				where: {
+					user_id: user.user_id,
+				},
+				data: {
+					spotify_users: {
+						update: {
+							profile_pic_url: spotify_user.images[0].url,
+						},
+					},
+				},
+			});
+
+			rtnData.spotify_users.profile_pic_url = spotify_user.images[0].url;
+		}
+
+		return new SuccessResponse('Success', rtnData).handleResponse(res);
 	} catch (error: any) {
 		return new InternalServerError(error.message).handleResponse(res);
 	}
