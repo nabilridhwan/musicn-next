@@ -1,7 +1,7 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
 import type { NextApiRequest, NextApiResponse } from 'next';
-import InternalServerError from '../../../class/InternalServerError';
-import SuccessResponse from '../../../class/SuccessResponse';
+import InternalServerError from '../../../class/Responses/InternalServerError';
+import SuccessResponse from '../../../class/Responses/SuccessResponse';
 import { getNewUsers } from '../../../model/users';
 import Cache from '../../../util/Cache';
 

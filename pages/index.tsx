@@ -42,6 +42,14 @@ const Home: NextPage = () => {
 							</button>
 						</Link>
 					</div>
+
+					<div className="flex items-center justify-center">
+						<Link href={'/blog/introducing-the-new-musicn'}>
+							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit mt-28 text-xs">
+								Read: What&apos;s new
+							</button>
+						</Link>
+					</div>
 				</Section>
 			</CenterStage>
 		</Container>

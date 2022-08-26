@@ -1,9 +1,9 @@
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
-import BaseErrorResponse from '../../../class/BaseErrorResponse';
-import InternalServerError from '../../../class/InternalServerError';
-import NotFoundResponse from '../../../class/NotFoundResponse';
-import SuccessResponse from '../../../class/SuccessResponse';
+import BaseErrorResponse from '../../../class/Responses/BaseErrorResponse';
+import InternalServerError from '../../../class/Responses/InternalServerError';
+import NotFoundResponse from '../../../class/Responses/NotFoundResponse';
+import SuccessResponse from '../../../class/Responses/SuccessResponse';
 import { getUserByUsername_public } from '../../../model/users';
 import Cache from '../../../util/Cache';
 

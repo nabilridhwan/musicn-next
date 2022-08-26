@@ -6,7 +6,7 @@ import { IoPerson } from 'react-icons/io5';
 import CenterStage from '../components/CenterStage';
 import Container from '../components/Container';
 import Section from '../components/Section';
-import getAllUsers from '../fe_controller/song/getAllUsers';
+import getAllUsers from '../frontend-api/user/getAllUsers';
 
 type UsersProps = {
 	users: any[];
