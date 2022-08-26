@@ -1,4 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
+import axios from 'axios';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
 import { useState } from 'react';
@@ -13,12 +14,12 @@ import {
 import Section from '../../components/Section';
 import ShareButton from '../../components/ShareButton';
 import SongCard from '../../components/SongCard';
-import getCurrentSong from '../../fe_controller/song/getCurrentSong';
+import getCurrentSong from '../../frontend-api/song/getCurrentSong';
+import getTopSongs from '../../frontend-api/song/getTopSongs';
 import getSpotifyUserDetails, {
 	SpotifyUserDetails,
-} from '../../fe_controller/song/getSpotifyUserDetails';
-import getTopSongs from '../../fe_controller/song/getTopSongs';
-import getUserDetails from '../../fe_controller/song/getUserDetails';
+} from '../../frontend-api/user/getSpotifyUserDetails';
+import getUserDetails from '../../frontend-api/user/getUserDetails';
 import styles from '../../styles/UserPage.module.css';
 
 type UsersProps = {
@@ -31,21 +32,11 @@ export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		let user, top, spotify;
-
-		let userPromise = getUserDetails(username);
-		let topPromise = getTopSongs(username);
-		let spotifyPromise = getSpotifyUserDetails(username);
-
-		const promiseResults = await Promise.all([
-			userPromise,
-			topPromise,
-			spotifyPromise,
+		const [user, spotify, top] = await axios.all([
+			getUserDetails(username),
+			getSpotifyUserDetails(username),
+			getTopSongs(username),
 		]);
-
-		user = promiseResults[0];
-		top = promiseResults[1];
-		spotify = promiseResults[2];
 
 		if (!user.spotify_users) {
 			throw new Error('No spotify user found');
@@ -54,8 +45,8 @@ export async function getServerSideProps(context: any) {
 		return {
 			props: {
 				user,
-				top,
 				spotify,
+				top,
 			},
 		};
 	} catch (error) {

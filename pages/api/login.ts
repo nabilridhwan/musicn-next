@@ -1,10 +1,10 @@
 import bcrypt from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
-import BodyValidationErrorResponse from '../../class/BodyValidationErrorResponse';
-import InternalServerError from '../../class/InternalServerError';
-import MethodNotAllowedResponse from '../../class/MethodNotAllowedResponse';
-import TokenResponse from '../../class/TokenResponse';
+import BodyValidationErrorResponse from '../../class/Responses/BodyValidationErrorResponse';
+import InternalServerError from '../../class/Responses/InternalServerError';
+import MethodNotAllowedResponse from '../../class/Responses/MethodNotAllowedResponse';
+import TokenResponse from '../../class/Responses/TokenResponse';
 import { getUserByEmailOrUsername } from '../../model/users';
 import { createJWT } from '../../util/jwt';
 
