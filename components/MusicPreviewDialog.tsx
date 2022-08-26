@@ -37,7 +37,7 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 					<div className="fixed inset-0 flex items-center justify-center p-4 bg-black/60">
 						<Dialog.Panel className="w-full max-w-sm rounded-2xl border border-white/20 bg-black my-10 text-center p-10 shadow-[0_0_50px] shadow-black">
 							{/* Top (Title and Button) */}
-							<Dialog.Title className="text-white font-bold text-center">Music Preview</Dialog.Title>
+							<Dialog.Title className="text-white font-bold text-center">{songDetails.preview ? 'Music Preview' : 'Song'}</Dialog.Title>
 
 							{/* Content */}
 							<div className="flex items-center justify-center flex-col">
@@ -52,7 +52,7 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 								</div>
 
 								{/* Show the audio dialog only if there is a song preview */}
-								{songDetails.preview && (
+								{songDetails.preview ? (
 									<audio
 										ref={audioElemRef}
 										src={songDetails.preview}
@@ -61,6 +61,8 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 										controls
 										autoPlay
 									/>
+								) : (
+									<NoPreviewAvailable />
 								)}
 
 								<a
@@ -84,5 +86,15 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 				</Dialog>
 			)}
 		</>
+	);
+}
+
+function NoPreviewAvailable() {
+	return (
+		<div className="flex items-center gap-2 border border-white/50 w-fit p-3 px-6 rounded-lg">
+			<section>
+				<p className="muted text-sm mb-0">No preview available :&apos;(</p>
+			</section>
+		</div>
 	);
 }
