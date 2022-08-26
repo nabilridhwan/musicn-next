@@ -12,13 +12,10 @@ const Home: NextPage = () => {
 			<CenterStage>
 				<Section>
 					<div className="text-center">
-						<h1 className="leading-tight">
-							Discover what other people are listening to
-						</h1>
+						<h1 className="leading-tight">Discover what other people are listening to</h1>
 
 						<p className="muted my-5">
-							With Musicn, you can discover what other people are
-							listening to, and create your own Musicn profile.
+							With Musicn, you can discover what other people are listening to, and create your own Musicn profile.
 						</p>
 
 						<Link href={'/users'}>
@@ -41,13 +38,23 @@ const Home: NextPage = () => {
 								</motion.div>
 							</button>
 						</Link>
+
+						<p className="mt-5 text-xs muted">
+							Login, sign-ups and more coming soon. Read more{' '}
+							<Link href={'/blog/introducing-the-new-musicn'}>
+								<a className="underline">here</a>
+							</Link>
+							.
+						</p>
 					</div>
 
-					<div className="flex items-center justify-center">
+					<div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
+						<Link href={'/changelog'}>
+							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">What&apos;s new? ✨</button>
+						</Link>
+
 						<Link href={'/blog/introducing-the-new-musicn'}>
-							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit mt-28 text-xs">
-								Read: What&apos;s new
-							</button>
+							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">Read: Some words from me</button>
 						</Link>
 					</div>
 				</Section>

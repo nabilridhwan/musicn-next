@@ -17,11 +17,7 @@ export async function getStaticPaths() {
 	};
 }
 
-export async function getStaticProps({
-	params: { slug },
-}: {
-	[prop: string]: any;
-}) {
+export async function getStaticProps({ params: { slug } }: { [prop: string]: any }) {
 	const fileName = await fs.readFile(`markdown/${slug}.md`, 'utf-8');
 	const { data: frontmatter, content } = matter(fileName);
 	return {
@@ -32,23 +28,14 @@ export async function getStaticProps({
 	};
 }
 
-export default function Post({
-	frontmatter,
-	content,
-}: {
-	[prop: string]: any;
-}) {
-	console.log(frontmatter, content);
+export default function Post({ frontmatter, content }: { [prop: string]: any }) {
 	return (
 		<Container>
 			<div className="prose prose-invert mx-auto">
 				<h1 className="">{frontmatter.title}</h1>
 				<p className="lead">{frontmatter.desc}</p>
 				<p className="text-sm">Written by {frontmatter.author}</p>
-				<div
-					className="mt-20"
-					dangerouslySetInnerHTML={{ __html: md().render(content) }}
-				/>
+				<div className="mt-20" dangerouslySetInnerHTML={{ __html: md().render(content) }} />
 			</div>
 		</Container>
 	);
