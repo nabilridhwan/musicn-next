@@ -37,8 +37,8 @@ function MyApp({ Component, pageProps }: AppProps) {
 			<MusicPreviewDialogProvider>
 				<NavigationBar />
 				<Component {...pageProps} />
-				<ReactQueryDevtools initialIsOpen={false} />
 			</MusicPreviewDialogProvider>
+			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 }
