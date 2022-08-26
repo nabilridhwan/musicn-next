@@ -1,13 +1,18 @@
 import { motion } from 'framer-motion';
-import Link from 'next/link';
+import { useContext } from 'react';
 
 import { Audio } from 'react-loader-spinner';
+import {
+	MusicPreview,
+	MusicPreviewDialogContext,
+} from '../context/MusicPreviewDialogProvider';
 
 type MusicPlayerProps = {
 	name: string;
 	spotifyLink: string;
 	artists: string;
 	imageUrl: string;
+	preview: string;
 };
 
 export const MusicPlayer = ({
@@ -15,7 +20,25 @@ export const MusicPlayer = ({
 	spotifyLink,
 	artists,
 	imageUrl,
+	preview,
 }: MusicPlayerProps) => {
+	const { showSongPreview, hideSongPreview, songDetails, setVolume } =
+		useContext(MusicPreviewDialogContext);
+
+	const handleSongClick = () => {
+		const song: MusicPreview = {
+			title: name,
+			artist: artists,
+			image: imageUrl,
+			preview,
+			url: spotifyLink,
+		};
+
+		console.log(preview);
+
+		showSongPreview(song);
+	};
+
 	return (
 		<motion.div
 			className="cursor-pointer"
@@ -26,38 +49,39 @@ export const MusicPlayer = ({
 				scale: 0.9,
 			}}
 		>
-			<Link href={spotifyLink}>
-				<div className="flex items-center gap-3 border border-white/20 w-fit rounded-lg p-2">
-					<picture>
-						<img
-							alt={'album-cover'}
-							className="w-10 h-10"
-							src={imageUrl}
-						/>
-					</picture>
-
-					<section className="px-2">
-						<p className="font-bold flex items-center justify-center gap-1">
-							{name.length > 23
-								? (name as string).slice(0, 23) + '...'
-								: name}
-						</p>
-						<p className="muted text-sm mb-0">
-							{artists.length > 25
-								? (artists as string).slice(0, 25) + '...'
-								: artists}
-						</p>
-					</section>
-
-					<Audio
-						height="18"
-						width="18"
-						color="rgba(255,255,255,0.7)"
-						wrapperClass="mr-1"
-						ariaLabel="three-dots-loading"
+			<div
+				onClick={handleSongClick}
+				className="flex items-center gap-3 border border-white/20 w-fit rounded-lg p-2"
+			>
+				<picture>
+					<img
+						alt={'album-cover'}
+						className="w-10 h-10"
+						src={imageUrl}
 					/>
-				</div>
-			</Link>
+				</picture>
+
+				<section className="px-2">
+					<p className="font-bold flex items-center justify-center gap-1">
+						{name.length > 23
+							? (name as string).slice(0, 23) + '...'
+							: name}
+					</p>
+					<p className="muted text-sm mb-0">
+						{artists.length > 25
+							? (artists as string).slice(0, 25) + '...'
+							: artists}
+					</p>
+				</section>
+
+				<Audio
+					height="18"
+					width="18"
+					color="rgba(255,255,255,0.7)"
+					wrapperClass="mr-1"
+					ariaLabel="three-dots-loading"
+				/>
+			</div>
 		</motion.div>
 	);
 };
