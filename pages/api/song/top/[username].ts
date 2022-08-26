@@ -14,10 +14,7 @@ import Cache from '../../../../util/Cache';
 	return Number(this);
 };
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
+export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	// Cache results in edge server for 2 days
 	Cache.inEdgeServer(res, 60 * 60 * 24 * 2);
 
@@ -43,19 +40,14 @@ export default async function handler(
 
 		// Check if spotify_users is falsy
 		if (!user.spotify_users) {
-			return new BaseErrorResponse(
-				400,
-				'Spotify account not linked',
-				{}
-			).handleResponse(res);
+			return new BaseErrorResponse(400, 'Spotify account not linked', {}).handleResponse(res);
 		}
 
 		const refresh_token = user.spotify_users.refresh_token;
-		const accessToken = await Spotify.getAccessTokenFromRefreshToken(
-			refresh_token
-		);
+		const accessToken = await Spotify.getAccessTokenFromRefreshToken(refresh_token);
 
 		let topSongs = await Spotify.getTopSongs(accessToken, 15, 'short_term');
+		console.log(topSongs);
 
 		// conAsole.log();
 		// Filter data to include relevant data!
@@ -71,6 +63,7 @@ export default async function handler(
 				album_art: song.album.images[0]?.url,
 				popularity: song.popularity,
 				duration: song.duration_ms,
+				preview: song.preview_url ?? null,
 				uri: song.uri,
 			};
 		});
@@ -78,13 +71,8 @@ export default async function handler(
 		return new SuccessResponse('Success', topSongs).handleResponse(res);
 	} catch (error: any) {
 		if (error instanceof AxiosError) {
-			if (
-				error.response?.status === 401 ||
-				error.response?.status === 403
-			) {
-				return new SpotifyInvalidPermissionResponse().handleResponse(
-					res
-				);
+			if (error.response?.status === 401 || error.response?.status === 403) {
+				return new SpotifyInvalidPermissionResponse().handleResponse(res);
 			}
 		}
 
