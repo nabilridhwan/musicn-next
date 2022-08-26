@@ -122,3 +122,23 @@ export async function getUserById(user_id: any) {
 
 	return data || [];
 }
+
+export async function updateProfilePictureUrl(
+	user_id: any,
+	profile_pic_url: string
+) {
+	const data = await prisma.app_users.update({
+		where: {
+			user_id: user_id,
+		},
+		data: {
+			spotify_users: {
+				update: {
+					profile_pic_url: profile_pic_url,
+				},
+			},
+		},
+	});
+
+	return data || [];
+}

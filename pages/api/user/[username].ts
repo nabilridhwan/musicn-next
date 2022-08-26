@@ -5,7 +5,10 @@ import InternalServerError from '../../../class/Responses/InternalServerError';
 import NotFoundResponse from '../../../class/Responses/NotFoundResponse';
 import SuccessResponse from '../../../class/Responses/SuccessResponse';
 import Spotify from '../../../class/Spotify';
-import { getUserByUsername } from '../../../model/users';
+import {
+	getUserByUsername,
+	updateProfilePictureUrl,
+} from '../../../model/users';
 import Cache from '../../../util/Cache';
 
 (BigInt.prototype as any).toJSON = function () {
@@ -76,19 +79,7 @@ export default async function handler(
 
 		if (spotify_user.images.length > 0) {
 			// Update profile picture (in the background)
-			prisma?.app_users.update({
-				where: {
-					user_id: user.user_id,
-				},
-				data: {
-					spotify_users: {
-						update: {
-							profile_pic_url: spotify_user.images[0].url,
-						},
-					},
-				},
-			});
-
+			updateProfilePictureUrl(user.user_id, spotify_user.images[0].url);
 			rtnData.spotify_users.profile_pic_url = spotify_user.images[0].url;
 		}
 
