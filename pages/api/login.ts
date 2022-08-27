@@ -1,4 +1,5 @@
 import bcrypt from 'bcrypt';
+import { setCookie } from 'cookies-next';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
 import BodyValidationErrorResponse from '../../class/Responses/BodyValidationErrorResponse';
@@ -58,6 +59,17 @@ export default async function handler(
 			}
 
 			const token = createJWT(user.user_id);
+
+			// Set a date 1 hour from now
+			const expires = new Date(Date.now() + 1000 * 60 * 60);
+
+			setCookie('token', token, {
+				req,
+				res,
+				expires,
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'production',
+			});
 
 			// User found
 
