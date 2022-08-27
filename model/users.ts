@@ -111,7 +111,7 @@ export async function getUserByUsername_public(input: string) {
 }
 
 export async function getUserById(user_id: any) {
-	const data = await prisma.app_users.findMany({
+	const data = await prisma.app_users.findFirst({
 		where: {
 			user_id,
 		},
@@ -120,7 +120,7 @@ export async function getUserById(user_id: any) {
 		},
 	});
 
-	return data || [];
+	return data || null;
 }
 
 export async function updateProfilePictureUrl(
