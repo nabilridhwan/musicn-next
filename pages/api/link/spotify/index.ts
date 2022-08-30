@@ -1,3 +1,5 @@
+import withProtect from '@/middleware/withProtect';
+import withSetupScript from '@/middleware/withSetupScript';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import InternalServerError from '../../../../class/Responses/InternalServerError';
 import Spotify from '../../../../class/Spotify';
@@ -6,7 +8,7 @@ import APITokenHandler from '../../../../util/APITokenHandler';
 const SCOPE =
 	'user-read-private user-read-email user-top-read user-read-recently-played user-read-currently-playing';
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
@@ -27,3 +29,7 @@ export default async function handler(
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+
+export default withSetupScript(withProtect(handler) as IHandler)

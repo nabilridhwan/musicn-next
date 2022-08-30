@@ -56,8 +56,8 @@ const Home: NextPage = () => {
 							</motion.div>
 
 							<p className="mt-5 text-xs muted">
-								Login, sign-ups and more coming soon. Read more{' '}
-								<Link href={'/blog/introducing-the-new-musicn'}>
+								<strong className='text-white/70'>[BETA]</strong> Login, sign-ups, linking Spotify accounts and re-link are here! Read more{' '}
+								<Link href={'/changelog'}>
 									<a className="underline">here</a>
 								</Link>
 								.

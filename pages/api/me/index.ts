@@ -1,21 +1,22 @@
+import ConflictErrorResponse from '@/class/Responses/ConflictErrorResponse';
+import InternalServerError from '@/class/Responses/InternalServerError';
+import MethodNotAllowedResponse from '@/class/Responses/MethodNotAllowedResponse';
+import NotFoundResponse from '@/class/Responses/NotFoundResponse';
+import SuccessResponse from '@/class/Responses/SuccessResponse';
+import withProtect from '@/middleware/withProtect';
+import withSetupScript from '@/middleware/withSetupScript';
+import { getUserById, updateOnlyUser } from '@/model/users';
+import APITokenHandler from '@/util/APITokenHandler';
+import { Prisma } from '@prisma/client';
+import bcrypt from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import InternalServerError from '../../../class/Responses/InternalServerError';
-import NotFoundResponse from '../../../class/Responses/NotFoundResponse';
-import SuccessResponse from '../../../class/Responses/SuccessResponse';
-import { getUserById, updateOnlyUser } from '../../../model/users';
-import APITokenHandler from '../../../util/APITokenHandler';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
 };
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
-		APITokenHandler.reject('none', req, res);
-
 		if (req.method === 'GET') {
 			if (APITokenHandler.hasAPIToken(req)) {
 				const token = APITokenHandler.getToken(req);
@@ -36,38 +37,54 @@ export default async function handler(
 			}
 		}
 
-		if (req.method === 'POST') {
-			if (APITokenHandler.hasAPIToken(req)) {
-				const updateData = req.body;
-				// TODO: Filter out fields that are not allowed to be updated
-				const allowedFields = ['name', 'email'];
+		if (req.method === 'PUT') {
+			// Filter out fields that are not allowed to be updated
+			const updateData = req.body;
+			const allowedFields = ['name', 'email', 'username', 'password'];
 
-				const token = APITokenHandler.getToken(req);
-				const dataFromToken: any = APITokenHandler.extractDataFromToken(
-					token!
+			const token = APITokenHandler.getToken(req);
+			const dataFromToken: any =
+				APITokenHandler.extractDataFromToken(token);
+
+			// Filter out allowed fields
+			const filteredUpdateData = Object.keys(updateData).reduce<{
+				[prop: string]: any;
+			}>((acc, key) => {
+				if (allowedFields.includes(key)) {
+					acc[key] = updateData[key];
+				}
+				return acc;
+			}, {});
+
+			if (filteredUpdateData.password) {
+				filteredUpdateData.password = await bcrypt.hash(
+					filteredUpdateData.password,
+					10
 				);
+			}
 
-				// Filter out allowed fields
-				const filteredUpdateData = Object.keys(updateData).reduce(
-					(acc, key) => {
-						if (allowedFields.includes(key)) {
-							acc[key] = updateData[key];
-						}
+			console.log(filteredUpdateData);
 
-						return acc;
-					},
-					{}
-				);
+			await updateOnlyUser(dataFromToken.user_id, filteredUpdateData);
 
-				updateOnlyUser(dataFromToken!.user_id, filteredUpdateData);
+			return new SuccessResponse('Success', updateData).handleResponse(
+				req,
+				res
+			);
+		}
 
-				return new SuccessResponse(
-					'Success',
-					updateData
+		return new MethodNotAllowedResponse().handleResponse(req, res);
+	} catch (error: any) {
+		if (error instanceof Prisma.PrismaClientKnownRequestError) {
+			console.log(error);
+			if (error.code === 'P2002') {
+				return new ConflictErrorResponse(
+					'User with that username or email already exists'
 				).handleResponse(req, res);
 			}
 		}
-	} catch (error: any) {
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+export default withSetupScript(withProtect(handler) as IHandler);

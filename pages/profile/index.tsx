@@ -14,10 +14,10 @@ export async function getServerSideProps(context: any) {
 	const token = getCookie('token', { req: context.req, res: context.res });
 
 	if (token) {
+
 		// Decode JWT token
 		try {
-			const data: any = verifyJWT(token.toString());
-			console.log(data);
+			const data= verifyJWT(token.toString());
 
 			const id = data.user_id;
 
@@ -36,19 +36,7 @@ export async function getServerSideProps(context: any) {
 					username,
 					email,
 					name,
-					spotify_users: {
-						...spotify_users,
-						id: spotify_users ? Number(spotify_users.id) : null,
-						user_id: spotify_users
-							? Number(spotify_users.user_id)
-							: null,
-						created_at: spotify_users?.created_at
-							? new Date(spotify_users.created_at).toISOString()
-							: null,
-						updated_at: spotify_users?.updated_at
-							? new Date(spotify_users.updated_at).toISOString()
-							: null,
-					},
+					spotify_users,
 					user_id: id,
 				},
 			};
@@ -106,16 +94,16 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 
 				<form action="/api/login" method="POST">
 					<div className="form-group">
-						<label htmlFor="Name" className="">
-							Name
+						<label htmlFor="display_name" className="">
+							Display Name
 						</label>
 						<input
-							name="name"
+							name="display_name"
 							type="text"
 							value={decodeURI(user.name)}
 							className="form-control"
-							id="name"
-							placeholder="Name"
+							id="display_name"
+							placeholder="Display Name"
 							disabled
 						/>
 					</div>
@@ -214,14 +202,11 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 
 function NoSpotifyAccount() {
 	return (
-		<div className="bg-text text-background rounded-2xl p-5 shadow-lg shadow-text/20">
-			<h2 className="font-extrabold text-3xl">👋 Hello there!</h2>
-			<p className="text-background/70">
-				Your Spotify account isn&apos;t linked yet.{' '}
-				<strong>
-					For your profile to display, you need to link your Spotify
-					account.
-				</strong>
+		<div className="bg-red-900/30 text-red-500 rounded-2xl p-5 border border-red-500/50">
+			<h2 className="font-bold text-2xl">Hello there!👋</h2>
+			<p className="text-red-500/80">
+				For your profile to be accessible, you need to link your Spotify
+				account.
 			</p>
 
 			<motion.div

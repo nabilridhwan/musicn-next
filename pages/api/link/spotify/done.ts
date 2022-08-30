@@ -1,3 +1,5 @@
+import withProtect from '@/middleware/withProtect';
+import withSetupScript from '@/middleware/withSetupScript';
 import { AxiosError } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import InternalServerError from '../../../../class/Responses/InternalServerError';
@@ -5,15 +7,10 @@ import Spotify from '../../../../class/Spotify';
 import { linkSpotifyUser } from '../../../../model/users';
 import APITokenHandler from '../../../../util/APITokenHandler';
 
-export default async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
-		APITokenHandler.reject('none', req, res);
-
 		// TODO: Reject if not signed in (APITokenHandler)
-		const { error, code } = req.query;
+		let { error, code } = req.query;
 
 		// Reject if error
 		// if(error){
@@ -21,6 +18,8 @@ export default async function handler(
 		// }
 
 		if (code) {
+			code = typeof code === 'string' ? code : code[0];
+
 			const { refresh_token, access_token } =
 				await Spotify.getRefreshTokenFromCode(
 					code,
@@ -35,9 +34,9 @@ export default async function handler(
 				id: spotify_userid,
 			} = await Spotify.getUserProfile('noob', access_token);
 
-			const { user_id } = APITokenHandler.extractDataFromToken(
+			const data = APITokenHandler.extractDataFromToken(
 				APITokenHandler.getToken(req)!
-			) as APITokenHandler.TokenData;
+			);
 
 			// Update spotify user
 			await linkSpotifyUser({
@@ -47,10 +46,10 @@ export default async function handler(
 				profile_pic_url: images[0].url || null,
 				spotify_userid,
 				refresh_token,
-				user_id,
+				user_id: data?.user_id,
 			});
 
-			return res.redirect("/profile")
+			return res.redirect('/profile');
 
 			// Write for the user
 			// return new SuccessResponse(
@@ -66,3 +65,5 @@ export default async function handler(
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+export default withSetupScript(withProtect(handler as IHandler) as IHandler);

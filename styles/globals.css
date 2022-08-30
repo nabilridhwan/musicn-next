@@ -24,8 +24,12 @@ h6 {
 	@apply text-text/50;
 }
 
+.btn-base {
+	@apply rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2;
+}
+
 .btn {
-	@apply bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2;
+	@apply bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2 disabled:text-background/40;
 }
 
 .btn-full {
@@ -51,6 +55,6 @@ input[type='email'] {
 	@apply px-4 py-3 rounded-md bg-black text-text placeholder:text-text/50 w-full disabled:text-white/50 disabled:border-white/30;
 }
 
-.error{
+.error {
 	@apply my-3 text-red-500;
 }

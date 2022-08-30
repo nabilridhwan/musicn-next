@@ -1,3 +1,4 @@
+import withSetupScript from '@/middleware/withSetupScript';
 import { AxiosError } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
@@ -14,7 +15,7 @@ import Cache from '../../../../util/Cache';
 	return Number(this);
 };
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
@@ -94,3 +95,6 @@ export default async function handler(
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+export default withSetupScript(handler as IHandler)

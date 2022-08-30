@@ -1,3 +1,5 @@
+import withProtect from '@/middleware/withProtect';
+import withSetupScript from '@/middleware/withSetupScript';
 import bcrypt from 'bcrypt';
 import { setCookie } from 'cookies-next';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -13,10 +15,12 @@ import { createJWT } from '../../util/jwt';
 	return Number(this);
 };
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
+
+	
 	try {
 		if (req.method === 'POST') {
 			const schema = yup.object().shape({
@@ -79,7 +83,7 @@ export default async function handler(
 		return new MethodNotAllowedResponse().handleResponse(req, res);
 	} catch (error: any) {
 		if (error instanceof yup.ValidationError) {
-			return new BodyValidationErrorResponse(error.errors).handleResponse(
+			return new BodyValidationErrorResponse(error.errors.join(", ")).handleResponse(
 				req,
 				res
 			);
@@ -88,3 +92,6 @@ export default async function handler(
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+export default withSetupScript(withProtect(handler, 'has') as IHandler)

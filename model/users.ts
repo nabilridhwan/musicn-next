@@ -27,7 +27,7 @@ export async function getNewUsers(limit: number) {
 		take: limit,
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function getAllUsers() {
@@ -51,7 +51,7 @@ export async function getAllUsers() {
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function getUserByEmailOrUsername(input: string) {
@@ -68,7 +68,7 @@ export async function getUserByEmailOrUsername(input: string) {
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function getUserByUsername(input: string) {
@@ -81,7 +81,7 @@ export async function getUserByUsername(input: string) {
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function getUserByUsername_public(input: string) {
@@ -107,7 +107,7 @@ export async function getUserByUsername_public(input: string) {
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function getUserById(user_id: any) {
@@ -120,7 +120,7 @@ export async function getUserById(user_id: any) {
 		},
 	});
 
-	return data || null;
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function updateProfilePictureUrl(
@@ -140,7 +140,7 @@ export async function updateProfilePictureUrl(
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function updateOnlyUser(user_id: any, updatedData: any) {
@@ -151,7 +151,7 @@ export async function updateOnlyUser(user_id: any, updatedData: any) {
 		data: updatedData,
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 type AddNewUserProps = {
@@ -178,7 +178,7 @@ export async function addNewUser({
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 type LinkSpotifyUserProps = {
@@ -199,7 +199,7 @@ export async function deleteSpotifyUserByUserID(user_id: any) {
 		},
 	});
 
-	return data || [];
+	return JSON.parse(JSON.stringify(data)) || null;
 }
 
 export async function linkSpotifyUser({
@@ -226,7 +226,6 @@ export async function linkSpotifyUser({
 			],
 		},
 	});
-
 
 	// If no spotify user
 	if (!existingSpotifyUser) {

@@ -1,12 +1,14 @@
+import editProfile, { EditProfileProps } from '@/frontend-api/user/editProfile';
+import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
-import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
-import { FaSpotify } from 'react-icons/fa';
+import { SyntheticEvent, useEffect, useState } from 'react';
+import * as yup from 'yup';
 import Container from '../../components/Container';
 import Section from '../../components/Section';
 import { getUserById } from '../../model/users';
 import { verifyJWT } from '../../util/jwt';
+import parseUsername from '../../util/ParseUsername';
 
 export async function getServerSideProps(context: any) {
 	// TODO: Check for existing cookies
@@ -89,15 +91,94 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 	const [password, setPassword] = useState('');
 	const [confirmPassword, setConfirmPassword] = useState('');
 
+	const [errorMessage, setErrorMessage] = useState('');
+
+	const { data, error, status, isLoading, mutate } = useMutation(
+		['edit', user],
+		({ username, name, email, password }: EditProfileProps) =>
+			editProfile({ username, email, name, password })
+	);
+
 	useEffect(() => {
-		if (originalUser != user) {
+		if (status === 'success') {
+			// If password changed, log out and redirect to login page
+			if (password) {
+				window.location.href = '/api/logout?redirect=/login';
+			} else {
+				window.location.href = '/profile';
+			}
+		}
+
+		if (status === 'error') {
+			console.log(error);
+			const {
+				response: {
+					data: { message: errors },
+				},
+			} = error as any;
+
+			if (Array.isArray(errors)) {
+				setErrorMessage(errors.join(', '));
+			} else {
+				setErrorMessage(errors);
+			}
+		}
+	}, [status, data, error, password]);
+
+	useEffect(() => {
+		if (JSON.stringify(originalUser) !== JSON.stringify(user) || password) {
 			setChanged(true);
 		} else {
 			setChanged(false);
 		}
-	}, [originalUser, user]);
+	}, [originalUser, user, password]);
 
-	console.log(props);
+	async function handleUpdateProfile(e: SyntheticEvent) {
+		e.preventDefault();
+		setErrorMessage('');
+
+		try {
+			const shape = yup.object().shape({
+				username: yup.string().required('Username is required'),
+				name: yup.string().required('Name is required'),
+				email: yup.string().required('Email is required'),
+				password: yup.string(),
+				confirm_password: yup
+					.string()
+					.oneOf([yup.ref('password'), null], 'Passwords must match'),
+			});
+
+			const validated = await shape.validate({
+				username: user.username,
+				name: user.name,
+				email: user.email,
+				password: password,
+				confirm_password: confirmPassword,
+			});
+
+			// Filter out objects with values in them
+			const filtered = Object.entries(validated).filter(
+				([key, value]) => value
+			);
+			const filteredObject = filtered.reduce(
+				(acc, [key, value]) => ({ ...acc, [key]: value }),
+				{}
+			);
+
+			console.log(validated);
+			console.log(filteredObject);
+
+			await mutate(filteredObject);
+		} catch (error) {
+			if (error instanceof yup.ValidationError) {
+				console.log(error.errors);
+				setErrorMessage(error.errors.join(', '));
+				return;
+			}
+
+			setErrorMessage('Something wrong happened');
+		}
+	}
 
 	return (
 		<Container>
@@ -108,14 +189,15 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 					<p className="muted">Edit your profile from here!</p>
 				</header>
 
-				<form action="/api/me" method="POST">
+				<p className="error">{errorMessage}</p>
+				<form onSubmit={handleUpdateProfile}>
 					<div className="form-group">
 						<h2 className="font-bold text-xl">User Details</h2>
 					</div>
 
 					<div className="form-group">
-						<label htmlFor="Name" className="">
-							Name
+						<label htmlFor="name" className="">
+							Display Name
 						</label>
 						<input
 							name="name"
@@ -126,7 +208,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 							onChange={(e) => {
 								setUser({ ...user, name: e.target.value });
 							}}
-							placeholder="Name"
+							placeholder="Display Name"
 						/>
 					</div>
 
@@ -134,12 +216,28 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 						<label htmlFor="username" className="">
 							Username
 						</label>
+
+						{user.username !== originalUser.username && (
+							<p className="text-sm muted my-2">
+								Your username will be saved as:{' '}
+								<strong className="text-text">
+									@{parseUsername(user.username)}
+								</strong>
+							</p>
+						)}
+
 						<input
 							name="username"
 							type="text"
 							value={user.username}
 							className="form-control"
 							id="username"
+							onBlur={(e) => {
+								setUser({
+									...user,
+									username: parseUsername(e.target.value),
+								});
+							}}
 							onChange={(e) => {
 								setUser({ ...user, username: e.target.value });
 							}}
@@ -197,32 +295,18 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 						/>
 					</div>
 
-					<div className="form-group">
-						<label htmlFor="email">Spotify linked?</label>
-						<p>{user.spotify_users ? 'Yes' : 'No'}</p>
-
-						<motion.div
-							className="w-fit"
-							whileHover={{
-								scale: 1.1,
-							}}
-							whileTap={{
-								scale: 0.9,
-							}}
-						>
-							<Link href={``}>
-								<a className="bg-spotify shadow-[0px_0px_20px] shadow-spotify/50 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2">
-									<FaSpotify size={16} />
-									Re-link Spotify Account
-								</a>
-							</Link>
-						</motion.div>
-					</div>
-
-					<button type="submit" className="btn btn-primary">
+					<button
+						type="submit"
+						className="btn btn-primary"
+						disabled={!changed}
+					>
 						{changed ? 'Save Changes' : 'No Changes to Save'}
 					</button>
 				</form>
+
+				<Link href="/profile">
+					<a className="btn-base bg-red-500">Cancel</a>
+				</Link>
 			</Section>
 		</Container>
 	);

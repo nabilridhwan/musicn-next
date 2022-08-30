@@ -1,3 +1,5 @@
+import withProtect from '@/middleware/withProtect';
+import withSetupScript from '@/middleware/withSetupScript';
 import { Prisma } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
@@ -8,12 +10,13 @@ import InternalServerError from '../../class/Responses/InternalServerError';
 import MethodNotAllowedResponse from '../../class/Responses/MethodNotAllowedResponse';
 import SuccessResponse from '../../class/Responses/SuccessResponse';
 import { addNewUser } from '../../model/users';
+import parseUsername from '../../util/ParseUsername';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
 };
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
@@ -34,7 +37,7 @@ export default async function handler(
 				{
 					name: req.body.name,
 					email: req.body.email,
-					username: req.body.username,
+					username: parseUsername(req.body.username),
 					password: req.body.password,
 					confirm_password: req.body.confirm_password,
 				},
@@ -92,3 +95,7 @@ export default async function handler(
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+
+export default withSetupScript(withProtect(handler, 'has') as IHandler)

@@ -8,6 +8,7 @@ import DefaultProfilePicture from '../components/DefaultProfilePicture';
 import Section from '../components/Section';
 import signup, { SignupProps } from '../frontend-api/user/signup';
 import styles from '../styles/UserPage.module.css';
+import parseUsername from '../util/ParseUsername';
 
 export async function getServerSideProps(context: any) {
 	// TODO: Check for existing cookies
@@ -46,6 +47,13 @@ const SignupPage = () => {
 		console.log(status);
 		console.log(error);
 
+		if (status === 'success') {
+			setErrorMessage('');
+			// Redirect to login page
+			window.location.href = '/login';
+			return;
+		}
+
 		if (status === 'error') {
 			console.log(error);
 			const {
@@ -62,16 +70,22 @@ const SignupPage = () => {
 		}
 	}, [status, error]);
 
-	const handleSignUp = (e: SyntheticEvent) => {
+	const handleSignUp = async (e: SyntheticEvent) => {
 		e.preventDefault();
 
-		mutate({
-			username,
-			name,
-			email,
-			password,
-			confirm_password: confirmPassword,
-		});
+		setErrorMessage('');
+
+		try {
+			await mutate({
+				username: parseUsername(username),
+				name,
+				email,
+				password,
+				confirm_password: confirmPassword,
+			});
+		} catch (error) {
+			console.log(error);
+		}
 	};
 	return (
 		<Container>
@@ -80,11 +94,13 @@ const SignupPage = () => {
 				<header className="my-10">
 					<h1>Sign Up for a Musicn account</h1>
 					<p className="muted">Signup for a free Musicn account!</p>
-
 				</header>
 
 				<div className="form-group">
-					<label htmlFor="username" className="text-center text-lg font-bold">
+					<label
+						htmlFor="username"
+						className="text-center text-lg font-bold"
+					>
 						You profile will look like this:
 					</label>
 
@@ -94,12 +110,14 @@ const SignupPage = () => {
 						exit={{ opacity: 0 }}
 						className="preview_window"
 					>
-						<PreviewProfile username={username} name={name} />
+						<PreviewProfile
+							username={parseUsername(username)}
+							name={name}
+						/>
 					</motion.div>
 				</div>
 
-
-					<p className="error">{errorMessage}</p>
+				<p className="error">{errorMessage}</p>
 
 				<form onSubmit={handleSignUp}>
 					<div className="form-group">
@@ -125,6 +143,10 @@ const SignupPage = () => {
 							type="text"
 							className="form-control"
 							id="username"
+							value={username}
+							onBlur={(e) =>
+								setUsername(parseUsername(e.target.value))
+							}
 							onChange={(e) => setUsername(e.target.value)}
 							placeholder="Username"
 						/>
