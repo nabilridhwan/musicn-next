@@ -21,8 +21,8 @@ export default async function handler(
 
 	try {
 		const data = await getAllUsers();
-		return new SuccessResponse('Success', data).handleResponse(res);
+		return new SuccessResponse('Success', data).handleResponse(req, res);
 	} catch (error: any) {
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }

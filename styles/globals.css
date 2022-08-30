@@ -48,5 +48,9 @@ label {
 input[type='text'],
 input[type='password'],
 input[type='email'] {
-	@apply px-4 py-3 rounded-md bg-black text-text placeholder:text-text/50 w-full disabled:bg-white/5 disabled:text-text/20 disabled:border-white/10;
+	@apply px-4 py-3 rounded-md bg-black text-text placeholder:text-text/50 w-full disabled:text-white/50 disabled:border-white/30;
+}
+
+.error{
+	@apply my-3 text-red-500;
 }

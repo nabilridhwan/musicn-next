@@ -73,17 +73,18 @@ export default async function handler(
 
 			// User found
 
-			return new TokenResponse(token).handleResponse(res);
+			return new TokenResponse(token).handleResponse(req, res);
 		}
 
-		return new MethodNotAllowedResponse().handleResponse(res);
+		return new MethodNotAllowedResponse().handleResponse(req, res);
 	} catch (error: any) {
 		if (error instanceof yup.ValidationError) {
 			return new BodyValidationErrorResponse(error.errors).handleResponse(
+				req,
 				res
 			);
 		}
 
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }

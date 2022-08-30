@@ -1,7 +1,7 @@
 import BaseErrorResponse from './BaseErrorResponse';
 
 export default class BodyValidationErrorResponse extends BaseErrorResponse {
-	constructor(data: object) {
-		super(400, 'Error validating body', data);
+	constructor(message: string = 'Error validating body', data: object = {}) {
+		super(400, message, data);
 	}
 }

@@ -33,7 +33,7 @@ export default async function handler(
 		const data = (await getUserByUsername(validatedData.username)) as any;
 
 		if (data.length === 0) {
-			return new NotFoundResponse().handleResponse(res);
+			return new NotFoundResponse().handleResponse(req, res);
 		}
 
 		const user = data[0];
@@ -44,7 +44,7 @@ export default async function handler(
 				400,
 				'Spotify account not linked',
 				{}
-			).handleResponse(res);
+			).handleResponse(req, res);
 		}
 
 		const refresh_token = user.spotify_users.refresh_token;
@@ -73,7 +73,10 @@ export default async function handler(
 			};
 		});
 
-		return new SuccessResponse('Success', recentSongs).handleResponse(res);
+		return new SuccessResponse('Success', recentSongs).handleResponse(
+			req,
+			res
+		);
 	} catch (error: any) {
 		if (error instanceof AxiosError) {
 			if (
@@ -81,11 +84,12 @@ export default async function handler(
 				error.response?.status === 403
 			) {
 				return new SpotifyInvalidPermissionResponse().handleResponse(
+					req,
 					res
 				);
 			}
 		}
 
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }

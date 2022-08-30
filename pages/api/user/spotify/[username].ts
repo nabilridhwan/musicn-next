@@ -12,7 +12,10 @@ import Cache from '../../../../util/Cache';
 	return Number(this);
 };
 
-export default async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
+export default async function handler(
+	req: NextApiRequest,
+	res: NextApiResponse<any>
+) {
 	Cache.revalidateInBackground(res);
 	try {
 		const schema = yup.object().shape({
@@ -29,21 +32,30 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 		const data = await getUserByUsername(validatedData.username);
 
 		if (data.length === 0) {
-			return new NotFoundResponse().handleResponse(res);
+			return new NotFoundResponse().handleResponse(req, res);
 		}
 
 		const user = data[0];
 
 		// Check if spotify_users is falsy
 		if (!user.spotify_users) {
-			return new BaseErrorResponse(400, 'Spotify account not linked', {}).handleResponse(res);
+			return new BaseErrorResponse(
+				400,
+				'Spotify account not linked',
+				{}
+			).handleResponse(req, res);
 		}
 
 		const spotify_userid = user.spotify_users.spotify_userid;
 		const refresh_token = user.spotify_users.refresh_token;
 
-		const access_token = await Spotify.getAccessTokenFromRefreshToken(refresh_token);
-		const spotify_user = await Spotify.getUserProfile(spotify_userid, access_token);
+		const access_token = await Spotify.getAccessTokenFromRefreshToken(
+			refresh_token
+		);
+		const spotify_user = await Spotify.getUserProfile(
+			spotify_userid,
+			access_token
+		);
 
 		// Filter out items needed
 		const rtnData = {
@@ -53,9 +65,9 @@ export default async function handler(req: NextApiRequest, res: NextApiResponse<
 			followers: spotify_user.followers.total,
 		};
 
-		return new SuccessResponse('Success', rtnData).handleResponse(res);
+		return new SuccessResponse('Success', rtnData).handleResponse(req, res);
 	} catch (error: any) {
 		console.log(error);
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }

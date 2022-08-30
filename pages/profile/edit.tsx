@@ -44,6 +44,9 @@ export async function getServerSideProps(context: any) {
 						created_at: spotify_users?.created_at
 							? new Date(spotify_users.created_at).toISOString()
 							: null,
+						updated_at: spotify_users?.updated_at
+							? new Date(spotify_users.updated_at).toISOString()
+							: null,
 					},
 					user_id: id,
 				},
@@ -105,7 +108,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 					<p className="muted">Edit your profile from here!</p>
 				</header>
 
-				<form action="/api/login" method="POST">
+				<form action="/api/me" method="POST">
 					<div className="form-group">
 						<h2 className="font-bold text-xl">User Details</h2>
 					</div>

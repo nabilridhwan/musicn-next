@@ -37,6 +37,40 @@ const NavigationBar = () => {
 					</a>
 				</Link>
 			</motion.div>
+
+			<motion.div
+				className="w-fit"
+				whileHover={{
+					scale: 1.1,
+				}}
+				whileTap={{
+					scale: 0.9,
+				}}
+			>
+				<Link href="/login">
+					<a className="flex items-center gap-2">
+						<IoPeopleOutline size={16} />
+						Login
+					</a>
+				</Link>
+			</motion.div>
+
+			<motion.div
+				className="w-fit"
+				whileHover={{
+					scale: 1.1,
+				}}
+				whileTap={{
+					scale: 0.9,
+				}}
+			>
+				<Link href="/signup">
+					<a className="flex items-center gap-2">
+						<IoPeopleOutline size={16} />
+						Signup
+					</a>
+				</Link>
+			</motion.div>
 		</nav>
 	);
 };

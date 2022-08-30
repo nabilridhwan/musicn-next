@@ -32,7 +32,7 @@ const LoginPage = () => {
 					<p className="muted">Login into your account</p>
 				</header>
 
-				<form action="/api/login" method="POST">
+				<form action="/api/login?redirect=/o" method="POST">
 					<div className="form-group">
 						<label htmlFor="username" className="">
 							Email

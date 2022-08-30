@@ -34,7 +34,7 @@ export default async function handler(
 		const data = await getUserByUsername(validatedData.username);
 
 		if (data.length === 0) {
-			return new NotFoundResponse().handleResponse(res);
+			return new NotFoundResponse().handleResponse(req, res);
 		}
 
 		const user = data[0];
@@ -45,7 +45,7 @@ export default async function handler(
 				400,
 				'Spotify account not linked',
 				{}
-			).handleResponse(res);
+			).handleResponse(req, res);
 		}
 
 		let rtnData: {
@@ -83,8 +83,8 @@ export default async function handler(
 			rtnData.spotify_users.profile_pic_url = spotify_user.images[0].url;
 		}
 
-		return new SuccessResponse('Success', rtnData).handleResponse(res);
+		return new SuccessResponse('Success', rtnData).handleResponse(req, res);
 	} catch (error: any) {
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
