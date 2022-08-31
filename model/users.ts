@@ -1,4 +1,8 @@
+import setup from '@/util/FirstUtilScriptRun';
 import prisma from '../util/PrismaClient';
+
+// Serializers and etc
+setup();
 
 export async function getNewUsers(limit: number) {
 	const data = await prisma.app_users.findMany({
