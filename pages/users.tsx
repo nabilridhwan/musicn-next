@@ -1,13 +1,13 @@
+import CenterStage from '@/components/CenterStage';
+import Container from '@/components/Container';
+import DefaultProfilePicture from '@/components/DefaultProfilePicture';
+import Section from '@/components/Section';
+import getAllUsers from '@/frontend-api/user/getAllUsers';
 import { motion } from 'framer-motion';
 import absoluteUrl from 'next-absolute-url';
 import Link from 'next/link';
 import { FaSpotify } from 'react-icons/fa';
 import { IoPerson } from 'react-icons/io5';
-import CenterStage from '../components/CenterStage';
-import Container from '../components/Container';
-import DefaultProfilePicture from '../components/DefaultProfilePicture';
-import Section from '../components/Section';
-import getAllUsers from '../frontend-api/user/getAllUsers';
 
 type UsersProps = {
 	users: any[];
@@ -35,9 +35,8 @@ const Users = ({ users }: UsersProps) => {
 						<p className="muted">All Musicn users</p>
 
 						<p className="muted text-xs mt-20 block">
-							If your profile does not have the Profile / Spotify
-							buttons. Link your Spotify account in your profile
-							page.
+							If your profile does not show up. Link your Spotify
+							account in your profile page.
 						</p>
 					</header>
 

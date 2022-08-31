@@ -1,5 +1,5 @@
 import setup from '@/util/FirstUtilScriptRun';
-import prisma from '../util/PrismaClient';
+import prisma from '@/util/PrismaClient';
 
 // Serializers and etc
 setup();
@@ -51,6 +51,12 @@ export async function getAllUsers() {
 		orderBy: {
 			spotify_users: {
 				name: 'asc',
+			},
+		},
+
+		where: {
+			spotify_users: {
+				isNot: null,
 			},
 		},
 	});

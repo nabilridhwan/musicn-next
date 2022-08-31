@@ -1,24 +1,21 @@
+import BaseErrorResponse from '@/class/Responses/BaseErrorResponse';
+import InternalServerError from '@/class/Responses/InternalServerError';
+import NotFoundResponse from '@/class/Responses/NotFoundResponse';
+import SpotifyInvalidPermissionResponse from '@/class/Responses/SpotifyInvalidPermissionResponse';
+import SuccessResponse from '@/class/Responses/SuccessResponse';
+import Spotify from '@/class/Spotify';
 import withSetupScript from '@/middleware/withSetupScript';
+import { getUserByUsername } from '@/model/users';
+import Cache from '@/util/Cache';
 import { AxiosError } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
-import BaseErrorResponse from '../../../../class/Responses/BaseErrorResponse';
-import InternalServerError from '../../../../class/Responses/InternalServerError';
-import NotFoundResponse from '../../../../class/Responses/NotFoundResponse';
-import SpotifyInvalidPermissionResponse from '../../../../class/Responses/SpotifyInvalidPermissionResponse';
-import SuccessResponse from '../../../../class/Responses/SuccessResponse';
-import Spotify from '../../../../class/Spotify';
-import { getUserByUsername } from '../../../../model/users';
-import Cache from '../../../../util/Cache';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
 };
 
-async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	Cache.inEdgeServer(res, 30);
 	try {
 		const schema = yup.object().shape({
@@ -95,6 +92,4 @@ async function handler(
 	}
 }
 
-
-
-export default withSetupScript(handler as IHandler)
+export default withSetupScript(handler as IHandler);

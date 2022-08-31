@@ -1,3 +1,17 @@
+import {
+	MusicPlayer,
+	MusicPlayerError,
+	MusicPlayerNotPlaying,
+} from '@/components/MusicPlayer';
+import MusicPreviewDialog from '@/components/MusicPreviewDialog';
+import Section from '@/components/Section';
+import ShareButton from '@/components/ShareButton';
+import SongCard from '@/components/SongCard';
+import { MusicPreviewDialogContext } from '@/context/MusicPreviewDialogProvider';
+import getCurrentSong from '@/frontend-api/song/getCurrentSong';
+import getTopSongs from '@/frontend-api/song/getTopSongs';
+import getUserDetails from '@/frontend-api/user/getUserDetails';
+import styles from '@/styles/UserPage.module.css';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
@@ -6,20 +20,6 @@ import { useContext, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
 import Container from '../../components/Container';
 import DefaultProfilePicture from '../../components/DefaultProfilePicture';
-import {
-	MusicPlayer,
-	MusicPlayerError,
-	MusicPlayerNotPlaying,
-} from '../../components/MusicPlayer';
-import MusicPreviewDialog from '../../components/MusicPreviewDialog';
-import Section from '../../components/Section';
-import ShareButton from '../../components/ShareButton';
-import SongCard from '../../components/SongCard';
-import { MusicPreviewDialogContext } from '../../context/MusicPreviewDialogProvider';
-import getCurrentSong from '../../frontend-api/song/getCurrentSong';
-import getTopSongs from '../../frontend-api/song/getTopSongs';
-import getUserDetails from '../../frontend-api/user/getUserDetails';
-import styles from '../../styles/UserPage.module.css';
 
 type UsersProps = {
 	user: any;

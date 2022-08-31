@@ -42,7 +42,7 @@ h6 {
 }
 
 .form-group {
-	@apply my-5;
+	@apply my-10;
 }
 
 label {

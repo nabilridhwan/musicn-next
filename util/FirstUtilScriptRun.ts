@@ -8,7 +8,7 @@ export default function setup() {
 		return Number(this);
 	};
 
-    Date.prototype.toJSON = function () {
-        return this.toISOString();
-    }
+	Date.prototype.toJSON = function () {
+		return this.toISOString();
+	};
 }

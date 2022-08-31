@@ -11,45 +11,48 @@ last_updated: '2022-08-26'
 
 ### Added
 
-- Added loading spinners in buttons for Login, Signup and Edit profile buttons.
+-   Added loading spinners in buttons for Login, Signup and Edit profile buttons.
 
 ### Unresolved issues
+
 -   The navigation bar will show 'Login' and 'Signup' even when you're logged in. Clicking on either this buttons will redirect you to your profile page.
     -   I'm still finding a good way to fix this while upholding security.
+
 ### Changed
 
-- When linking Spotify account, you will be redirected to Spotify's login page even if you have already previously signed in.
+-   When linking Spotify account, you will be redirected to Spotify's login page even if you have already previously signed in.
     -   This is so that users can change their Spotify account if needed.
 
 ### Fixed
 
-- Fixed issue where users will be redirected to the users page when they try to go to the profile page.
+-   Fixed issue where users will be redirected to the users page when they try to go to the profile page.
     -   Added BigInt serialization to the model file.
 -   Fixed an issue where users who unlink Spotify accounts will receive either a `Internal Server Error` or `Client Error`.
 
 ### Removed
 
-- Remove item
+-   Remove item
 
 ## [0.3.0] - 2022-08-31
 
 ### Added
 
--   __[BETA]__ Added basic login and signing up capabilities! _(Behavior of login and signup might change in the future!)_
+-   **[BETA]** Added basic login and signing up capabilities! _(Behavior of login and signup might change in the future!)_
     -   Forget password functionality is still in development.
 -   Added profile page.
     -   In this page, you can re-link or unlink your Spotify account and edit your profile. _(Behavior of linking and unlinking might change in the future!)_
 
 ### Unresolved issues
+
 -   The navigation bar will show 'Login' and 'Signup' even when you're logged in. Clicking on either this buttons will redirect you to your profile page.
     -   I'm still finding a good way to fix this while upholding security.
 
 ### Changed
 
--   __[DEV]__ Added alias for basePath in `tsconfig.js`. The path `@/` refers to the root directory now.
+-   **[DEV]** Added alias for basePath in `tsconfig.js`. The path `@/` refers to the root directory now.
     ```js
-    import {BaseResponse} from '../../classes/baseResponse'; // => OLD - Endless going back
-    import {BaseResponse} from '@/classes/baseResponse'; // => NEW - Neater!
+    import { BaseResponse } from '../../classes/baseResponse'; // => OLD - Endless going back
+    import { BaseResponse } from '@/classes/baseResponse'; // => NEW - Neater!
     ```
 
 ### Fixed

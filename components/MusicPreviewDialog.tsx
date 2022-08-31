@@ -17,8 +17,17 @@ type MusicPreviewDialogProps = {
 	handleClose: () => void;
 };
 
-export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogProps) {
-	const { showDialog, showSongPreview, hideSongPreview, songDetails, setVolume, volume } = useContext(MusicPreviewDialogContext);
+export default function MusicPreviewDialog({
+	handleClose,
+}: MusicPreviewDialogProps) {
+	const {
+		showDialog,
+		showSongPreview,
+		hideSongPreview,
+		songDetails,
+		setVolume,
+		volume,
+	} = useContext(MusicPreviewDialogContext);
 	const audioElemRef = React.useRef<HTMLAudioElement>(null);
 
 	useEffect(() => {
@@ -35,7 +44,10 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 		<>
 			<AnimatePresence>
 				{songDetails && showDialog && (
-					<Dialog open={showDialog && songDetails !== null} onClose={handleClose}>
+					<Dialog
+						open={showDialog && songDetails !== null}
+						onClose={handleClose}
+					>
 						<motion.div
 							initial={{ opacity: 0 }}
 							animate={{ opacity: 1 }}
@@ -50,19 +62,31 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 								<Dialog.Panel className="w-full max-w-sm rounded-2xl border border-white/20 bg-black my-10 text-center p-10 shadow-[0_0_50px] shadow-black">
 									{/* Top (Title and Button) */}
 									<Dialog.Title className="text-white font-bold text-center">
-										{songDetails.preview ? 'Music Preview' : 'Song'}
+										{songDetails.preview
+											? 'Music Preview'
+											: 'Song'}
 									</Dialog.Title>
 
 									{/* Content */}
 									<div className="flex items-center justify-center flex-col">
 										<div className="my-5">
 											<picture className="w-full h-full">
-												<img width={200} height={200} className="m-auto" src={songDetails.image} alt={songDetails.title} />
+												<img
+													width={200}
+													height={200}
+													className="m-auto"
+													src={songDetails.image}
+													alt={songDetails.title}
+												/>
 											</picture>
 
-											<h2 className="font-bold text-lg mt-10 ">{songDetails.title}</h2>
+											<h2 className="font-bold text-lg mt-10 ">
+												{songDetails.title}
+											</h2>
 
-											<p className="muted">{songDetails.artist}</p>
+											<p className="muted">
+												{songDetails.artist}
+											</p>
 										</div>
 
 										{/* Show the audio dialog only if there is a song preview */}
@@ -71,7 +95,9 @@ export default function MusicPreviewDialog({ handleClose }: MusicPreviewDialogPr
 												ref={audioElemRef}
 												src={songDetails.preview}
 												// TODO: Handle volume change
-												onVolumeChange={handleVolumeChange}
+												onVolumeChange={
+													handleVolumeChange
+												}
 												controls
 												autoPlay
 											/>
@@ -109,7 +135,9 @@ function NoPreviewAvailable() {
 	return (
 		<div className="flex items-center gap-2 border border-white/50 w-fit p-3 px-6 rounded-lg">
 			<section>
-				<p className="muted text-sm mb-0">No preview available :&apos;(</p>
+				<p className="muted text-sm mb-0">
+					No preview available :&apos;(
+				</p>
 			</section>
 		</div>
 	);

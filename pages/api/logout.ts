@@ -1,9 +1,9 @@
+import InternalServerError from '@/class/Responses/InternalServerError';
 import withProtect from '@/middleware/withProtect';
 import withSetupScript from '@/middleware/withSetupScript';
+import APITokenHandler from '@/util/APITokenHandler';
+import RedirectHandler from '@/util/RedirectHandler';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import InternalServerError from '../../class/Responses/InternalServerError';
-import APITokenHandler from '../../util/APITokenHandler';
-import RedirectHandler from '../../util/RedirectHandler';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);

@@ -1,19 +1,15 @@
+import InternalServerError from '@/class/Responses/InternalServerError';
+import Spotify from '@/class/Spotify';
 import withProtect from '@/middleware/withProtect';
 import withSetupScript from '@/middleware/withSetupScript';
+import APITokenHandler from '@/util/APITokenHandler';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import InternalServerError from '../../../../class/Responses/InternalServerError';
-import Spotify from '../../../../class/Spotify';
-import APITokenHandler from '../../../../util/APITokenHandler';
 
 const SCOPE =
 	'user-read-private user-read-email user-top-read user-read-recently-played user-read-currently-playing';
 
-async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
-		
 		// TODO: Reject if not signed in
 		APITokenHandler.reject('none', req, res);
 
@@ -30,6 +26,4 @@ async function handler(
 	}
 }
 
-
-
-export default withSetupScript(withProtect(handler) as IHandler)
+export default withSetupScript(withProtect(handler) as IHandler);

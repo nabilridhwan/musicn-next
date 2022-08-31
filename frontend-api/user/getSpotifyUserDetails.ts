@@ -1,4 +1,4 @@
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '@/frontend-api/axiosInstance';
 
 export type SpotifyUserDetails = {
 	display_name: string;

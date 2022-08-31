@@ -2,10 +2,7 @@ import { motion } from 'framer-motion';
 import { useContext } from 'react';
 
 import { Audio } from 'react-loader-spinner';
-import {
-	MusicPreview,
-	MusicPreviewDialogContext,
-} from '../context/MusicPreviewDialogProvider';
+import { MusicPreviewDialogContext } from '../context/MusicPreviewDialogProvider';
 
 type MusicPlayerProps = {
 	name: string;

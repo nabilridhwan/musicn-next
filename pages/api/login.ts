@@ -1,26 +1,21 @@
+import BodyValidationErrorResponse from '@/class/Responses/BodyValidationErrorResponse';
+import InternalServerError from '@/class/Responses/InternalServerError';
+import MethodNotAllowedResponse from '@/class/Responses/MethodNotAllowedResponse';
+import TokenResponse from '@/class/Responses/TokenResponse';
 import withProtect from '@/middleware/withProtect';
 import withSetupScript from '@/middleware/withSetupScript';
+import { getUserByEmailOrUsername } from '@/model/users';
+import { createJWT } from '@/util/jwt';
 import bcrypt from 'bcrypt';
 import { setCookie } from 'cookies-next';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
-import BodyValidationErrorResponse from '../../class/Responses/BodyValidationErrorResponse';
-import InternalServerError from '../../class/Responses/InternalServerError';
-import MethodNotAllowedResponse from '../../class/Responses/MethodNotAllowedResponse';
-import TokenResponse from '../../class/Responses/TokenResponse';
-import { getUserByEmailOrUsername } from '../../model/users';
-import { createJWT } from '../../util/jwt';
 
 (BigInt.prototype as any).toJSON = function () {
 	return Number(this);
 };
 
-async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
-
-	
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
 		if (req.method === 'POST') {
 			const schema = yup.object().shape({
@@ -83,15 +78,13 @@ async function handler(
 		return new MethodNotAllowedResponse().handleResponse(req, res);
 	} catch (error: any) {
 		if (error instanceof yup.ValidationError) {
-			return new BodyValidationErrorResponse(error.errors.join(", ")).handleResponse(
-				req,
-				res
-			);
+			return new BodyValidationErrorResponse(
+				error.errors.join(', ')
+			).handleResponse(req, res);
 		}
 
 		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
 
-
-export default withSetupScript(withProtect(handler, 'has') as IHandler)
+export default withSetupScript(withProtect(handler, 'has') as IHandler);

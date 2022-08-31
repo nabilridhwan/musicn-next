@@ -1,29 +1,14 @@
-import React, { ReactNode } from 'react';
-
-interface MusicPreviewDialogProviderProps {
-	children?: ReactNode;
-}
-
-type MusicPreviewDialogState = {
-	showSongPreview: (song: MusicPreview) => void;
-	hideSongPreview: () => void;
-	songDetails: MusicPreview | null;
-	setVolume: (volume: number) => void;
-};
-
-export type MusicPreview = {
-	title: string;
-	artist: string;
-	image: string;
-	preview?: string;
-	url: string;
-};
+import React from 'react';
 
 export const MusicPreviewDialogContext = React.createContext<any>(null);
 
-export default function MusicPreviewDialogProvider({ children }: MusicPreviewDialogProviderProps) {
+export default function MusicPreviewDialogProvider({
+	children,
+}: MusicPreviewDialogProviderProps) {
 	const [showDialog, setShowDialog] = React.useState<boolean>(false);
-	const [songDetails, setSongDetails] = React.useState<MusicPreview | null>(null);
+	const [songDetails, setSongDetails] = React.useState<MusicPreview | null>(
+		null
+	);
 
 	const [_volume, _setVolume] = React.useState<number>(0.5);
 
