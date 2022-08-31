@@ -1,3 +1,4 @@
+import ButtonWithLoading from '@/components/ButtonWithLoading';
 import login, { LoginProps } from '@/frontend-api/user/login';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
@@ -130,9 +131,9 @@ const LoginPage = () => {
 							placeholder="Password"
 						/>
 					</div>
-					<button type="submit" className="btn btn-primary">
-						Login
-					</button>
+
+
+					<ButtonWithLoading text="Log In" isLoading={isLoading} disabled={!username && !password} />
 				</form>
 			</Section>
 		</Container>

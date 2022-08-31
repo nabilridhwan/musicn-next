@@ -1,3 +1,4 @@
+import ButtonWithLoading from '@/components/ButtonWithLoading';
 import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
@@ -192,9 +193,7 @@ const SignupPage = () => {
 						/>
 					</div>
 
-					<button type="submit" className={`btn btn-primary`}>
-						Signup
-					</button>
+					<ButtonWithLoading text="Sign Up" isLoading={isLoading} disabled={false} />
 				</form>
 			</Section>
 		</Container>

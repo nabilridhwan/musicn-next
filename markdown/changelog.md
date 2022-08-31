@@ -11,7 +11,7 @@ last_updated: '2022-08-26'
 
 ### Added
 
-- None
+- Added loading spinners in buttons for Login, Signup and Edit profile buttons.
 
 ### Unresolved issues
 -   The navigation bar will show 'Login' and 'Signup' even when you're logged in. Clicking on either this buttons will redirect you to your profile page.

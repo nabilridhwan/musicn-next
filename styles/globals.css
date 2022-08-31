@@ -29,11 +29,11 @@ h6 {
 }
 
 .btn {
-	@apply bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2 disabled:text-background/40;
+	@apply bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2 disabled:text-background/40 disabled:bg-white/90;
 }
 
 .btn-full {
-	@apply w-full;
+	@apply w-full flex items-center justify-center gap-2;
 }
 
 .container {

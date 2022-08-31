@@ -1,15 +1,15 @@
 import { Bars } from 'react-loader-spinner';
-import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
+// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
 
-const LoadingSpinner = () => {
+const LoadingSpinner = ({color = 'white', width = 80, height = 80}) => {
 	return (
 		<Bars
-			height="80"
-			width="80"
-			color="white"
+			height={height}
+			width={width}
+			color={color}
 			ariaLabel="bars-loading"
 			wrapperStyle={{}}
-			wrapperClass=""
+			wrapperClass="py-1"
 			visible={true}
 		/>
 	);

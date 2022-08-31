@@ -1,3 +1,4 @@
+import ButtonWithLoading from '@/components/ButtonWithLoading';
 import editProfile, { EditProfileProps } from '@/frontend-api/user/editProfile';
 import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
@@ -295,13 +296,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 						/>
 					</div>
 
-					<button
-						type="submit"
-						className="btn btn-primary"
-						disabled={!changed}
-					>
-						{changed ? 'Save Changes' : 'No Changes to Save'}
-					</button>
+					<ButtonWithLoading text={changed ? 'Save Changes' : 'No Changes to Save'} isLoading={isLoading} disabled={!changed} />
 				</form>
 
 				<Link href="/profile">
