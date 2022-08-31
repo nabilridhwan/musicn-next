@@ -4,5 +4,6 @@ export default function parseUsername(username: string) {
 		.toLowerCase()
 		.replace(/[^0-9a-zA-Z_]+/g, '_')
 		.replace(/^[^a-z]+/g, '')
-		.replace(/[^0-9a-zA-Z]+$/g, '').slice(0, 30);
+		.replace(/[^0-9a-zA-Z]+$/g, '')
+		.slice(0, 30);
 }

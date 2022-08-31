@@ -1,11 +1,5 @@
-import axiosInstance from '../axiosInstance';
+import axiosInstance from '@/frontend-api/axiosInstance';
 
-export type EditProfileProps = {
-	username?: string;
-	email?: string;
-	name?: string;
-	password?: string;
-};
 export default async function editProfile({
 	username,
 	email,

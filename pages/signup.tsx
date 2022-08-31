@@ -1,15 +1,16 @@
 import ButtonWithLoading from '@/components/ButtonWithLoading';
+import Container from '@/components/Container';
+import DefaultProfilePicture from '@/components/DefaultProfilePicture';
+import Section from '@/components/Section';
+import signup from '@/frontend-api/user/signup';
+import styles from '@/styles/UserPage.module.css';
+import parseUsername from '@/util/ParseUsername';
 import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
+import Link from 'next/link';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
-import Container from '../components/Container';
-import DefaultProfilePicture from '../components/DefaultProfilePicture';
-import Section from '../components/Section';
-import signup, { SignupProps } from '../frontend-api/user/signup';
-import styles from '../styles/UserPage.module.css';
-import parseUsername from '../util/ParseUsername';
 
 export async function getServerSideProps(context: any) {
 	// TODO: Check for existing cookies
@@ -193,7 +194,19 @@ const SignupPage = () => {
 						/>
 					</div>
 
-					<ButtonWithLoading text="Sign Up" isLoading={isLoading} disabled={false} />
+					<div className="flex items-center justify-center my-10">
+						<Link href={'/blog/agreement'}>
+							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">
+								Important: Click here to read our agreement
+							</button>
+						</Link>
+					</div>
+
+					<ButtonWithLoading
+						text="Sign Up"
+						isLoading={isLoading}
+						disabled={false}
+					/>
 				</form>
 			</Section>
 		</Container>

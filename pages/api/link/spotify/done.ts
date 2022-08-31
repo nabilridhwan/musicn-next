@@ -1,11 +1,11 @@
+import InternalServerError from '@/class/Responses/InternalServerError';
+import Spotify from '@/class/Spotify';
 import withProtect from '@/middleware/withProtect';
 import withSetupScript from '@/middleware/withSetupScript';
+import { linkSpotifyUser } from '@/model/users';
+import APITokenHandler from '@/util/APITokenHandler';
 import { AxiosError } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
-import InternalServerError from '../../../../class/Responses/InternalServerError';
-import Spotify from '../../../../class/Spotify';
-import { linkSpotifyUser } from '../../../../model/users';
-import APITokenHandler from '../../../../util/APITokenHandler';
 
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {

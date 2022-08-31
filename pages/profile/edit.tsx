@@ -1,15 +1,15 @@
 import ButtonWithLoading from '@/components/ButtonWithLoading';
-import editProfile, { EditProfileProps } from '@/frontend-api/user/editProfile';
+import Container from '@/components/Container';
+import Section from '@/components/Section';
+import editProfile from '@/frontend-api/user/editProfile';
+import { getUserById } from '@/model/users';
+import { verifyJWT } from '@/util/jwt';
+import parseUsername from '@/util/ParseUsername';
 import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
 import Link from 'next/link';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import * as yup from 'yup';
-import Container from '../../components/Container';
-import Section from '../../components/Section';
-import { getUserById } from '../../model/users';
-import { verifyJWT } from '../../util/jwt';
-import parseUsername from '../../util/ParseUsername';
 
 export async function getServerSideProps(context: any) {
 	// TODO: Check for existing cookies
@@ -296,7 +296,11 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 						/>
 					</div>
 
-					<ButtonWithLoading text={changed ? 'Save Changes' : 'No Changes to Save'} isLoading={isLoading} disabled={!changed} />
+					<ButtonWithLoading
+						text={changed ? 'Save Changes' : 'No Changes to Save'}
+						isLoading={isLoading}
+						disabled={!changed}
+					/>
 				</form>
 
 				<Link href="/profile">

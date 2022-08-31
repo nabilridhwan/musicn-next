@@ -1,25 +1,18 @@
+import BodyValidationErrorResponse from '@/class/Responses/BodyValidationErrorResponse';
+import ConflictErrorResponse from '@/class/Responses/ConflictErrorResponse';
+import InternalServerError from '@/class/Responses/InternalServerError';
+import MethodNotAllowedResponse from '@/class/Responses/MethodNotAllowedResponse';
+import SuccessResponse from '@/class/Responses/SuccessResponse';
 import withProtect from '@/middleware/withProtect';
 import withSetupScript from '@/middleware/withSetupScript';
+import { addNewUser } from '@/model/users';
+import parseUsername from '@/util/ParseUsername';
 import { Prisma } from '@prisma/client';
 import bcrypt from 'bcrypt';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
-import BodyValidationErrorResponse from '../../class/Responses/BodyValidationErrorResponse';
-import ConflictErrorResponse from '../../class/Responses/ConflictErrorResponse';
-import InternalServerError from '../../class/Responses/InternalServerError';
-import MethodNotAllowedResponse from '../../class/Responses/MethodNotAllowedResponse';
-import SuccessResponse from '../../class/Responses/SuccessResponse';
-import { addNewUser } from '../../model/users';
-import parseUsername from '../../util/ParseUsername';
 
-(BigInt.prototype as any).toJSON = function () {
-	return Number(this);
-};
-
-async function handler(
-	req: NextApiRequest,
-	res: NextApiResponse<any>
-) {
+async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
 		if (req.method === 'POST') {
 			console.log(req.body);
@@ -59,7 +52,6 @@ async function handler(
 
 			password = await bcrypt.hash(password, 10);
 
-
 			// Add a new user
 			await addNewUser({
 				name,
@@ -68,7 +60,6 @@ async function handler(
 				password,
 			});
 
-
 			return new SuccessResponse(
 				'User created successfully'
 			).handleResponse(req, res);
@@ -76,7 +67,7 @@ async function handler(
 
 		return new MethodNotAllowedResponse().handleResponse(req, res);
 	} catch (error: any) {
-		console.log(error)
+		console.log(error);
 		if (error instanceof yup.ValidationError) {
 			return new BodyValidationErrorResponse(
 				error.errors.join(', ')
@@ -84,7 +75,7 @@ async function handler(
 		}
 
 		if (error instanceof Prisma.PrismaClientKnownRequestError) {
-			console.log(error)
+			console.log(error);
 			if (error.code === 'P2002') {
 				return new ConflictErrorResponse(
 					'User already exists'
@@ -96,6 +87,4 @@ async function handler(
 	}
 }
 
-
-
-export default withSetupScript(withProtect(handler, 'has') as IHandler)
+export default withSetupScript(withProtect(handler, 'has') as IHandler);

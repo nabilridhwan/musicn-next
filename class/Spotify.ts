@@ -7,21 +7,25 @@ export default class Spotify {
 		return `https://accounts.spotify.com/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}&show_dialog=true`;
 	}
 
-	static async getRefreshTokenFromCode(code: string, redirect_uri: string){
+	static async getRefreshTokenFromCode(code: string, redirect_uri: string) {
 		const formData = new URLSearchParams();
 		formData.append('grant_type', 'authorization_code');
 		formData.append('code', code);
 		formData.append('redirect_uri', redirect_uri);
 
-		const results = await axios.post('https://accounts.spotify.com/api/token', formData, {
-			headers: {
-				'Authorization': `Basic ${Buffer.from(
-					`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
-				).toString('base64')}`,
+		const results = await axios.post(
+			'https://accounts.spotify.com/api/token',
+			formData,
+			{
+				headers: {
+					Authorization: `Basic ${Buffer.from(
+						`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
+					).toString('base64')}`,
+				},
 			}
-		})
+		);
 
-		return results.data
+		return results.data;
 	}
 
 	static async getAccessTokenFromRefreshToken(refreshToken: string) {
@@ -82,7 +86,6 @@ export default class Spotify {
 		});
 
 		if (!response.data || !response.data.items) {
-			
 			return [];
 		}
 

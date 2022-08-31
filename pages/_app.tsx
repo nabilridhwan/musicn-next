@@ -1,7 +1,7 @@
+import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
-import '../styles/globals.css';
 
 // Progress bar: https://stackoverflow.com/a/60755417
 import Head from 'next/head';
@@ -32,7 +32,7 @@ const queryClient = new QueryClient({
 	},
 });
 
-function MyApp({ Component, pageProps}: AppProps) {
+function MyApp({ Component, pageProps }: AppProps) {
 	return (
 		<>
 			<Head>

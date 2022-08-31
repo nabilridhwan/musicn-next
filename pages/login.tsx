@@ -1,12 +1,12 @@
 import ButtonWithLoading from '@/components/ButtonWithLoading';
+import Container from '@/components/Container';
+import Section from '@/components/Section';
 import login, { LoginProps } from '@/frontend-api/user/login';
 import { useMutation } from '@tanstack/react-query';
 import { AxiosError } from 'axios';
 import { getCookie } from 'cookies-next';
 import { SyntheticEvent, useEffect, useState } from 'react';
 import * as yup from 'yup';
-import Container from '../components/Container';
-import Section from '../components/Section';
 
 export async function getServerSideProps(context: any) {
 	// TODO: Check for existing cookies
@@ -132,8 +132,11 @@ const LoginPage = () => {
 						/>
 					</div>
 
-
-					<ButtonWithLoading text="Log In" isLoading={isLoading} disabled={!username && !password} />
+					<ButtonWithLoading
+						text="Log In"
+						isLoading={isLoading}
+						disabled={!username && !password}
+					/>
 				</form>
 			</Section>
 		</Container>

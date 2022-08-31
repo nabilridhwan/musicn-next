@@ -1,11 +1,11 @@
+import CenterStage from '@/components/CenterStage';
+import Container from '@/components/Container';
+import Section from '@/components/Section';
 import { motion } from 'framer-motion';
 import type { NextPage } from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
 import { IoArrowForward } from 'react-icons/io5';
-import CenterStage from '../components/CenterStage';
-import Container from '../components/Container';
-import Section from '../components/Section';
 
 const Home: NextPage = () => {
 	return (
@@ -56,7 +56,11 @@ const Home: NextPage = () => {
 							</motion.div>
 
 							<p className="mt-5 text-xs muted">
-								<strong className='text-white/70'>[BETA]</strong> Login, sign-ups, linking Spotify accounts and re-link are here! Read more{' '}
+								<strong className="text-white/70">
+									[BETA]
+								</strong>{' '}
+								Login, sign-ups, linking Spotify accounts and
+								re-link are here! Read more{' '}
 								<Link href={'/changelog'}>
 									<a className="underline">here</a>
 								</Link>

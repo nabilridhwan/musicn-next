@@ -1,9 +1,6 @@
 import { motion } from 'framer-motion';
 import { useContext } from 'react';
-import {
-	MusicPreview,
-	MusicPreviewDialogContext,
-} from '../context/MusicPreviewDialogProvider';
+import { MusicPreviewDialogContext } from '../context/MusicPreviewDialogProvider';
 type SongCardProps = {
 	name: string;
 	spotifyLink: string;

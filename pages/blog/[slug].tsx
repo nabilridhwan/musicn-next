@@ -1,8 +1,8 @@
+import Container from '@/components/Container';
 import fs from 'fs/promises';
 import matter from 'gray-matter';
 import md from 'markdown-it';
 import Head from 'next/head';
-import Container from '../../components/Container';
 
 export async function getStaticPaths() {
 	const files = await fs.readdir('markdown');

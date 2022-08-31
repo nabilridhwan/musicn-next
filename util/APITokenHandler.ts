@@ -1,8 +1,8 @@
 import BodyValidationErrorResponse from '@/class/Responses/BodyValidationErrorResponse';
+import UnauthorizedResponse from '@/class/Responses/UnauthorizedResponse';
+import { verifyJWT } from '@/util/jwt';
 import { deleteCookie } from 'cookies-next';
 import { NextApiRequest, NextApiResponse } from 'next';
-import UnauthorizedResponse from '../class/Responses/UnauthorizedResponse';
-import { verifyJWT } from './jwt';
 
 namespace APITokenHandler {
 	const tokenKey = 'token';
@@ -40,7 +40,7 @@ namespace APITokenHandler {
 		}
 	}
 
-	export function extractDataFromToken(token: string){
+	export function extractDataFromToken(token: string) {
 		try {
 			const data = verifyJWT(token);
 			return data;
