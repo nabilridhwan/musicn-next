@@ -24,8 +24,12 @@ h6 {
 	@apply text-text/50;
 }
 
+.btn-base {
+	@apply rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2;
+}
+
 .btn {
-	@apply bg-primary font-bold text-white py-2 px-4 rounded inline-block;
+	@apply bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2 disabled:text-background/40;
 }
 
 .btn-full {
@@ -35,4 +39,22 @@ h6 {
 .container {
 	width: 80%;
 	margin: auto;
+}
+
+.form-group {
+	@apply my-5;
+}
+
+label {
+	@apply w-full block mb-2 text-text/90;
+}
+
+input[type='text'],
+input[type='password'],
+input[type='email'] {
+	@apply px-4 py-3 rounded-md bg-black text-text placeholder:text-text/50 w-full disabled:text-white/50 disabled:border-white/30;
+}
+
+.error {
+	@apply my-3 text-red-500;
 }

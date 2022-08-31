@@ -90,7 +90,7 @@ const Users = ({ users }: UsersProps) => {
 										</p>
 
 										{user.spotify_users && (
-											<div className="flex flex-wrap gap-2">
+											<div className="flex flex-wrap gap-2 items-center justify-center">
 												{/* <p>
 											Spotify name:{' '}
 											{user.spotify_users.name}

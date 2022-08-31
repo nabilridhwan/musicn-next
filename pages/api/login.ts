@@ -1,4 +1,7 @@
+import withProtect from '@/middleware/withProtect';
+import withSetupScript from '@/middleware/withSetupScript';
 import bcrypt from 'bcrypt';
+import { setCookie } from 'cookies-next';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
 import BodyValidationErrorResponse from '../../class/Responses/BodyValidationErrorResponse';
@@ -12,10 +15,12 @@ import { createJWT } from '../../util/jwt';
 	return Number(this);
 };
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
+
+	
 	try {
 		if (req.method === 'POST') {
 			const schema = yup.object().shape({
@@ -59,19 +64,34 @@ export default async function handler(
 
 			const token = createJWT(user.user_id);
 
+			// Set a date 1 hour from now
+			const expires = new Date(Date.now() + 1000 * 60 * 60);
+
+			setCookie('token', token, {
+				req,
+				res,
+				expires,
+				httpOnly: true,
+				secure: process.env.NODE_ENV === 'production',
+			});
+
 			// User found
 
-			return new TokenResponse(token).handleResponse(res);
+			return new TokenResponse(token).handleResponse(req, res);
 		}
 
-		return new MethodNotAllowedResponse().handleResponse(res);
+		return new MethodNotAllowedResponse().handleResponse(req, res);
 	} catch (error: any) {
 		if (error instanceof yup.ValidationError) {
-			return new BodyValidationErrorResponse(error.errors).handleResponse(
+			return new BodyValidationErrorResponse(error.errors.join(", ")).handleResponse(
+				req,
 				res
 			);
 		}
 
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+export default withSetupScript(withProtect(handler, 'has') as IHandler)

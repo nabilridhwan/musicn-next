@@ -1,4 +1,5 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
+import withSetupScript from '@/middleware/withSetupScript';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import InternalServerError from '../../../class/Responses/InternalServerError';
 import SuccessResponse from '../../../class/Responses/SuccessResponse';
@@ -9,7 +10,7 @@ import Cache from '../../../util/Cache';
 	return Number(this);
 };
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
@@ -18,8 +19,12 @@ export default async function handler(
 
 	try {
 		const data = await getNewUsers(3);
-		return new SuccessResponse('Success', data).handleResponse(res);
+		return new SuccessResponse('Success', data).handleResponse(req, res);
 	} catch (error: any) {
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+
+export default withSetupScript(handler as IHandler)

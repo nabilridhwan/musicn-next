@@ -3,6 +3,27 @@ import axios from 'axios';
 type SpotifyTerm = 'short_term' | 'medium_term' | 'long_term';
 
 export default class Spotify {
+	static getUserAuthorizationUrl(scope: string, redirectUri: string) {
+		return `https://accounts.spotify.com/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}`;
+	}
+
+	static async getRefreshTokenFromCode(code: string, redirect_uri: string){
+		const formData = new URLSearchParams();
+		formData.append('grant_type', 'authorization_code');
+		formData.append('code', code);
+		formData.append('redirect_uri', redirect_uri);
+
+		const results = await axios.post('https://accounts.spotify.com/api/token', formData, {
+			headers: {
+				'Authorization': `Basic ${Buffer.from(
+					`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
+				).toString('base64')}`,
+			}
+		})
+
+		return results.data
+	}
+
 	static async getAccessTokenFromRefreshToken(refreshToken: string) {
 		const formData = new URLSearchParams();
 		formData.append('grant_type', 'refresh_token');
@@ -61,6 +82,7 @@ export default class Spotify {
 		});
 
 		if (!response.data || !response.data.items) {
+			
 			return [];
 		}
 
@@ -86,7 +108,7 @@ export default class Spotify {
 	static async getUserProfile(user_id: string, accessToken: string) {
 		const response = await axios({
 			method: 'GET',
-			url: `https://api.spotify.com/v1/users/${user_id}`,
+			url: `https://api.spotify.com/v1/me`,
 			headers: {
 				Authorization: `Bearer ${accessToken}`,
 			},

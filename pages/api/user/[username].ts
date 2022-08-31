@@ -1,3 +1,4 @@
+import withSetupScript from '@/middleware/withSetupScript';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
 import BaseErrorResponse from '../../../class/Responses/BaseErrorResponse';
@@ -7,7 +8,7 @@ import SuccessResponse from '../../../class/Responses/SuccessResponse';
 import Spotify from '../../../class/Spotify';
 import {
 	getUserByUsername,
-	updateProfilePictureUrl,
+	updateProfilePictureUrl
 } from '../../../model/users';
 import Cache from '../../../util/Cache';
 
@@ -15,7 +16,7 @@ import Cache from '../../../util/Cache';
 	return Number(this);
 };
 
-export default async function handler(
+async function handler(
 	req: NextApiRequest,
 	res: NextApiResponse<any>
 ) {
@@ -34,7 +35,7 @@ export default async function handler(
 		const data = await getUserByUsername(validatedData.username);
 
 		if (data.length === 0) {
-			return new NotFoundResponse().handleResponse(res);
+			return new NotFoundResponse().handleResponse(req, res);
 		}
 
 		const user = data[0];
@@ -45,7 +46,7 @@ export default async function handler(
 				400,
 				'Spotify account not linked',
 				{}
-			).handleResponse(res);
+			).handleResponse(req, res);
 		}
 
 		let rtnData: {
@@ -83,8 +84,11 @@ export default async function handler(
 			rtnData.spotify_users.profile_pic_url = spotify_user.images[0].url;
 		}
 
-		return new SuccessResponse('Success', rtnData).handleResponse(res);
+		return new SuccessResponse('Success', rtnData).handleResponse(req, res);
 	} catch (error: any) {
-		return new InternalServerError(error.message).handleResponse(res);
+		return new InternalServerError(error.message).handleResponse(req, res);
 	}
 }
+
+
+export default withSetupScript(handler as IHandler)

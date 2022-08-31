@@ -2,7 +2,7 @@ import { sign, verify } from 'jsonwebtoken';
 
 export function createJWT(user_id: any) {
 	const payload = {
-		user_id,
+		user_id: Number(user_id),
 	};
 
 	const options = {
@@ -13,6 +13,6 @@ export function createJWT(user_id: any) {
 	return token;
 }
 
-export function verifyJWT(token: string) {
-	return verify(token, process.env.JWT_SECRET as string);
+export function verifyJWT(token: string): TokenData {
+	return verify(token, process.env.JWT_SECRET as string) as TokenData;
 }

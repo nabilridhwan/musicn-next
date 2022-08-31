@@ -33,7 +33,7 @@ const Home: NextPage = () => {
 								whileTap={{ scale: 0.9 }}
 								whileHover={{ scale: 1.05 }}
 							>
-								<Link href={'/users'}>
+								<Link href={'/signup'}>
 									<button className=" bg-white text-black font-bold shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-full flex items-center justify-center gap-2 mt-10">
 										Get started
 										{/* Arrow */}
@@ -56,8 +56,8 @@ const Home: NextPage = () => {
 							</motion.div>
 
 							<p className="mt-5 text-xs muted">
-								Login, sign-ups and more coming soon. Read more{' '}
-								<Link href={'/blog/introducing-the-new-musicn'}>
+								<strong className='text-white/70'>[BETA]</strong> Login, sign-ups, linking Spotify accounts and re-link are here! Read more{' '}
+								<Link href={'/changelog'}>
 									<a className="underline">here</a>
 								</Link>
 								.
