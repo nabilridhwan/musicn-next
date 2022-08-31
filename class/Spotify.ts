@@ -4,7 +4,7 @@ type SpotifyTerm = 'short_term' | 'medium_term' | 'long_term';
 
 export default class Spotify {
 	static getUserAuthorizationUrl(scope: string, redirectUri: string) {
-		return `https://accounts.spotify.com/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}`;
+		return `https://accounts.spotify.com/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}&show_dialog=true`;
 	}
 
 	static async getRefreshTokenFromCode(code: string, redirect_uri: string){

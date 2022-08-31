@@ -23,7 +23,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 			const { refresh_token, access_token } =
 				await Spotify.getRefreshTokenFromCode(
 					code,
-					'http://localhost:3000/api/link/spotify/done'
+					process.env.SPOTIFY_REDIRECT_URL!
 				);
 
 			const {

@@ -21,7 +21,7 @@ async function handler(
 			res.redirect(
 				Spotify.getUserAuthorizationUrl(
 					SCOPE,
-					'http://localhost:3000/api/link/spotify/done'
+					process.env.SPOTIFY_REDIRECT_URL!
 				)
 			);
 		}

@@ -1,7 +1,7 @@
 import { getCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
 import { IoClose } from 'react-icons/io5';
 import Container from '../../components/Container';
@@ -76,14 +76,23 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 	const [originalUser, setOriginalUser] = useState(props);
 	const [user, setUser] = useState(props);
 
-	console.log(props);
+	const [hasSpotify, setHasSpotify] = useState(false);
+
+	useEffect(() => {
+
+		if(user.hasOwnProperty('spotify_users') && user.spotify_users && (user.spotify_users as any).id) {
+			setHasSpotify(true);
+		}
+	}, [user])
+
+	console.log(user);
 
 	return (
 		<Container>
 			<Section>
 				{/* Card if user has no spotify account */}
 
-				{!user.spotify_users.id && <NoSpotifyAccount />}
+				{!hasSpotify  && <NoSpotifyAccount />}
 
 				{/* Page header */}
 				<header className="my-10">
@@ -137,7 +146,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 					</div>
 
 					<div className="form-group">
-						{user.spotify_users.id && (
+						{hasSpotify && (
 							<>
 								<p>
 									Spotify Linking Last updated:{' '}

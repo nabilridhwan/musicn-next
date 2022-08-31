@@ -18,12 +18,14 @@ last_updated: '2022-08-26'
     -   I'm still finding a good way to fix this while upholding security.
 ### Changed
 
-- None
+- When linking Spotify account, you will be redirected to Spotify's login page even if you have already previously signed in.
+    -   This is so that users can change their Spotify account if needed.
 
 ### Fixed
 
 - Fixed issue where users will be redirected to the users page when they try to go to the profile page.
     -   Added BigInt serialization to the model file.
+-   Fixed an issue where users who unlink Spotify accounts will receive either a `Internal Server Error` or `Client Error`.
 
 ### Removed
 
