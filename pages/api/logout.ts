@@ -5,10 +5,6 @@ import APITokenHandler from '@/util/APITokenHandler';
 import RedirectHandler from '@/util/RedirectHandler';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-(BigInt.prototype as any).toJSON = function () {
-	return Number(this);
-};
-
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	try {
 		APITokenHandler.removeToken(req, res);

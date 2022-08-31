@@ -6,10 +6,6 @@ import { getNewUsers } from '@/model/users';
 import Cache from '@/util/Cache';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-(BigInt.prototype as any).toJSON = function () {
-	return Number(this);
-};
-
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	// Cache results in the background and show the 'old' data
 	Cache.revalidateInBackground(res);

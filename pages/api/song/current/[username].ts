@@ -11,10 +11,6 @@ import { AxiosError } from 'axios';
 import type { NextApiRequest, NextApiResponse } from 'next';
 import * as yup from 'yup';
 
-(BigInt.prototype as any).toJSON = function () {
-	return Number(this);
-};
-
 async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 	Cache.inEdgeServer(res, 10);
 	try {
