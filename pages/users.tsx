@@ -40,7 +40,10 @@ const Users = ({ users }: UsersProps) => {
 						</p>
 					</header>
 
-					<div className="grid md:grid-cols-2 gap-5">
+					<div
+						data-test-id="users-list"
+						className="grid md:grid-cols-2 gap-5"
+					>
 						{users.map((user, index) => {
 							return (
 								<div

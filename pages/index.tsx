@@ -34,7 +34,10 @@ const Home: NextPage = () => {
 								whileHover={{ scale: 1.05 }}
 							>
 								<Link href={'/signup'}>
-									<button className=" bg-white text-black font-bold shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-full flex items-center justify-center gap-2 mt-10">
+									<button
+										data-test-id="get-started-button"
+										className=" bg-white text-black font-bold shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-full flex items-center justify-center gap-2 mt-10"
+									>
 										Get started
 										{/* Arrow */}
 										<motion.div
@@ -74,7 +77,10 @@ const Home: NextPage = () => {
 								whileHover={{ scale: 1.05 }}
 							>
 								<Link href={'/changelog'}>
-									<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">
+									<button
+										data-test-id="changelog-button"
+										className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs"
+									>
 										What&apos;s new? ✨
 									</button>
 								</Link>

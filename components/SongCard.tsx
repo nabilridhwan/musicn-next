@@ -40,6 +40,7 @@ const SongCard = ({
 				scale: 0.9,
 			}}
 			className="cursor-pointer"
+			data-test-id="song-card"
 			onClick={handleSongClick}
 		>
 			<div className="flex flex-col items-center text-center border border-white/20 rounded-lg">
@@ -49,7 +50,9 @@ const SongCard = ({
 				/>
 
 				<section className="py-5 px-3">
-					<p className="font-bold">{name}</p>
+					<p data-test-id="song-name" className="font-bold">
+						{name}
+					</p>
 					<p className="muted text-sm mb-0">{artists}</p>
 				</section>
 			</div>
