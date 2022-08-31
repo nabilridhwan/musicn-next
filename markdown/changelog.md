@@ -5,6 +5,30 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 last_updated: '2022-08-26'
 ---
 
+# Changelog
+
+## [0.3.1] - 2022-08-31
+
+### Added
+
+- None
+
+### Unresolved issues
+-   The navigation bar will show 'Login' and 'Signup' even when you're logged in. Clicking on either this buttons will redirect you to your profile page.
+    -   I'm still finding a good way to fix this while upholding security.
+### Changed
+
+- None
+
+### Fixed
+
+- Fixed issue where users will be redirected to the users page when they try to go to the profile page.
+    -   Added BigInt serialization to the model file.
+
+### Removed
+
+- Remove item
+
 ## [0.3.0] - 2022-08-31
 
 ### Added
