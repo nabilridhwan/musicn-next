@@ -155,19 +155,22 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 							</label>
 
 							<Link href={`/user/${user.username}`}>
-								<a className="underline flex flex-wrap items-center gap-2 my-3 text-text/60">
+								<a
+									data-test-id="musicn-profile-link"
+									className="underline flex flex-wrap items-center gap-2 my-3 text-text/60"
+								>
 									<IoPerson size={16} />
 									Click here to go to your Musicn profile
 								</a>
 							</Link>
 
 							<input
-								name="email"
-								type="email"
+								name="musicn_link"
+								type="text"
 								value={`${window.location.origin}/user/${user.username}`}
 								className="form-control"
-								id="email"
-								placeholder="Email"
+								id="musicn_link"
+								placeholder="Musicn Profile Link"
 								readOnly
 							/>
 						</div>

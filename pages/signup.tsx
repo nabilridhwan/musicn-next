@@ -160,7 +160,7 @@ const SignupPage = () => {
 						</label>
 						<input
 							name="email"
-							type="email"
+							type="text"
 							className="form-control"
 							id="email"
 							onChange={(e) => setEmail(e.target.value)}
@@ -195,14 +195,18 @@ const SignupPage = () => {
 					</div>
 
 					<div className="flex items-center justify-center my-10">
-						<Link href={'/blog/agreement'}>
-							<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">
+						<Link href={'/agreement'}>
+							<button
+								data-test-id="agreement-button"
+								className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs"
+							>
 								Important: Click here to read our agreement
 							</button>
 						</Link>
 					</div>
 
 					<ButtonWithLoading
+						data-test-id="signup-button"
 						text="Sign Up"
 						isLoading={isLoading}
 						disabled={false}

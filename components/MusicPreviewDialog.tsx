@@ -45,6 +45,7 @@ export default function MusicPreviewDialog({
 			<AnimatePresence>
 				{songDetails && showDialog && (
 					<Dialog
+						data-test-id={'preview-black-background'}
 						open={showDialog && songDetails !== null}
 						onClose={handleClose}
 					>
@@ -80,7 +81,10 @@ export default function MusicPreviewDialog({
 												/>
 											</picture>
 
-											<h2 className="font-bold text-lg mt-10 ">
+											<h2
+												data-test-id="preview-song-name"
+												className="font-bold text-lg mt-10 "
+											>
 												{songDetails.title}
 											</h2>
 

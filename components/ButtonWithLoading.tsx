@@ -4,15 +4,18 @@ type ButtonWithLoadingProps = {
 	isLoading: boolean;
 	text: string;
 	disabled: boolean;
+	'data-test-id'?: string;
 };
 
 const ButtonWithLoading = ({
 	isLoading,
 	text,
 	disabled,
+	'data-test-id': dataTestId,
 }: ButtonWithLoadingProps) => {
 	return (
 		<button
+			data-test-id={dataTestId}
 			className={`btn btn-primary btn-full`}
 			disabled={disabled ? disabled || isLoading : isLoading}
 		>

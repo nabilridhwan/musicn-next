@@ -67,7 +67,7 @@ const LoginPage = () => {
 		setErrorMessage('');
 
 		const shape = yup.object({
-			username: yup.string().required('Username is required'),
+			username: yup.string().required('Username or email is required'),
 			password: yup.string().required('Password is required'),
 		});
 
@@ -110,6 +110,7 @@ const LoginPage = () => {
 							Username or email
 						</label>
 						<input
+							data-test-id="username-input"
 							value={username}
 							onChange={(e) => setUsername(e.target.value)}
 							name="username"
@@ -123,6 +124,7 @@ const LoginPage = () => {
 						<label htmlFor="password">Password</label>
 						<input
 							value={password}
+							data-test-id="password-input"
 							onChange={(e) => setPassword(e.target.value)}
 							name="password"
 							type="password"
@@ -133,6 +135,7 @@ const LoginPage = () => {
 					</div>
 
 					<ButtonWithLoading
+						data-test-id="login-button"
 						text="Log In"
 						isLoading={isLoading}
 						disabled={!username && !password}
