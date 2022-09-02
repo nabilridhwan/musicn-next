@@ -207,6 +207,14 @@ export async function addNewUser({
 			password: password,
 			spotify_linked: false,
 			activated: false,
+			preferences: {
+				create: {
+					account: true,
+					top: true,
+					recent: true,
+					current: true,
+				},
+			},
 		},
 		select: {
 			user_id: true,
