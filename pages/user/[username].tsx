@@ -31,7 +31,7 @@ export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		const [user, top] = await axios.all([
+		let [user, top] = await axios.all([
 			getUserDetails(username),
 			getTopSongs(username),
 		]);
@@ -46,10 +46,14 @@ export async function getServerSideProps(context: any) {
 			throw new Error('Account is not visible to the public');
 		}
 
+		if (user.preferences.top === false) {
+			top = [];
+		}
+
 		return {
 			props: {
 				user: user,
-				top: top || [],
+				top,
 			},
 		};
 	} catch (error) {
