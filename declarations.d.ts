@@ -40,3 +40,10 @@ type SignupProps = {
 	password: string;
 	confirm_password: string;
 };
+
+type Preferences = {
+	account: boolean;
+	top: boolean;
+	current: boolean;
+	recent: boolean;
+};

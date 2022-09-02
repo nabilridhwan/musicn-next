@@ -118,3 +118,22 @@ export const MusicPlayerError = () => {
 		</div>
 	);
 };
+
+export const MusicPlayerPrivate = () => {
+	return (
+		<div className="flex items-center gap-2 border border-white/50 w-fit p-3 px-6 rounded-lg">
+			{/* <img className="w-12 h-12" src={imageUrl} /> */}
+
+			{/* <section>
+				<p className="font-bold">{name}</p>
+				<p className="muted text-sm mb-0">{artists}</p>
+			</section> */}
+
+			<section>
+				<p className="muted text-sm mb-0">
+					The data is private :&apos;(
+				</p>
+			</section>
+		</div>
+	);
+};

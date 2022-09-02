@@ -35,6 +35,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
 		const user = data[0];
 
+		if (user.preferences && user.preferences.top === false) {
+			return new BaseErrorResponse(
+				204,
+				'Top songs is disabled in preferences',
+				{}
+			).handleResponse(req, res);
+		}
+
 		// Check if spotify_users is falsy
 		if (!user.spotify_users) {
 			return new BaseErrorResponse(

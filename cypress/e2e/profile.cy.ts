@@ -36,3 +36,5 @@ describe('Profile', () => {
 		cy.location('pathname').should('eq', expectedLink);
 	});
 });
+
+export {};

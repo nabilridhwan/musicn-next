@@ -47,6 +47,12 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 				profile_pic_url: string | null;
 				spotify_userid: string;
 			};
+			preferences: {
+				account: boolean;
+				current: boolean;
+				top: boolean;
+				recent: boolean;
+			};
 		} = {
 			name: user.name || '',
 			username: user.username,
@@ -55,6 +61,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 				profile_pic_url: user.spotify_users.profile_pic_url || null,
 				spotify_userid: user.spotify_users.spotify_userid,
 			},
+			preferences: user.preferences,
 		};
 
 		// Get profile picture

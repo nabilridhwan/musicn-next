@@ -35,3 +35,5 @@ describe('Login page', () => {
 		cy.location('pathname').should('eq', '/profile');
 	});
 });
+
+export {};

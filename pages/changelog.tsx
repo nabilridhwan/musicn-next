@@ -29,10 +29,7 @@ export default function Post({
 			<Container>
 				<div className="prose prose-invert mx-auto">
 					<h1>Changelog</h1>
-					<p className="text-sm">
-						Last updated{' '}
-						{new Date(frontmatter.last_updated).toUTCString()}
-					</p>
+					<p className="lead">Detailed list of changes to Musicn!</p>
 
 					<div
 						className="mt-20"

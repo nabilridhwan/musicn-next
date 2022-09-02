@@ -66,6 +66,13 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 				secure: process.env.NODE_ENV === 'production',
 			});
 
+			setCookie('signed_in', true, {
+				req,
+				res,
+				expires,
+				secure: process.env.NODE_ENV === 'production',
+			});
+
 			// User found
 
 			return new TokenResponse(token).handleResponse(req, res);

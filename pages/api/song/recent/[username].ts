@@ -32,6 +32,14 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 
 		const user = data[0];
 
+		if (user.preferences && user.preferences.recent === false) {
+			return new BaseErrorResponse(
+				204,
+				'Recent songs is disabled in preferences',
+				{}
+			).handleResponse(req, res);
+		}
+
 		// Check if spotify_users is falsy
 		if (!user.spotify_users) {
 			return new BaseErrorResponse(
@@ -64,6 +72,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 				duration: song.track.duration_ms,
 				preview: song.track.preview_url ?? null,
 				uri: song.track.uri,
+				played_at: song.played_at,
 			};
 		});
 
