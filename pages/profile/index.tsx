@@ -1,12 +1,15 @@
+import ButtonWithLoading from '@/components/ButtonWithLoading';
 import Container from '@/components/Container';
 import Section from '@/components/Section';
+import updatePreferences from '@/frontend-api/user/updatePreferences';
 import { getUserById } from '@/model/users';
 import { verifyJWT } from '@/util/jwt';
+import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
 import { DateTime } from 'luxon';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { SyntheticEvent, useEffect, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
 import { IoClose, IoPerson } from 'react-icons/io5';
 
@@ -27,7 +30,7 @@ export async function getServerSideProps(context: any) {
 				throw new Error('User not found');
 			}
 
-			const { username, email, name, spotify_users } = user;
+			const { username, email, name, spotify_users, preferences } = user;
 
 			console.log(id);
 
@@ -37,6 +40,7 @@ export async function getServerSideProps(context: any) {
 					email,
 					name,
 					spotify_users,
+					preferences,
 					user_id: id,
 				},
 			};
@@ -70,6 +74,13 @@ type ProfilePageProps = {
 		created_at: string;
 		updated_at: string;
 	};
+	preferences: {
+		id: number;
+		top: boolean;
+		current: boolean;
+		recent: boolean;
+		updated_at: string;
+	};
 };
 
 const ProfilePage = ({ ...props }: ProfilePageProps) => {
@@ -77,6 +88,25 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 	const [user, setUser] = useState(props);
 
 	const [hasSpotify, setHasSpotify] = useState(false);
+	const [hasPreferences, setHasPreferences] = useState(false);
+	const [preferenceChanged, setPreferenceChanged] = useState(false);
+
+	const [originalTop, setOriginalTop] = useState(true);
+	const [originalCurrent, setOriginalCurrent] = useState(true);
+	const [originalRecent, setOriginalRecent] = useState(true);
+
+	const [top, setTop] = useState(true);
+	const [current, setCurrent] = useState(true);
+	const [recent, setRecent] = useState(true);
+
+	const {
+		status: updateStatus,
+		error: updateError,
+		mutateAsync: updatePreferencesAsync,
+	} = useMutation(
+		['updatePreference', user],
+		async (obj: Preferences) => await updatePreferences(obj)
+	);
 
 	useEffect(() => {
 		if (
@@ -86,9 +116,51 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 		) {
 			setHasSpotify(true);
 		}
+
+		if (
+			user.hasOwnProperty('preferences') &&
+			user.preferences &&
+			(user.preferences as any).id
+		) {
+			setHasPreferences(true);
+
+			const { top, current, recent } = user.preferences;
+
+			setOriginalTop(top);
+			setOriginalCurrent(current);
+			setOriginalRecent(recent);
+
+			setTop(top);
+			setCurrent(current);
+			setRecent(recent);
+		}
 	}, [user]);
 
-	console.log(user);
+	useEffect(() => {
+		// One of the preferences change
+		if (
+			top !== originalTop ||
+			current !== originalCurrent ||
+			recent !== originalRecent
+		) {
+			setPreferenceChanged(true);
+		} else {
+			setPreferenceChanged(false);
+		}
+	}, [top, current, recent, originalTop, originalCurrent, originalRecent]);
+
+	useEffect(() => {
+		if (updateStatus === 'success') {
+			setOriginalCurrent(current);
+			setOriginalRecent(recent);
+			setOriginalTop(top);
+		}
+	}, [updateStatus, current, recent, top]);
+
+	async function handlePreferenceUpdate(e: SyntheticEvent) {
+		e.preventDefault();
+		await updatePreferencesAsync({ top, recent, current });
+	}
 
 	return (
 		<Container>
@@ -157,7 +229,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 							<Link href={`/user/${user.username}`}>
 								<a
 									data-test-id="musicn-profile-link"
-									className="underline flex flex-wrap items-center gap-2 my-3 text-text/60"
+									className="underline flex flex-wrap items-center gap-2 my-3"
 								>
 									<IoPerson size={16} />
 									Click here to go to your Musicn profile
@@ -175,6 +247,60 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 							/>
 						</div>
 					)}
+
+					<div className="form-group">
+						<label htmlFor="Preferences">Preferences</label>
+
+						{updateStatus === 'success' && (
+							<div className="alert alert-success">
+								Preferences updated successfully!
+							</div>
+						)}
+
+						{hasPreferences && (
+							<p className="muted my-2">
+								Last changed:{' '}
+								{DateTime.fromISO(
+									user.preferences.updated_at
+								).toRelative()}
+							</p>
+						)}
+
+						<label htmlFor="top">Top Songs</label>
+						<input
+							type="checkbox"
+							id="top"
+							onChange={() => setTop(!top)}
+							checked={top}
+						/>
+
+						<label htmlFor="Recently Played Songs">
+							Recently Played Songs
+						</label>
+						<input
+							type="checkbox"
+							id="Recently Played Songs"
+							onChange={() => setRecent(!recent)}
+							checked={recent}
+						/>
+
+						<label htmlFor="Currently Playing Song">
+							Currently Playing Song
+						</label>
+						<input
+							type="checkbox"
+							id="Currently Playing Song"
+							onChange={() => setCurrent(!current)}
+							checked={current}
+						/>
+
+						<ButtonWithLoading
+							disabled={updateStatus === 'loading'}
+							isLoading={updateStatus === 'loading'}
+							onClick={handlePreferenceUpdate}
+							text="Update Preferences"
+						/>
+					</div>
 
 					<div className="form-group">
 						{hasSpotify && (

@@ -55,6 +55,11 @@ namespace APITokenHandler {
 			req,
 			res,
 		});
+
+		deleteCookie('signed_in', {
+			req,
+			res,
+		});
 	}
 }
 

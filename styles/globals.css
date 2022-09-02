@@ -58,3 +58,7 @@ input[type='email'] {
 .error {
 	@apply my-3 text-red-500;
 }
+
+.alert-success {
+	@apply text-green-500 text-sm;
+}

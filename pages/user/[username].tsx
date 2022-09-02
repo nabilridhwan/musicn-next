@@ -2,6 +2,7 @@ import {
 	MusicPlayer,
 	MusicPlayerError,
 	MusicPlayerNotPlaying,
+	MusicPlayerPrivate,
 } from '@/components/MusicPlayer';
 import MusicPreviewDialog from '@/components/MusicPreviewDialog';
 import Section from '@/components/Section';
@@ -41,8 +42,8 @@ export async function getServerSideProps(context: any) {
 
 		return {
 			props: {
-				user,
-				top,
+				user: user,
+				top: top || [],
 			},
 		};
 	} catch (error) {
@@ -182,6 +183,7 @@ const UserPage = ({ user, top }: UsersProps) => {
 								<p className="text-text/70 mb-5 text-sm">
 									I&apos;m currently listening to
 								</p>
+
 								{Object.keys(currentSongData).length > 0 ? (
 									<>
 										<MusicPlayer
@@ -202,10 +204,21 @@ const UserPage = ({ user, top }: UsersProps) => {
 
 						{currentSongStatus === 'error' && (
 							<>
-								<p className="text-text/70 mb-5 text-sm">
-									I&apos;m currently listening to
-								</p>
-								<MusicPlayerError />
+								{typeof currentSongData === 'undefined' ? (
+									<>
+										<p className="text-text/70 mb-5 text-sm">
+											I&apos;m currently listening to
+										</p>
+										<MusicPlayerPrivate />
+									</>
+								) : (
+									<>
+										<p className="text-text/70 mb-5 text-sm">
+											I&apos;m currently listening to
+										</p>
+										<MusicPlayerError />
+									</>
+								)}
 							</>
 						)}
 					</div>
@@ -234,7 +247,11 @@ const UserPage = ({ user, top }: UsersProps) => {
 							</div>
 
 							{top.length === 0 && (
-								<Nothing text={'No top songs :('} />
+								<Nothing
+									text={
+										'No top songs or the user has made it private :('
+									}
+								/>
 							)}
 						</>
 						{/* )} */}

@@ -1,3 +1,4 @@
+import { SyntheticEvent } from 'react';
 import LoadingSpinner from './LoadingSpinner';
 
 type ButtonWithLoadingProps = {
@@ -5,6 +6,7 @@ type ButtonWithLoadingProps = {
 	text: string;
 	disabled: boolean;
 	'data-test-id'?: string;
+	onClick?: (e: SyntheticEvent) => any;
 };
 
 const ButtonWithLoading = ({
@@ -12,9 +14,11 @@ const ButtonWithLoading = ({
 	text,
 	disabled,
 	'data-test-id': dataTestId,
+	onClick,
 }: ButtonWithLoadingProps) => {
 	return (
 		<button
+			onClick={onClick ? onClick : () => {}}
 			data-test-id={dataTestId}
 			className={`btn btn-primary btn-full`}
 			disabled={disabled ? disabled || isLoading : isLoading}

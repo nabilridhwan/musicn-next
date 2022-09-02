@@ -27,6 +27,14 @@ export async function getNewUsers(limit: number) {
 					spotify_userid: true,
 				},
 			},
+			preferences: {
+				select: {
+					top: true,
+					recent: true,
+					current: true,
+					updated_at: true,
+				},
+			},
 		},
 		take: limit,
 	});
@@ -88,6 +96,14 @@ export async function getUserByUsername(input: string) {
 		},
 		include: {
 			spotify_users: true,
+			preferences: {
+				select: {
+					top: true,
+					recent: true,
+					current: true,
+					updated_at: true,
+				},
+			},
 		},
 	});
 
@@ -127,6 +143,7 @@ export async function getUserById(user_id: any) {
 		},
 		include: {
 			spotify_users: true,
+			preferences: true,
 		},
 	});
 
@@ -184,7 +201,10 @@ export async function addNewUser({
 			name: name,
 			password: password,
 			spotify_linked: false,
-			activated: true,
+			activated: false,
+		},
+		select: {
+			user_id: true,
 		},
 	});
 
@@ -272,4 +292,17 @@ export async function linkSpotifyUser({
 			},
 		});
 	}
+}
+
+export async function activateUserByUserID(user_id: any) {
+	const data = await prisma.app_users.update({
+		data: {
+			activated: true,
+		},
+		where: {
+			user_id,
+		},
+	});
+
+	return JSON.parse(JSON.stringify(data)) || null;
 }

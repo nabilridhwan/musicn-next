@@ -2,10 +2,31 @@
 title: 'Changelog'
 desc: 'Musicn Changelog'
 author: 'Nabil Ridhwan (@nabilridhwan)'
-last_updated: '2022-08-26'
 ---
 
 # Changelog
+
+## [0.4.0] - 2022-09-02
+
+### Added
+
+-   Now you can make your currently playing song, top songs and recently played songs not visible to the public! 🎉
+    -   Head over and change your preferences in the [Profile](/profile) page.
+-   You can now see your Musicn profile link directly in your Profile page. Copy and share the link with others (alternatively, you can click on the Share button in your Musicn profile page!)
+
+### Changed
+
+-   The Changelog page won't show when is the last updated time anymore. This is because I'm too lazy to update it every time I make a change. 😅
+-   **[DEV]** With the new changes of preferences, the 3 APIs for Songs will give a `204 No Content` response if the user has set their preferences to not show their Spotify data.
+
+### Fixed
+
+-   Fixed a bug in signup where sending an empty username would result in the server crashing.
+-   The navigation bar will now show `profile` and `logout` when you're signed in! 🎉
+
+### Removed
+
+-   None
 
 ## [0.3.1] - 2022-08-31
 
@@ -31,7 +52,7 @@ last_updated: '2022-08-26'
 
 ### Removed
 
--   Remove item
+-   None
 
 ## [0.3.0] - 2022-08-31
 
