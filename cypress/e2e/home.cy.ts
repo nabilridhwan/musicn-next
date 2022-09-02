@@ -13,3 +13,5 @@ describe('Home page', () => {
 		cy.location('pathname').should('eq', '/changelog');
 	});
 });
+
+export {};

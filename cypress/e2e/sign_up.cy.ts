@@ -28,3 +28,5 @@ describe('Sign Up', () => {
 		cy.location('pathname').should('eq', '/agreement');
 	});
 });
+
+export {};

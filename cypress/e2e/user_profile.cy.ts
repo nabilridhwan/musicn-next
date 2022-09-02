@@ -32,3 +32,5 @@ describe('User Profile', () => {
 		cy.location('pathname').should('eq', '/users');
 	});
 });
+
+export {};
