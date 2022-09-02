@@ -42,6 +42,7 @@ type SignupProps = {
 };
 
 type Preferences = {
+	account: boolean;
 	top: boolean;
 	current: boolean;
 	recent: boolean;

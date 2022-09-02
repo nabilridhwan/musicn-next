@@ -40,6 +40,12 @@ export async function getServerSideProps(context: any) {
 			throw new Error('No spotify user found');
 		}
 
+		console.log(user);
+
+		if (user.preferences.account === false) {
+			throw new Error('Account is not visible to the public');
+		}
+
 		return {
 			props: {
 				user: user,

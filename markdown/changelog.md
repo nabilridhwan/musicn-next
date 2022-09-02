@@ -10,9 +10,9 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 
 ### Added
 
--   Now you can make your currently playing song, top songs and recently played songs not visible to the public! 🎉
+-   Now you can make your account, currently playing song, top songs and recently played songs visibility to the public! 🎉
     -   Head over and change your preferences in the [Profile](/profile) page.
--   You can now see your Musicn profile link directly in your Profile page. Copy and share the link with others (alternatively, you can click on the Share button in your Musicn profile page!)
+-   You can now see your Musicn profile's link directly in your Profile page. Copy and share the link with others (alternatively, you can click on the Share button in your Musicn profile page!)
 
 ### Changed
 
@@ -23,6 +23,7 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 
 -   Fixed a bug in signup where sending an empty username would result in the server crashing.
 -   The navigation bar will now show `profile` and `logout` when you're signed in! 🎉
+-   When not logged in and you are trying to attempt to go to the profile page, you'll be redirected to the login page instead of users.
 
 ### Removed
 

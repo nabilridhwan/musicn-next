@@ -29,6 +29,7 @@ export async function getNewUsers(limit: number) {
 			},
 			preferences: {
 				select: {
+					account: true,
 					top: true,
 					recent: true,
 					current: true,
@@ -66,6 +67,9 @@ export async function getAllUsers() {
 			spotify_users: {
 				isNot: null,
 			},
+			preferences: {
+				account: true,
+			},
 		},
 	});
 
@@ -98,6 +102,7 @@ export async function getUserByUsername(input: string) {
 			spotify_users: true,
 			preferences: {
 				select: {
+					account: true,
 					top: true,
 					recent: true,
 					current: true,

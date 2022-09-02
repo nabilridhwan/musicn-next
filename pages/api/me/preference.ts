@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 		if (req.method === 'PUT') {
 			// Filter out fields that are not allowed to be updated
 			const updateData = req.body;
-			const allowedFields = ['top', 'recent', 'current'];
+			const allowedFields = ['top', 'recent', 'current', 'account'];
 
 			const token = APITokenHandler.getToken(req);
 			const dataFromToken: any =

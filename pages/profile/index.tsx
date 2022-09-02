@@ -57,7 +57,7 @@ export async function getServerSideProps(context: any) {
 
 	return {
 		redirect: {
-			destination: '/users',
+			destination: '/login',
 			permanent: false,
 		},
 	};
@@ -77,6 +77,7 @@ type ProfilePageProps = {
 	preferences: {
 		id: number;
 		top: boolean;
+		account: boolean;
 		current: boolean;
 		recent: boolean;
 		updated_at: string;
@@ -91,10 +92,12 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 	const [hasPreferences, setHasPreferences] = useState(false);
 	const [preferenceChanged, setPreferenceChanged] = useState(false);
 
+	const [originalAccount, setOriginalAccount] = useState(true);
 	const [originalTop, setOriginalTop] = useState(true);
 	const [originalCurrent, setOriginalCurrent] = useState(true);
 	const [originalRecent, setOriginalRecent] = useState(true);
 
+	const [account, setAccount] = useState(true);
 	const [top, setTop] = useState(true);
 	const [current, setCurrent] = useState(true);
 	const [recent, setRecent] = useState(true);
@@ -124,12 +127,14 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 		) {
 			setHasPreferences(true);
 
-			const { top, current, recent } = user.preferences;
+			const { top, current, recent, account } = user.preferences;
 
+			setOriginalAccount(account);
 			setOriginalTop(top);
 			setOriginalCurrent(current);
 			setOriginalRecent(recent);
 
+			setAccount(account);
 			setTop(top);
 			setCurrent(current);
 			setRecent(recent);
@@ -159,7 +164,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 
 	async function handlePreferenceUpdate(e: SyntheticEvent) {
 		e.preventDefault();
-		await updatePreferencesAsync({ top, recent, current });
+		await updatePreferencesAsync({ top, recent, current, account });
 	}
 
 	return (
@@ -265,6 +270,14 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 								).toRelative()}
 							</p>
 						)}
+
+						<label htmlFor="account">Account</label>
+						<input
+							type="checkbox"
+							id="account"
+							onChange={() => setAccount(!account)}
+							checked={account}
+						/>
 
 						<label htmlFor="top">Top Songs</label>
 						<input

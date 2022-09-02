@@ -67,5 +67,6 @@ model preferences {
   recent     Boolean   @default(true)
   created_at DateTime? @default(now()) @db.Timestamptz(6)
   updated_at DateTime? @default(now()) @db.Timestamptz(6)
+  account    Boolean   @default(true)
   app_users  app_users @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
