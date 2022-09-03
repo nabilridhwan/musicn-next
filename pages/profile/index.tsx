@@ -4,6 +4,7 @@ import Section from '@/components/Section';
 import updatePreferences from '@/frontend-api/user/updatePreferences';
 import { getUserById } from '@/model/users';
 import { verifyJWT } from '@/util/jwt';
+import { Switch } from '@headlessui/react';
 import { useMutation } from '@tanstack/react-query';
 import { getCookie } from 'cookies-next';
 import { motion } from 'framer-motion';
@@ -271,41 +272,124 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 							</p>
 						)}
 
-						<label htmlFor="account">Account</label>
-						<input
-							type="checkbox"
-							id="account"
-							onChange={() => setAccount(!account)}
-							checked={account}
-						/>
+						<Switch.Group>
+							<div className="flex items-center my-4">
+								<Switch.Label
+									htmlFor="Currently Playing Song"
+									className="my-0"
+								>
+									Account
+								</Switch.Label>
 
-						<label htmlFor="top">Top Songs</label>
-						<input
-							type="checkbox"
-							id="top"
-							onChange={() => setTop(!top)}
-							checked={top}
-						/>
+								<Switch
+									checked={account}
+									onChange={() => setAccount(!account)}
+									id="Recently Played Songs"
+									className={`${
+										account ? 'bg-blue-600' : 'bg-gray-300'
+									} relative inline-flex h-6 w-11 items-center rounded-full`}
+								>
+									<span className="sr-only">Account</span>
+									<span
+										className={`${
+											account
+												? 'translate-x-6'
+												: 'translate-x-1'
+										} inline-block h-4 w-4 transform rounded-full bg-white`}
+									/>
+								</Switch>
+							</div>
+						</Switch.Group>
 
-						<label htmlFor="Recently Played Songs">
-							Recently Played Songs
-						</label>
-						<input
-							type="checkbox"
-							id="Recently Played Songs"
-							onChange={() => setRecent(!recent)}
-							checked={recent}
-						/>
+						<Switch.Group>
+							<div className="flex items-center my-4">
+								<Switch.Label
+									htmlFor="Currently Playing Song"
+									className="my-0"
+								>
+									Top Songs
+								</Switch.Label>
 
-						<label htmlFor="Currently Playing Song">
-							Currently Playing Song
-						</label>
-						<input
-							type="checkbox"
-							id="Currently Playing Song"
-							onChange={() => setCurrent(!current)}
-							checked={current}
-						/>
+								<Switch
+									onChange={() => setTop(!top)}
+									checked={top}
+									id="Top Songs"
+									className={`${
+										top ? 'bg-blue-600' : 'bg-gray-300'
+									} relative inline-flex h-6 w-11 items-center rounded-full`}
+								>
+									<span className="sr-only">Account</span>
+									<span
+										className={`${
+											top
+												? 'translate-x-6'
+												: 'translate-x-1'
+										} inline-block h-4 w-4 transform rounded-full bg-white`}
+									/>
+								</Switch>
+							</div>
+						</Switch.Group>
+
+						<Switch.Group>
+							<div className="flex items-center my-4">
+								<Switch.Label
+									htmlFor="Currently Playing Song"
+									className="my-0"
+								>
+									Recently Played Songs
+								</Switch.Label>
+
+								<Switch
+									checked={recent}
+									onChange={() => setRecent(!recent)}
+									id="Recently Played Songs"
+									className={`${
+										recent ? 'bg-blue-600' : 'bg-gray-300'
+									} relative inline-flex h-6 w-11 items-center rounded-full`}
+								>
+									<span className="sr-only">
+										Recently played songs
+									</span>
+									<span
+										className={`${
+											recent
+												? 'translate-x-6'
+												: 'translate-x-1'
+										} inline-block h-4 w-4 transform rounded-full bg-white`}
+									/>
+								</Switch>
+							</div>
+						</Switch.Group>
+
+						<Switch.Group>
+							<div className="flex items-center my-4">
+								<Switch.Label
+									htmlFor="Currently Playing Song"
+									className="my-0"
+								>
+									Currently Playing Song
+								</Switch.Label>
+
+								<Switch
+									checked={current}
+									onChange={() => setCurrent(!current)}
+									className={`${
+										current ? 'bg-blue-600' : 'bg-gray-300'
+									} relative inline-flex h-6 w-11 items-center rounded-full`}
+								>
+									<span className="sr-only">
+										Currently Playing Song
+									</span>
+									<span
+										className={`${
+											current
+												? 'translate-x-6'
+												: 'translate-x-1'
+										} inline-block h-4 w-4 transform rounded-full bg-white`}
+									/>
+								</Switch>
+							</div>
+						</Switch.Group>
 
 						<ButtonWithLoading
 							disabled={updateStatus === 'loading'}
@@ -321,7 +405,7 @@ const ProfilePage = ({ ...props }: ProfilePageProps) => {
 								<label htmlFor="musicn_link">
 									Spotify account
 								</label>
-								<p className="muted my-2">
+								<p className="muted my-4">
 									Last linked:{' '}
 									{DateTime.fromISO(
 										user.spotify_users.updated_at

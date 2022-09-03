@@ -6,6 +6,24 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 
 # Changelog
 
+## [0.5.1] - 2022-09-03
+
+### Added
+
+-   None
+
+### Changed
+
+-   Changed the checkboxes in the preferences page to be switch (toggle)
+
+### Fixed
+
+-   None
+
+### Removed
+
+-   None
+
 ## [0.5.0] - 2022-09-03
 
 ### Added
