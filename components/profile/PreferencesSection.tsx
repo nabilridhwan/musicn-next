@@ -1,4 +1,5 @@
 import updatePreferences from '@/frontend-api/user/updatePreferences';
+import { Header } from '@/pages/profile';
 import { Switch } from '@headlessui/react';
 import { useMutation } from '@tanstack/react-query';
 import { DateTime } from 'luxon';
@@ -81,7 +82,10 @@ export default function PreferencesSection({ user: userFromProps }: any) {
 
 	return (
 		<>
-			<label htmlFor="Preferences">Preferences</label>
+			<Header
+				title="Preferences"
+				lead="Change your preferences and what you want to show on your profile"
+			/>
 
 			{updateStatus === 'success' && (
 				<div className="alert alert-success">
