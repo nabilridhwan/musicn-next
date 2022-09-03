@@ -406,7 +406,7 @@ function NoSpotifyAccount() {
 					scale: 0.9,
 				}}
 			>
-				<Link href={`/api/link/spotify?redirect=/profile`}>
+				<Link href={`/link`}>
 					<a className="text-text bg-spotify shadow-[-1px_0px_20px] shadow-spotify/50 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2">
 						<FaSpotify size={15} />
 						Link Spotify Account

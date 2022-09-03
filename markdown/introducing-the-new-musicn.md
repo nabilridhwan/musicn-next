@@ -17,11 +17,8 @@ As time passes, new technologies emerge and I want to use them to create the bes
 
 ## What does not work in this new Musicn?
 
--   Login
--   Registration
 -   Password reset
--   Password change
--   Profile Page (and Linking of Spotify accounts)
+-   Activation
 
 _These features are held back for now! We will revise these features in more details to provide the best security, and developer friendly experience._
 

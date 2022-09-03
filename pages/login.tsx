@@ -41,9 +41,20 @@ const LoginPage = () => {
 	useEffect(() => {
 		if (status === 'success') {
 			setErrorMessage('');
-			// Redirect to profile page
-			window.location.href = '/profile';
-			return;
+
+			console.log(data);
+
+			// If user has no linked their account, redirect them to /link otherwise redirect them to /profile
+
+			if (!data.spotify_users || !data.spotify_users.id) {
+				// Redirect to link page
+				window.location.href = '/link';
+				return;
+			} else {
+				// Redirect to profile page
+				window.location.href = '/profile';
+				return;
+			}
 		}
 
 		if (status === 'error') {

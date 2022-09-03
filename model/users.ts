@@ -88,6 +88,18 @@ export async function getUserByEmailOrUsername(input: string) {
 				},
 			],
 		},
+		include: {
+			spotify_users: true,
+			preferences: {
+				select: {
+					account: true,
+					top: true,
+					recent: true,
+					current: true,
+					updated_at: true,
+				},
+			},
+		},
 	});
 
 	return JSON.parse(JSON.stringify(data)) || null;

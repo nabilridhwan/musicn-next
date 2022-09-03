@@ -1,3 +1,4 @@
+import LoadingSpinner from '@/components/LoadingSpinner';
 import {
 	MusicPlayer,
 	MusicPlayerError,
@@ -5,11 +6,13 @@ import {
 	MusicPlayerPrivate,
 } from '@/components/MusicPlayer';
 import MusicPreviewDialog from '@/components/MusicPreviewDialog';
+import RecentlyPlayedSongCard from '@/components/RecentlyPlayedSongCard';
 import Section from '@/components/Section';
 import ShareButton from '@/components/ShareButton';
 import SongCard from '@/components/SongCard';
 import { MusicPreviewDialogContext } from '@/context/MusicPreviewDialogProvider';
 import getCurrentSong from '@/frontend-api/song/getCurrentSong';
+import getRecentSongs from '@/frontend-api/song/getRecentSongs';
 import getTopSongs from '@/frontend-api/song/getTopSongs';
 import getUserDetails from '@/frontend-api/user/getUserDetails';
 import styles from '@/styles/UserPage.module.css';
@@ -17,7 +20,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
-import { useContext, useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
 import Container from '../../components/Container';
 import DefaultProfilePicture from '../../components/DefaultProfilePicture';
@@ -67,6 +70,22 @@ export async function getServerSideProps(context: any) {
 	}
 }
 
+enum SECTION {
+	TOP_SONGS = 'top_songs',
+	RECENTLY_PLAYED_SONGS = 'recently_played_songs',
+}
+
+const sections = [
+	{
+		title: 'Top Songs',
+		enum: SECTION.TOP_SONGS,
+	},
+	{
+		title: 'Recently Played Songs',
+		enum: SECTION.RECENTLY_PLAYED_SONGS,
+	},
+];
+
 const UserPage = ({ user, top }: UsersProps) => {
 	const {
 		showDialog,
@@ -77,17 +96,26 @@ const UserPage = ({ user, top }: UsersProps) => {
 		volume,
 	} = useContext(MusicPreviewDialogContext);
 
+	const [currentSection, setCurrentSection] = useState<SECTION>(
+		SECTION.TOP_SONGS
+	);
+
+	const [currentTitle, setCurrentTitle] = useState<string>(sections[0].title);
+
 	const [imageLoadError, setImageLoadError] = useState(false);
-	// const {
-	// 	data: recentSongsData,
-	// 	isLoading: isRecentSongsLoading,
-	// 	isError: isRecentSongsError,
-	// 	isSuccess: isRecentSongsSuccess,
-	// 	status: recentSongsStatus,
-	// } = useQuery(
-	// 	['recentSongs', user.username],
-	// 	async () => await getRecentSongs(user.username)
-	// );
+
+	const {
+		data: recentSongsData,
+		isLoading: isRecentSongsLoading,
+		isError: isRecentSongsError,
+		isSuccess: isRecentSongsSuccess,
+		status: recentSongsStatus,
+		refetch: refetchRecentSongs,
+	} = useQuery(
+		['recentSongs', user.username],
+		async () => await getRecentSongs(user.username),
+		{ retry: 2 }
+	);
 
 	const {
 		data: currentSongData,
@@ -112,6 +140,15 @@ const UserPage = ({ user, top }: UsersProps) => {
 	// 	async () => await getTopSongs(user.username),
 	// 	{ onSuccess: (d) => console.log(d) }
 	// );
+
+	useEffect(() => {
+		if (currentSection === SECTION.TOP_SONGS) {
+			setCurrentTitle(sections[0].title);
+		} else {
+			refetchRecentSongs();
+			setCurrentTitle(sections[1].title);
+		}
+	}, [currentSection]);
 
 	return (
 		<>
@@ -233,38 +270,101 @@ const UserPage = ({ user, top }: UsersProps) => {
 						)}
 					</div>
 
+					{/* Top songs / Recently Played Songs */}
 					<div className={styles.section}>
-						{/* {topSongsStatus === 'success' &&
-					topSongsData &&
-					topSongsData.length > 0 && ( */}
-						<>
-							<h2 className={styles.name + ' mb-5'}>
-								Top Songs of the month
-							</h2>
-							<div className="grid grid-cols-2 md:grid-cols-5 gap-5">
-								{top.map((currentSong: any) => (
-									<SongCard
-										key={currentSong.id}
-										name={currentSong.name}
-										artists={currentSong.artists
-											.map((a: any) => a.name)
-											.join(', ')}
-										imageUrl={currentSong.album_art}
-										preview={currentSong.preview}
-										spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
-									/>
-								))}
-							</div>
+						<div className="flex gap-3">
+							{sections.map((section, i) => (
+								<motion.h2
+									key={i}
+									onClick={() => {
+										setCurrentSection(section.enum);
+									}}
+									className={`text-xl font-bold mb-5 cursor-pointer ${
+										currentSection === section.enum
+											? 'text-text'
+											: 'muted'
+									}`}
+								>
+									{section.title}
 
-							{top.length === 0 && (
-								<Nothing
-									text={
-										'No top songs or the user has made it private :('
-									}
-								/>
-							)}
-						</>
-						{/* )} */}
+									{currentSection === section.enum && (
+										<motion.div
+											className="w-100 h-1 rounded-full mt-1"
+											layoutId="underline"
+											style={{ backgroundColor: 'white' }}
+										/>
+									)}
+								</motion.h2>
+							))}
+						</div>
+
+						{currentSection === SECTION.TOP_SONGS && (
+							<>
+								<div className="grid grid-cols-2 md:grid-cols-5 gap-5">
+									{top.map((currentSong: any) => (
+										<SongCard
+											key={currentSong.id}
+											name={currentSong.name}
+											artists={currentSong.artists
+												.map((a: any) => a.name)
+												.join(', ')}
+											imageUrl={currentSong.album_art}
+											preview={currentSong.preview}
+											spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
+										/>
+									))}
+								</div>
+
+								{top.length === 0 && (
+									<Nothing
+										text={
+											'No top songs or the user has made it private :('
+										}
+									/>
+								)}
+							</>
+						)}
+
+						{currentSection === SECTION.RECENTLY_PLAYED_SONGS && (
+							<>
+								<div className="grid gap-5">
+									{recentSongsStatus === 'success' &&
+										recentSongsData.map(
+											(currentSong: any) => (
+												<RecentlyPlayedSongCard
+													key={currentSong.id}
+													name={currentSong.name}
+													artists={currentSong.artists
+														.map((a: any) => a.name)
+														.join(', ')}
+													imageUrl={
+														currentSong.album_art
+													}
+													preview={
+														currentSong.preview
+													}
+													played_at={
+														currentSong.played_at
+													}
+													spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
+												/>
+											)
+										)}
+								</div>
+
+								{isRecentSongsError &&
+									(typeof recentSongsData === 'undefined' ||
+										recentSongsData.length === 0) && (
+										<Nothing
+											text={
+												'No recently played songs or the user has made it private :('
+											}
+										/>
+									)}
+
+								{isRecentSongsLoading && <LoadingSpinner />}
+							</>
+						)}
 					</div>
 
 					{/* TODO: Show actual volume */}

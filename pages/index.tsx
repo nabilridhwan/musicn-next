@@ -59,11 +59,9 @@ const Home: NextPage = () => {
 							</motion.div>
 
 							<p className="mt-5 text-xs muted">
-								<strong className="text-white/70">
-									[BETA]
-								</strong>{' '}
-								Login, sign-ups, linking Spotify accounts and
-								re-link are here! Read more{' '}
+								<strong className="text-white/70">NEW</strong>{' '}
+								See other people&apos;s recently played songs!
+								Read more{' '}
 								<Link href={'/changelog'}>
 									<a className="underline">here</a>
 								</Link>
