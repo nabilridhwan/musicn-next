@@ -62,7 +62,7 @@ const Home: NextPage = () => {
 								<strong className="text-white/70">NEW</strong>{' '}
 								See other people&apos;s recently played songs!
 								Read more{' '}
-								<Link href={'/changelog'}>
+								<Link href={'/changelog/v0-5-0'}>
 									<a className="underline">here</a>
 								</Link>
 								.
