@@ -6,11 +6,32 @@ author: 'Nabil Ridhwan (@nabilridhwan)'
 
 # Changelog
 
+## [0.5.0] - 2022-09-03
+
+### Added
+
+-   Now you can see each other's recently played songs in the Musicn profile page!
+    -   Adjust the visibility by changing your Preferences in the [Profile](/profile) page.
+-   A footer for every foot out there!
+
+### Changed
+
+-   New Spotify account linking flow to make it easier for new users to link their Spotify account.
+-   **[DEV]** Logging in will now give you the account's response (similar to `/api/me`)
+
+### Fixed
+
+-   None
+
+### Removed
+
+-   None
+
 ## [0.4.0] - 2022-09-02
 
 ### Added
 
--   Now you can make your account, currently playing song, top songs and recently played songs visibility to the public! 🎉
+-   Now you can change your account, currently playing song, top songs and recently played songs visibility (to the public)! 🎉
     -   Head over and change your preferences in the [Profile](/profile) page.
 -   You can now see your Musicn profile's link directly in your Profile page. Copy and share the link with others (alternatively, you can click on the Share button in your Musicn profile page!)
 

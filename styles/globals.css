@@ -62,3 +62,7 @@ input[type='email'] {
 .alert-success {
 	@apply text-green-500 text-sm;
 }
+
+footer {
+	@apply bg-black muted text-xs p-4 my-5 flex items-center justify-center text-center;
+}

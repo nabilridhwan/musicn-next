@@ -1,7 +1,7 @@
 import BodyValidationErrorResponse from '@/class/Responses/BodyValidationErrorResponse';
 import InternalServerError from '@/class/Responses/InternalServerError';
 import MethodNotAllowedResponse from '@/class/Responses/MethodNotAllowedResponse';
-import TokenResponse from '@/class/Responses/TokenResponse';
+import SuccessResponse from '@/class/Responses/SuccessResponse';
 import withProtect from '@/middleware/withProtect';
 import withSetupScript from '@/middleware/withSetupScript';
 import { getUserByEmailOrUsername } from '@/model/users';
@@ -74,8 +74,10 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
 			});
 
 			// User found
-
-			return new TokenResponse(token).handleResponse(req, res);
+			return new SuccessResponse(
+				'Logged in successfully',
+				user
+			).handleResponse(req, res);
 		}
 
 		return new MethodNotAllowedResponse().handleResponse(req, res);

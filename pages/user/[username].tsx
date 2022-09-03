@@ -1,3 +1,4 @@
+import LoadingSpinner from '@/components/LoadingSpinner';
 import {
 	MusicPlayer,
 	MusicPlayerError,
@@ -109,6 +110,7 @@ const UserPage = ({ user, top }: UsersProps) => {
 		isError: isRecentSongsError,
 		isSuccess: isRecentSongsSuccess,
 		status: recentSongsStatus,
+		refetch: refetchRecentSongs,
 	} = useQuery(
 		['recentSongs', user.username],
 		async () => await getRecentSongs(user.username),
@@ -143,6 +145,7 @@ const UserPage = ({ user, top }: UsersProps) => {
 		if (currentSection === SECTION.TOP_SONGS) {
 			setCurrentTitle(sections[0].title);
 		} else {
+			refetchRecentSongs();
 			setCurrentTitle(sections[1].title);
 		}
 	}, [currentSection]);
@@ -358,6 +361,8 @@ const UserPage = ({ user, top }: UsersProps) => {
 											}
 										/>
 									)}
+
+								{isRecentSongsLoading && <LoadingSpinner />}
 							</>
 						)}
 					</div>
