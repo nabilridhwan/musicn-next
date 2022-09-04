@@ -1,8 +1,8 @@
-import { Dialog } from '@headlessui/react';
 import { AnimatePresence, motion } from 'framer-motion';
+import Link from 'next/link';
 import React, { useContext, useEffect } from 'react';
 import { FaSpotify } from 'react-icons/fa';
-import { IoClose } from 'react-icons/io5';
+import { IoClose, IoPause, IoPlay, IoStop } from 'react-icons/io5';
 import { MusicPreviewDialogContext } from '../context/MusicPreviewDialogProvider';
 
 export type MusicPreview = {
@@ -30,11 +30,29 @@ export default function MusicPreviewDialog({
 	} = useContext(MusicPreviewDialogContext);
 	const audioElemRef = React.useRef<HTMLAudioElement>(null);
 
+	const [isPlaying, setIsPlaying] = React.useState<boolean>(true);
+
+	useEffect(() => {
+		setIsPlaying(true);
+	}, [songDetails]);
+
 	useEffect(() => {
 		if (audioElemRef.current) {
 			audioElemRef.current.volume = parseFloat(volume());
 		}
 	}, [audioElemRef, volume]);
+
+	function handlePlay() {
+		setIsPlaying(!isPlaying);
+
+		if (audioElemRef.current) {
+			if (isPlaying) {
+				audioElemRef.current.pause();
+			} else {
+				audioElemRef.current.play();
+			}
+		}
+	}
 
 	function handleVolumeChange(e: any) {
 		setVolume(e.target.volume);
@@ -44,91 +62,116 @@ export default function MusicPreviewDialog({
 		<>
 			<AnimatePresence>
 				{songDetails && showDialog && (
-					<Dialog
-						data-test-id={'preview-black-background'}
-						open={showDialog && songDetails !== null}
-						onClose={handleClose}
-					>
+					<motion.div className="flex justify-center">
+						{/* Content */}
 						<motion.div
-							initial={{ opacity: 0 }}
-							animate={{ opacity: 1 }}
-							exit={{ opacity: 0 }}
-							transition={{
-								type: 'tween',
-								duration: 0.15,
-								ease: 'easeInOut',
-							}}
+							initial={{ opacity: 0, y: 100 }}
+							animate={{ opacity: 1, y: 0 }}
+							exit={{ opacity: 0, y: 100 }}
+							transition={{ duration: 0.2, ease: 'easeOut' }}
+							className="flex border border-white/30 bg-black/50 backdrop-blur-xl items-center justify-between rounded-xl fixed bottom-8 gap-1 px-5 z-10 shadow-black/50 shadow-[0_0_50px] w-11/12 mx-auto"
 						>
-							<div className="fixed inset-0 flex items-center justify-center p-4 bg-black/60">
-								<Dialog.Panel className="w-full max-w-sm rounded-2xl border border-white/20 bg-black my-10 text-center p-10 shadow-[0_0_50px] shadow-black">
-									{/* Top (Title and Button) */}
-									<Dialog.Title className="text-white font-bold text-center">
-										{songDetails.preview
-											? 'Music Preview'
-											: 'Song'}
-									</Dialog.Title>
+							{/* Song details */}
+							<div className="flex items-center gap-2 my-3">
+								<picture>
+									<img
+										width={40}
+										height={40}
+										className="m-auto rounded-lg drop-shadow-md"
+										src={songDetails.image}
+										alt={songDetails.title}
+									/>
+								</picture>
 
-									{/* Content */}
-									<div className="flex items-center justify-center flex-col">
-										<div className="my-5">
-											<picture className="w-full h-full">
-												<img
-													width={200}
-													height={200}
-													className="m-auto"
-													src={songDetails.image}
-													alt={songDetails.title}
-												/>
-											</picture>
-
-											<h2
-												data-test-id="preview-song-name"
-												className="font-bold text-lg mt-10 "
-											>
-												{songDetails.title}
-											</h2>
-
-											<p className="muted">
-												{songDetails.artist}
-											</p>
-										</div>
-
-										{/* Show the audio dialog only if there is a song preview */}
-										{songDetails.preview ? (
-											<audio
-												ref={audioElemRef}
-												src={songDetails.preview}
-												// TODO: Handle volume change
-												onVolumeChange={
-													handleVolumeChange
-												}
-												controls
-												autoPlay
-											/>
-										) : (
-											<NoPreviewAvailable />
-										)}
-
-										<a
-											href={songDetails.url + '?go=1'}
-											className="cursor-pointer flex items-center w-full gap-1 bg-spotify p-2 px-4 rounded-lg mt-10"
+								<Link href={songDetails.url + '?go=1'}>
+									<div>
+										<h2
+											data-test-id="preview-song-name"
+											className="font-bold my-0 text-sm"
 										>
-											<FaSpotify />
-											Open In Spotify
-										</a>
+											{songDetails.title.slice(0, 23)}
+											{songDetails.title.length > 23 &&
+												'...'}
+										</h2>
 
-										<button
+										<p className="muted text-xs">
+											{songDetails.artist.slice(0, 23)}
+											{songDetails.artist.length > 23 &&
+												'...'}
+										</p>
+									</div>
+								</Link>
+							</div>
+
+							{/* Show the audio dialog only if there is a song preview */}
+							{songDetails.preview && (
+								<audio
+									onEnded={() => {
+										setIsPlaying(false);
+									}}
+									onTimeUpdate={(e) => {
+										console.log(
+											(e.target as any).currentTime
+										);
+
+										console.log((e.target as any).duration);
+									}}
+									ref={audioElemRef}
+									src={songDetails.preview}
+									// TODO: Handle volume change
+									onVolumeChange={handleVolumeChange}
+									autoPlay
+								/>
+							)}
+
+							<div className="buttons flex gap-2.5">
+								{songDetails.preview && (
+									<>
+										<motion.button
+											whileHover={{ scale: 1.07 }}
+											whileTap={{ scale: 0.9 }}
+											onClick={handlePlay}
+											className="cursor-pointer border border-white/20 flex items-center gap-1 bg-white/10 backdrop-blur-md p-2 rounded-lg"
+										>
+											{isPlaying ? (
+												<IoPause />
+											) : (
+												<IoPlay />
+											)}
+										</motion.button>
+
+										<motion.button
+											whileHover={{ scale: 1.07 }}
+											whileTap={{ scale: 0.9 }}
 											onClick={handleClose}
-											className="cursor-pointer flex items-center w-full gap-1 bg-red-500 p-2 px-4 rounded-lg mt-4"
+											className="cursor-pointer border border-white/20 flex items-center gap-1 bg-white/10 backdrop-blur-md p-2 rounded-lg"
+										>
+											<IoStop />
+										</motion.button>
+
+										<motion.button
+											whileHover={{ scale: 1.07 }}
+											whileTap={{ scale: 0.9 }}
+											onClick={handleClose}
+											className="cursor-pointer border border-white/20 flex items-center gap-1 bg-white/20 backdrop-blur-md p-2 rounded-lg"
 										>
 											<IoClose />
-											Close
-										</button>
-									</div>
-								</Dialog.Panel>
+										</motion.button>
+									</>
+								)}
+
+								<Link href={songDetails.url + '?go=1'}>
+									<motion.button
+										whileHover={{ scale: 1.07 }}
+										whileTap={{ scale: 0.9 }}
+										className="cursor-pointer border border-white/20 flex items-center gap-1 bg-white/20 backdrop-blur-md p-2 rounded-lg"
+									>
+										<FaSpotify />
+									</motion.button>
+								</Link>
 							</div>
 						</motion.div>
-					</Dialog>
+					</motion.div>
 				)}
 			</AnimatePresence>
 		</>

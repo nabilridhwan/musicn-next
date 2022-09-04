@@ -5,12 +5,9 @@ import {
 	MusicPlayerNotPlaying,
 	MusicPlayerPrivate,
 } from '@/components/MusicPlayer';
-import MusicPreviewDialog from '@/components/MusicPreviewDialog';
 import RecentlyPlayedSongCard from '@/components/RecentlyPlayedSongCard';
 import Section from '@/components/Section';
-import ShareButton from '@/components/ShareButton';
 import SongCard from '@/components/SongCard';
-import { MusicPreviewDialogContext } from '@/context/MusicPreviewDialogProvider';
 import getCurrentSong from '@/frontend-api/song/getCurrentSong';
 import getRecentSongs from '@/frontend-api/song/getRecentSongs';
 import getTopSongs from '@/frontend-api/song/getTopSongs';
@@ -20,7 +17,7 @@ import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
-import { useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { FaSpotify } from 'react-icons/fa';
 import Container from '../../components/Container';
 import DefaultProfilePicture from '../../components/DefaultProfilePicture';
@@ -87,15 +84,6 @@ const sections = [
 ];
 
 const UserPage = ({ user, top }: UsersProps) => {
-	const {
-		showDialog,
-		showSongPreview,
-		hideSongPreview,
-		songDetails,
-		setVolume,
-		volume,
-	} = useContext(MusicPreviewDialogContext);
-
 	const [currentSection, setCurrentSection] = useState<SECTION>(
 		SECTION.TOP_SONGS
 	);
@@ -366,12 +354,10 @@ const UserPage = ({ user, top }: UsersProps) => {
 							</>
 						)}
 					</div>
-
-					{/* TODO: Show actual volume */}
-					<MusicPreviewDialog handleClose={hideSongPreview} />
 				</Section>
 			</Container>
-			<ShareButton overrideText="Share" />
+
+			{/* <ShareButton overrideText="Share" /> */}
 		</>
 	);
 };

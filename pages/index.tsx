@@ -60,9 +60,8 @@ const Home: NextPage = () => {
 
 							<p className="mt-5 text-xs muted">
 								<strong className="text-white/70">NEW</strong>{' '}
-								See other people&apos;s recently played songs!
-								Read more{' '}
-								<Link href={'/changelog/v0-5-0'}>
+								Try out Gridify! Read more{' '}
+								<Link href={'/changelog/v0-6-0'}>
 									<a className="underline">here</a>
 								</Link>
 								.

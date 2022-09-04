@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import {
 	IoCogOutline,
 	IoExitOutline,
+	IoGrid,
 	IoHomeOutline,
 	IoMenuOutline,
 	IoPeopleOutline,
@@ -51,6 +52,26 @@ const NavigationBar = () => {
 					<a className="flex items-center gap-2">
 						<IoPeopleOutline size={16} />
 						users
+					</a>
+				</Link>
+			</motion.div>
+
+			<motion.div
+				className="w-fit"
+				whileHover={{
+					scale: 1.1,
+				}}
+				whileTap={{
+					scale: 0.9,
+				}}
+			>
+				<Link href="/gridify">
+					<a className="flex items-center gap-2">
+						<IoGrid size={16} />
+						Gridify
+						<div className="text-xs relative bg-red-500 rounded-lg p-1 font-bold">
+							New!
+						</div>
 					</a>
 				</Link>
 			</motion.div>

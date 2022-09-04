@@ -1,3 +1,4 @@
+import MusicPreviewDialog from '@/components/MusicPreviewDialog';
 import '@/styles/globals.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
@@ -8,8 +9,11 @@ import Head from 'next/head';
 import Router from 'next/router';
 import NProgress from 'nprogress';
 import 'nprogress/nprogress.css';
+import { useContext } from 'react';
 import NavigationBar from '../components/NavigationBar';
-import MusicPreviewDialogProvider from '../context/MusicPreviewDialogProvider';
+import MusicPreviewDialogProvider, {
+	MusicPreviewDialogContext,
+} from '../context/MusicPreviewDialogProvider';
 
 NProgress.configure({
 	minimum: 0.3,
@@ -44,10 +48,21 @@ function MyApp({ Component, pageProps }: AppProps) {
 				<MusicPreviewDialogProvider>
 					<NavigationBar />
 					<Component {...pageProps} />
+					<MPD_Wrapper />
 					{/* <Footer /> */}
 				</MusicPreviewDialogProvider>
 				<ReactQueryDevtools initialIsOpen={false} />
 			</QueryClientProvider>
+		</>
+	);
+}
+
+function MPD_Wrapper() {
+	const { hideSongPreview } = useContext(MusicPreviewDialogContext);
+	return (
+		<>
+			{/* TODO: Show actual volume */}
+			<MusicPreviewDialog handleClose={hideSongPreview} />
 		</>
 	);
 }
