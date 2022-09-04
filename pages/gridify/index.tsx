@@ -1,8 +1,8 @@
+import ButtonWithLoading from '@/components/ButtonWithLoading';
 import CenterStage from '@/components/CenterStage';
 import Section from '@/components/Section';
 import { motion } from 'framer-motion';
 import Head from 'next/head';
-import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { useEffect, useState } from 'react';
@@ -19,6 +19,8 @@ const GridifyLandingPage = () => {
 	const [username, setUsername] = useState('');
 
 	const [notFound, setNotFound] = useState(false);
+
+	const [loading, setLoading] = useState(false);
 
 	useEffect(() => {
 		const { notFound } = router.query;
@@ -50,12 +52,12 @@ const GridifyLandingPage = () => {
 							transition={{ duration: 2 }}
 							className="image-wrapper rounded-lg border border-white/40"
 						>
-							<Image
+							{/* <Image
 								className="rounded-lg"
 								layout="responsive"
 								src={require('@/public/gridify-example.png')}
 								alt="Gridify Example"
-							/>
+							/> */}
 						</motion.div>
 						<div className="flex flex-col items-center justify-center my-10">
 							<h1>Gridify</h1>
@@ -75,6 +77,7 @@ const GridifyLandingPage = () => {
 						<form
 							onSubmit={(e) => {
 								e.preventDefault();
+								setLoading(true);
 								window.location.href = `/gridify/${username}`;
 							}}
 						>
@@ -91,9 +94,11 @@ const GridifyLandingPage = () => {
 								className="input text-center"
 							/>
 
-							<button className="btn btn-primary m-auto">
-								Gridify Me!
-							</button>
+							<ButtonWithLoading
+								disabled={loading}
+								isLoading={loading}
+								text="Gridify me!"
+							/>
 						</form>
 					</Section>
 				</CenterStage>

@@ -108,6 +108,52 @@ export default class Spotify {
 		return response.data.items;
 	}
 
+	static async getRecentlyPlayedSongsByMonth(
+		accessToken: string,
+		notExceeding: Date
+	) {
+		const items = [];
+		let next =
+			'https://api.spotify.com/v1/me/player/recently-played?limit=50';
+		let currentItems = [];
+		do {
+			const response = await axios({
+				method: 'GET',
+				url: next,
+				headers: {
+					Authorization: `Bearer ${accessToken}`,
+				},
+			});
+
+			if (!response.data || !response.data.items) {
+				return [];
+			}
+
+			currentItems = response.data.items;
+			items.push(...response.data.items);
+			next = response.data.next;
+			// console.log(response.data);
+			console.log('next: ', next, typeof next);
+
+			console.log(currentItems.length);
+
+			// console.log(
+			// 	new Date(items[items.length - 1].played_at),
+			// 	notExceeding,
+			// 	new Date(items[items.length - 1].played_at) > notExceeding
+			// );
+		} while (
+			new Date(items[items.length - 1].played_at) > notExceeding &&
+			currentItems.length === 0
+		);
+
+		// return response.data.items;
+
+		console.log(new Date(items[items.length - 1].played_at), notExceeding);
+		console.log(items.length);
+		return items;
+	}
+
 	static async getUserProfile(user_id: string, accessToken: string) {
 		const response = await axios({
 			method: 'GET',

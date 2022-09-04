@@ -4,7 +4,9 @@ import Section from '@/components/Section';
 import getTopSongs from '@/frontend-api/song/getTopSongs';
 import getUserDetails from '@/frontend-api/user/getUserDetails';
 import axios from 'axios';
-import html2canvas from 'html2canvas';
+import chroma from 'chroma-js';
+import domtoimage from 'dom-to-image';
+import getColors from 'get-image-colors';
 import { DateTime } from 'luxon';
 import Head from 'next/head';
 import { Ref, useRef, useState } from 'react';
@@ -14,15 +16,17 @@ import Container from '../../components/Container';
 type UsersProps = {
 	user: any;
 	top: any;
+	played: any;
 };
 
 export async function getServerSideProps(context: any) {
 	const { username } = context.query;
 
 	try {
-		let [user, top] = await axios.all([
+		let [user, top, played] = await axios.all([
 			getUserDetails(username),
 			getTopSongs(username),
+			// getStatisticsPlayed(username),
 		]);
 
 		if (!user) {
@@ -41,10 +45,34 @@ export async function getServerSideProps(context: any) {
 			top = [];
 		}
 
+		if (top.length > 0) {
+			const topPromises = top.map(async (song: any) => {
+				const colors = await getColors(song.album_art);
+
+				const image = await axios
+					.get(song.album_art, {
+						responseType: 'arraybuffer',
+					})
+					.then((response) =>
+						Buffer.from(response.data, 'binary').toString('base64')
+					);
+
+				return {
+					...song,
+					album_art_base64: image,
+					color: colors[2].alpha(0.6).hex() || null,
+				};
+			});
+
+			const values = await Promise.all(topPromises);
+			top = values;
+		}
+
 		return {
 			props: {
 				user: user,
 				top,
+				// played,
 			},
 		};
 	} catch (error: any) {
@@ -75,7 +103,7 @@ export async function getServerSideProps(context: any) {
 	}
 }
 
-const GridifyHome = ({ user, top }: UsersProps) => {
+const GridifyHome = ({ user, top, played }: UsersProps) => {
 	const saveItemRef = useRef(null);
 
 	const [showCanvas, setShowCanvas] = useState(false);
@@ -83,30 +111,37 @@ const GridifyHome = ({ user, top }: UsersProps) => {
 	const handleDownloadImage = async () => {
 		setShowCanvas(true);
 
-		setTimeout(async () => {
-			const element = saveItemRef.current;
-			if (element) {
-				const canvas = await html2canvas(element, {
-					useCORS: true,
-				});
+		// setTimeout(async () => {
+		const element = saveItemRef.current;
+		// 	// if (!element) return;
 
-				const data = canvas.toDataURL('image/jpg');
-				const link = document.createElement('a');
-
-				if (typeof link.download === 'string') {
-					link.href = data;
-					link.download = 'image.jpg';
-
-					document.body.appendChild(link);
+		if (element) {
+			domtoimage
+				.toJpeg(element, {
+					width: 1080,
+					height: 1920,
+				})
+				.then(function (dataUrl) {
+					var link = document.createElement('a');
+					link.download = 'my-image-name.jpeg';
+					link.href = dataUrl;
 					link.click();
-					document.body.removeChild(link);
-				} else {
-					window.open(data);
-				}
-			}
+				})
+				.catch((e) => console.log(e));
+		}
+		// 	// const canvas = await html2canvas(element!, {
+		// 	// 	useCORS: true,
+		// 	// });
 
-			setShowCanvas(false);
-		}, 500);
+		// 	// const data = canvas.toDataURL('image/png', 1);
+		// 	// const link = document.createElement('a');
+
+		// 	// link.href = data;
+		// 	// link.download = `gridify-${user.username}.png`;
+		// 	// link.click();
+
+		// }, 500);
+		setShowCanvas(false);
 	};
 
 	return (
@@ -152,9 +187,14 @@ const GridifyHome = ({ user, top }: UsersProps) => {
 					</CenterStage>
 				</Container>
 
-				{showCanvas && (
-					<Canvas itemRef={saveItemRef} user={user} top={top} />
-				)}
+				{/* {showCanvas && ( */}
+				<Canvas
+					itemRef={saveItemRef}
+					user={user}
+					top={top}
+					played={played}
+				/>
+				{/* )} */}
 
 				{/* <ShareButton overrideText="Share" /> */}
 			</div>
@@ -166,29 +206,35 @@ function Canvas({
 	itemRef,
 	user,
 	top,
+	played,
 }: {
 	itemRef: Ref<HTMLDivElement>;
 	user: any;
 	top: any;
+	played: any;
 }) {
+	console.table(top);
+	function myLoader({ src, width, quality }: any) {
+		return `${src}?w=${width}&q=${quality || 75}`;
+	}
 	return (
 		<div
 			ref={itemRef}
 			style={{
 				backgroundColor: '#111',
 			}}
-			className="background w-[700px] aspect-[9/16] flex items-center justify-center px-20"
+			className="background w-[750px] aspect-[9/16] flex items-center justify-center px-20"
 		>
 			<div className="wrapper-items text-center">
 				<h2 className="text-lg font-bold my-5">
 					{DateTime.now().toFormat('MMMM')}&apos;s Top Songs
 				</h2>
 
-				<div className="flex items-center justify-center gap-2 w-fit m-auto bg-white/10 p-3 py-5 rounded-lg border border-white/30 my-10">
+				<div className=" my-5 flex items-center justify-center gap-2 bg-white/10 p-3 rounded-lg border border-white/30 w-full h-full">
 					<picture>
 						<img
-							width={60}
-							height={60}
+							width={80}
+							height={80}
 							src={user.spotify_users.profile_pic_url}
 							className="rounded-full"
 							alt={user.name}
@@ -196,32 +242,100 @@ function Canvas({
 					</picture>
 
 					<div>
-						<p className="font-bold m-0">{user.name}</p>
-						<p className="muted text-sm text-left m-0">
-							@{user.username}
-						</p>
+						<p className="font-bold m-0 text-lg">{user.name}</p>
+						<p className="muted text-left m-0">@{user.username}</p>
 					</div>
+
+					{/* <div className="statistics text-xs flex justify-between">
+										<table>
+											<tbody>
+												<tr>
+													<td className="font-bold">
+														{played[0].name}
+													</td>
+													<td>
+														<p>
+															x{played[0].amount}
+														</p>
+													</td>
+												</tr>
+
+												<tr>
+													<td className="font-bold">
+														{
+															played[
+																played.length -
+																	1
+															].name
+														}
+													</td>
+													<td>
+														<p>
+															x
+															{
+																played[
+																	played.length -
+																		1
+																].amount
+															}
+														</p>
+													</td>
+												</tr>
+											</tbody>
+										</table>
+									</div> */}
 				</div>
+
 				<div className="wrapper-content border border-white/30 rounded-lg">
 					<div className="grid-content bg-white/5 p-3">
 						{/* Album art grid */}
-						<div className="grid grid-cols-4 gap-2">
+						<div className="grid grid-cols-4 gap-5">
 							{top
 								.slice(0, 12)
-								.map((song: any, index: number) => (
-									<div key={index}>
-										<picture key={index}>
-											<img
-												src={song.album_art}
-												alt={song.name}
-											/>
-										</picture>
+								.map((song: any, index: number) => {
+									// console.log(song.color);
 
-										{/* <p className="text-xs py-3 bg-red-500 h-auto">
-											{index + 1}. {song.name}
-										</p> */}
-									</div>
-								))}
+									// console.log(chroma(song.color).hex());
+									return (
+										<div
+											key={index}
+											style={{
+												boxShadow: `0 0 50px ${song.color}`,
+												background: `${chroma(
+													song.color
+												)
+													.darken(0.8)
+													.hex()}`,
+												border: `2px solid ${chroma(
+													song.color
+												)
+													.darken(0.1)
+													.hex()}`,
+											}}
+											className={`rounded-lg border border-white/60`}
+										>
+											<picture>
+												<img
+													src={`data:image/jpeg;base64, ${song.album_art_base64}`}
+													className="rounded-tr-lg rounded-tl-lg"
+													alt={song.name}
+												/>
+											</picture>
+
+											<div className="flex flex-col items-center justify-center text p-2 h-100">
+												<p className="text-xs font-bold m-0">
+													{song.name}
+												</p>
+
+												<p className="text-xs muted m-0">
+													{song.artists
+														.map((a: any) => a.name)
+														.join(', ')}
+												</p>
+											</div>
+										</div>
+									);
+								})}
 						</div>
 					</div>
 				</div>
