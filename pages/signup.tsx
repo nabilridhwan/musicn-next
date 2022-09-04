@@ -194,17 +194,6 @@ const SignupPage = () => {
 						/>
 					</div>
 
-					<div className="flex items-center justify-center my-10">
-						<Link href={'/agreement'}>
-							<button
-								data-test-id="agreement-button"
-								className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs"
-							>
-								Important: Click here to read our agreement
-							</button>
-						</Link>
-					</div>
-
 					<ButtonWithLoading
 						data-test-id="signup-button"
 						text="Sign Up"
@@ -212,6 +201,17 @@ const SignupPage = () => {
 						disabled={false}
 					/>
 				</form>
+
+				<div className="flex items-center justify-center my-10">
+					<Link href={'/agreement'}>
+						<button
+							data-test-id="agreement-button"
+							className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs"
+						>
+							Important: Click here to read our agreement
+						</button>
+					</Link>
+				</div>
 			</Section>
 		</Container>
 	);

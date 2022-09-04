@@ -87,7 +87,7 @@ export default function MusicPreviewDialog({
 									<div>
 										<h2
 											data-test-id="preview-song-name"
-											className="font-bold my-0 text-xs"
+											className="font-bold my-0 text-sm"
 										>
 											{songDetails.title.slice(0, 23)}
 											{songDetails.title.length > 23 &&

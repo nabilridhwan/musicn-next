@@ -55,8 +55,9 @@ const LinkPage = ({ name, username }: { [prop: string]: any }) => {
 						<header className="my-10">
 							<h1>Hello {name}!</h1>
 							<p className="muted">
-								Link your Spotify account to make your account
-								visible (and shareable!)
+								Link your Spotify account to use Musicn&apos;s
+								features and make your account visible (and
+								shareable!)
 							</p>
 						</header>
 
