@@ -52,17 +52,27 @@ const GridifyLandingPage = () => {
 							transition={{ duration: 2 }}
 							className="image-wrapper rounded-lg border border-white/40"
 						>
-							{/* <Image
-								className="rounded-lg"
-								layout="responsive"
-								src={require('@/public/gridify-example.png')}
-								alt="Gridify Example"
-							/> */}
+							{/* <picture className="rounded-lg h-60 w-auto">
+								<img src={exampleImage} alt="Gridify Example" />
+							</picture> */}
 						</motion.div>
 						<div className="flex flex-col items-center justify-center my-10">
+							<Link href="/gridify">
+								<a className="flex items-center gap-2 my-2">
+									<div className="text-xs relative bg-red-500 rounded-lg p-1 font-bold">
+										New (BETA)
+									</div>
+								</a>
+							</Link>
 							<h1>Gridify</h1>
 							<p className="muted">
-								Save your top songs as a grid!
+								See your top songs of the month as a grid! Save
+								it and share it!
+							</p>
+
+							<p className="italic text-xs mt-5">
+								*This is a BETA version, it does not work with
+								iOS devices.
 							</p>
 						</div>
 
