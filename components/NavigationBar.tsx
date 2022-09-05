@@ -56,26 +56,6 @@ const NavigationBar = () => {
 				</Link>
 			</motion.div>
 
-			<motion.div
-				className="w-fit"
-				whileHover={{
-					scale: 1.1,
-				}}
-				whileTap={{
-					scale: 0.9,
-				}}
-			>
-				<Link href="/gridify">
-					<a className="flex items-center gap-2">
-						<IoGrid size={16} />
-						Gridify
-						<div className="text-xs relative bg-red-500 rounded-lg p-1 font-bold">
-							New!
-						</div>
-					</a>
-				</Link>
-			</motion.div>
-
 			{userSignedIn ? (
 				<div>
 					<Menu as="div" className="relative">
@@ -118,6 +98,20 @@ const NavigationBar = () => {
 											</a>
 										</Link>
 									)}
+								</Menu.Item>
+
+								<Menu.Item>
+									<Link href="/gridify">
+										<a className="flex items-center gap-2 p-1 rounded-lg hover:bg-blue-100 hover:text-blue-500">
+											<div className="flex gap-2 justify-center items-center flex-1">
+												<IoGrid size={16} />
+												Gridify
+											</div>
+											<div className="text-xs relative text-white bg-red-500 rounded-lg p-1 font-bold">
+												New!
+											</div>
+										</a>
+									</Link>
 								</Menu.Item>
 							</Menu.Items>
 						</Transition>
