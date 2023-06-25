@@ -1,17 +1,17 @@
 import axiosInstance from '@/frontend-api/axiosInstance';
 
 export default async function updatePreferences({
-	account,
-	top,
-	current,
-	recent,
+  account,
+  top,
+  current,
+  recent,
 }: Preferences) {
-	const result = await axiosInstance.put(`/api/me/preference`, {
-		account,
-		top,
-		current,
-		recent,
-	});
+  const result = await axiosInstance.put(`/api/me/preference`, {
+    account,
+    top,
+    current,
+    recent,
+  });
 
-	return result.data.data;
+  return result.data.data;
 }

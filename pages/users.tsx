@@ -1,160 +1,142 @@
 import CenterStage from '@/components/CenterStage';
-import Container from '@/components/Container';
 import DefaultProfilePicture from '@/components/DefaultProfilePicture';
-import Section from '@/components/Section';
 import getAllUsers from '@/frontend-api/user/getAllUsers';
-import { motion } from 'framer-motion';
+import {motion} from 'framer-motion';
 import absoluteUrl from 'next-absolute-url';
 import Link from 'next/link';
-import { FaSpotify } from 'react-icons/fa';
-import { IoPerson } from 'react-icons/io5';
+import {FaSpotify} from 'react-icons/fa';
+import {IoPerson, IoSearch} from 'react-icons/io5';
+import {
+    Avatar,
+    Box,
+    Button,
+    Card,
+    Container, FormControl, FormLabel,
+    Grid,
+    Heading,
+    HStack, IconButton, Input, InputGroup, InputRightElement, SimpleGrid,
+    Text,
+    VStack,
+} from '@chakra-ui/react';
+import getColors from 'get-image-colors';
+import {useEffect, useMemo, useState} from 'react';
+import axios, {AxiosResponse} from 'axios';
+import {Buffer} from 'buffer';
+import {useRouter} from 'next/router';
 
 type UsersProps = {
-	users: any[];
+    users: any[];
 };
 
 export async function getServerSideProps(context: any) {
-	const { origin } = absoluteUrl(context.req);
-	const users = await getAllUsers();
+    const {origin} = absoluteUrl(context.req);
+    const users = await getAllUsers();
 
-	return {
-		props: {
-			users,
-		},
-	};
+    return {
+        props: {
+            users,
+        },
+    };
 }
 
-const Users = ({ users }: UsersProps) => {
-	return (
-		<CenterStage>
-			<Container>
-				<Section>
-					{/* Page header */}
-					<header className="my-10">
-						<h1>Musicn Users</h1>
-						<p className="muted">All Musicn users</p>
+const Users = ({users}: UsersProps) => {
+    console.log(users);
+    return (
+        <Container maxW={'container.lg'}>
+            {/* Page header */}
+            <Box my={10}>
+                <Heading>Musicn Users</Heading>
 
-						<p className="muted text-xs mt-20 block">
-							If your profile does not show up. Link your Spotify
-							account in your profile page.
-						</p>
-					</header>
+                <p>All Musicn Users</p>
 
-					<div
-						data-test-id="users-list"
-						className="grid md:grid-cols-2 gap-5"
-					>
-						{users.map((user, index) => {
-							return (
-								<div
-									key={index}
-									className="border border-white/20 break-all p-5 rounded-xl flex flex-col items-center text-center lg:text-left lg:flex-row gap-5 "
-								>
-									{/* Profile Picture */}
-									{user.spotify_users && (
-										<div className="col-span-1">
-											{user.spotify_users
-												.profile_pic_url ? (
-												<picture>
-													<img
-														className="w-20 h-20 lg:w-28 lg:h-28 rounded-full aspect-square"
-														src={
-															user.spotify_users
-																.profile_pic_url
-														}
-														alt={user.name}
-													/>
-												</picture>
-											) : (
-												<DefaultProfilePicture />
-											)}
-										</div>
-									)}
+                {/*Search box*/}
+                {/*<FormControl>*/}
+                {/*    <FormLabel>*/}
+                {/*        Search*/}
+                {/*    </FormLabel>*/}
 
-									{/* Content */}
-									<div className="col-span-3">
-										<h2
-											className={`text-2xl font-bold ${
-												!user.spotify_users &&
-												'text-white/20'
-											}`}
-										>
-											{decodeURI(user.name)}
-										</h2>
-										<p
-											className={`text-sm ${
-												!user.spotify_users
-													? 'text-white/20'
-													: 'muted'
-											}`}
-										>
-											@{user.username}
-										</p>
+                {/*    <InputGroup rounded={15}>*/}
+                {/*        <Input rounded={15} placeholder={"Search for a user"}/>*/}
+                {/*        <InputRightElement>*/}
+                {/*            <IconButton variant={"ghost"} aria-label={"Search"} icon={<IoSearch/>}/>*/}
+                {/*        </InputRightElement>*/}
+                {/*    </InputGroup>*/}
+                {/*</FormControl>*/}
+            </Box>
 
-										{user.spotify_users && (
-											<div className="flex flex-wrap gap-2 items-center justify-center">
-												{/* <p>
-											Spotify name:{' '}
-											{user.spotify_users.name}
-										</p>
-										<p>
-											Spotify user id:{' '}
-											{user.spotify_users.spotify_userid}
-										</p> */}
 
-												{/* Profile Button */}
-												<motion.div
-													className="w-fit"
-													whileHover={{
-														scale: 1.1,
-													}}
-													whileTap={{
-														scale: 0.9,
-													}}
-												>
-													<Link
-														href={`/user/${user.username}`}
-													>
-														<a className="bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2">
-															<IoPerson
-																size={16}
-															/>
-															Profile
-														</a>
-													</Link>
-												</motion.div>
+            <SimpleGrid columns={[1,2]} gap={6} data-test-id="users-list">
+                {users.map(user => {
+                    return (
+                        <SearchUserCard
+                            key={user.spotify_users.spotify_userid ?? user.username}
+                            name={user.name}
+                            username={user.username}
+                            spotify_users={user.spotify_users}
+                        />
+                    );
+                })}
+            </SimpleGrid>
+        </Container>
+    );
+};
 
-												<motion.div
-													className="w-fit"
-													whileHover={{
-														scale: 1.1,
-													}}
-													whileTap={{
-														scale: 0.9,
-													}}
-												>
-													<Link
-														href={`https://open.spotify.com/user/${user.spotify_users.spotify_userid}?go=1`}
-													>
-														<a className="bg-spotify shadow-[0px_0px_20px] shadow-spotify/50 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2">
-															<FaSpotify
-																size={16}
-															/>
-															Spotify
-														</a>
-													</Link>
-												</motion.div>
-											</div>
-										)}
-									</div>
-								</div>
-							);
-						})}
-					</div>
-				</Section>
-			</Container>
-		</CenterStage>
-	);
+interface UserCardProps {
+    name: string;
+    username: string;
+    spotify_users?: {
+        profile_pic_url: string;
+        spotify_userid: string;
+    };
+}
+
+const SearchUserCard = ({name, username, spotify_users}: UserCardProps) => {
+    const router = useRouter();
+
+    // const [color, setColor] = useState<string | null>(null);
+    //
+    // useEffect(() => {
+    //     (async () => {
+    //         if (!spotify_users) return;
+    //
+    //         // Fetch user image
+    //         const profPicData = await axios.get(spotify_users.profile_pic_url, {
+    //             responseType: 'blob',
+    //         })
+    //
+    //
+    //         const c = await getColors(
+    //             spotify_users.profile_pic_url, {
+    //                 count: 1
+    //             }
+    //         )
+    //
+    //         const hex = c[0].alpha(0.6).hex() || null;
+    //         setColor(hex)
+    //     })();
+    // }, [spotify_users])
+
+    return (
+        <Card
+            rounded={15}
+            p={5}
+            _hover={{
+                scale: 1.5,
+            }}
+            cursor={'pointer'}
+            onClick={() => {
+                router.push(`/@${username}`);
+            }}>
+            {/* Profile Picture */}
+            <Avatar size={'xl'} name={name} src={spotify_users?.profile_pic_url}/>
+
+            <Heading order={2}>{decodeURI(name)}</Heading>
+
+            {/*<Text color={"muted"}>*/}
+            {/*    @{username}*/}
+            {/*</Text>*/}
+        </Card>
+    );
 };
 
 export default Users;

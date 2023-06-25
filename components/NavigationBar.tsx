@@ -1,161 +1,121 @@
-import { Menu, Transition } from '@headlessui/react';
-import { getCookie } from 'cookies-next';
-import { motion } from 'framer-motion';
+import {getCookie} from 'cookies-next';
+import {motion} from 'framer-motion';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import {useEffect, useState} from 'react';
 import {
-	IoCogOutline,
-	IoExitOutline,
-	IoGrid,
-	IoHomeOutline,
-	IoMenuOutline,
-	IoPeopleOutline,
+  IoChevronDown,
+  IoCogOutline,
+  IoExitOutline,
+  IoGrid,
+  IoHomeOutline,
+  IoMenuOutline,
+  IoPeopleOutline,
 } from 'react-icons/io5';
+import {
+  Avatar,
+  Button,
+  Container,
+  Flex,
+  HStack,
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+  Text,
+} from '@chakra-ui/react';
+import useUserSignedIn from '@/hooks/useUserSignedIn';
+import {useQuery} from '@tanstack/react-query';
+import getOwnProfile from '@/frontend-api/me/getOwnProfile';
+import {STATIC_PROPS_ID} from 'next/constants';
+
+const LoggedInNavigationItems = () => {
+  const {data: profile, isLoading: profileLoading} = useQuery(
+    ['me'],
+    async () => await getOwnProfile(),
+    {
+      cacheTime: 30000,
+    },
+  );
+
+  if (profileLoading) {
+    return null;
+  }
+
+  return (
+    <Menu>
+      <MenuButton
+        variant={'link'}
+        as={Button}
+        rounded={'full'}
+        w={'fit-content'}>
+        <HStack>
+          <Avatar
+            size={'xs'}
+            name={profile?.name}
+            src={profile?.spotify_users?.profile_pic_url}
+          />
+
+          <Text fontSize={'sm'}>{profile?.name}</Text>
+        </HStack>
+      </MenuButton>
+
+      <MenuList>
+        <MenuItem>
+          <Link href={'/profile'}>Account Settings</Link>
+        </MenuItem>
+
+        <MenuItem>
+          <Link href={`/@${profile?.username}`}>Musicn Profile</Link>
+        </MenuItem>
+
+        {/*<MenuItem>*/}
+        {/*  <Link href={'/gridify'}>Gridify</Link>*/}
+        {/*</MenuItem>*/}
+
+        <MenuDivider />
+
+        <MenuItem>
+          <Link href={'/api/logout'}>Logout</Link>
+        </MenuItem>
+      </MenuList>
+    </Menu>
+  );
+};
 
 const NavigationBar = () => {
-	const [userSignedIn, setUserSignedIn] = useState(false);
+  const [isUserSignedIn] = useUserSignedIn();
 
-	useEffect(() => {
-		if (getCookie('signed_in')) {
-			setUserSignedIn(true);
-		}
-	}, []);
+  return (
+    <Container maxW={'container.xl'} my={8}>
+      <Flex>
+        <HStack flex={1}>
 
-	return (
-		<nav className="flex flex-wrap gap-5 items-center justify-center my-10">
-			<motion.div
-				className="w-fit"
-				whileHover={{
-					scale: 1.1,
-				}}
-				whileTap={{
-					scale: 0.9,
-				}}
-			>
-				<Link href="/">
-					<a className="flex items-center gap-2">
-						<IoHomeOutline size={16} />
-						home
-					</a>
-				</Link>
-			</motion.div>
-			<motion.div
-				className="w-fit"
-				whileHover={{
-					scale: 1.1,
-				}}
-				whileTap={{
-					scale: 0.9,
-				}}
-			>
-				<Link href="/users">
-					<a className="flex items-center gap-2">
-						<IoPeopleOutline size={16} />
-						users
-					</a>
-				</Link>
-			</motion.div>
+          <Link href="/">
+            Home
+          </Link>
 
-			{userSignedIn ? (
-				<div>
-					<Menu as="div" className="relative">
-						<Menu.Button>
-							<IoMenuOutline className="inline mr-1" />
-							menu
-						</Menu.Button>
+          <Link href="/users">
+            <a className="flex items-center gap-2">Users</a>
+          </Link>
+        </HStack>
 
-						<Transition
-							enter="transition duration-100 ease-out"
-							enterFrom="transform scale-95 opacity-0"
-							enterTo="transform scale-100 opacity-100"
-							leave="transition duration-75 ease-out"
-							leaveFrom="transform scale-100 opacity-100"
-							leaveTo="transform scale-95 opacity-0"
-						>
-							<Menu.Items className="absolute left-0 top-2 bg-white text-black p-2 rounded-lg text-left">
-								<Menu.Item>
-									{({ active }) => (
-										<Link href="/profile">
-											<a
-												className={`flex items-center gap-2 p-1 rounded-lg hover:bg-blue-100 hover:text-blue-500 ${
-													active &&
-													'bg-blue-100 text-blue-500'
-												}`}
-											>
-												<IoCogOutline size={16} />
-												Profile
-											</a>
-										</Link>
-									)}
-								</Menu.Item>
+        <HStack justifyContent={'flex-end'} gap={5}>
+          {isUserSignedIn ? (
+            <LoggedInNavigationItems />
+          ) : (
+            <>
+              <Button>
+                <Link href={'/login'}>Login</Link>
+              </Button>
 
-								<Menu.Item>
-									{({ active }) => (
-										<Link href="/api/logout">
-											<a className="flex items-center gap-2 p-1 rounded-lg hover:bg-blue-100 hover:text-blue-500">
-												<IoExitOutline size={16} />
-												Logout
-											</a>
-										</Link>
-									)}
-								</Menu.Item>
-
-								<Menu.Item>
-									<Link href="/gridify">
-										<a className="flex items-center gap-2 p-1 rounded-lg hover:bg-blue-100 hover:text-blue-500">
-											<div className="flex gap-2 justify-center items-center flex-1">
-												<IoGrid size={16} />
-												Gridify
-											</div>
-											<div className="text-xs relative text-white bg-red-500 rounded-lg p-1 font-bold">
-												New!
-											</div>
-										</a>
-									</Link>
-								</Menu.Item>
-							</Menu.Items>
-						</Transition>
-					</Menu>
-				</div>
-			) : (
-				<>
-					<motion.div
-						className="w-fit"
-						whileHover={{
-							scale: 1.1,
-						}}
-						whileTap={{
-							scale: 0.9,
-						}}
-					>
-						<Link href="/login">
-							<a className="flex items-center gap-2">
-								<IoPeopleOutline size={16} />
-								login
-							</a>
-						</Link>
-					</motion.div>
-
-					<motion.div
-						className="w-fit"
-						whileHover={{
-							scale: 1.1,
-						}}
-						whileTap={{
-							scale: 0.9,
-						}}
-					>
-						<Link href="/signup">
-							<a className="flex items-center gap-2">
-								<IoPeopleOutline size={16} />
-								signup
-							</a>
-						</Link>
-					</motion.div>
-				</>
-			)}
-		</nav>
-	);
+              <Link href="/signup">Signup</Link>
+            </>
+          )}
+        </HStack>
+      </Flex>
+    </Container>
+  );
 };
 
 export default NavigationBar;

@@ -1,255 +1,233 @@
 import ButtonWithLoading from '@/components/ButtonWithLoading';
-import Container from '@/components/Container';
 import DefaultProfilePicture from '@/components/DefaultProfilePicture';
 import Section from '@/components/Section';
 import signup from '@/frontend-api/user/signup';
-import styles from '@/styles/UserPage.module.css';
 import parseUsername from '@/util/ParseUsername';
-import { useMutation } from '@tanstack/react-query';
-import { getCookie } from 'cookies-next';
-import { motion } from 'framer-motion';
+import {useMutation} from '@tanstack/react-query';
+import {getCookie} from 'cookies-next';
+import {motion} from 'framer-motion';
+import Signup from '../public/signup.svg';
 import Link from 'next/link';
-import { SyntheticEvent, useEffect, useState } from 'react';
-import { FaSpotify } from 'react-icons/fa';
+import {SyntheticEvent, useEffect, useState} from 'react';
+import {FaSpotify} from 'react-icons/fa';
+import {
+  Box,
+  Button,
+  Card,
+  Container,
+  Divider,
+  FormControl,
+  FormHelperText,
+  FormLabel,
+  Heading,
+  HStack,
+  Input,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import UserCard from '@/components/UserCard';
+import Image from 'next/image';
+import * as yup from 'yup';
+
+const validationSchema = yup.object().shape({
+  email: yup.string().email('Invalid email').required('Email is required'),
+  password: yup.string().required('Password is required'),
+  confirm_password: yup
+    .string()
+    .oneOf([yup.ref('password'), null], 'Passwords must match'),
+  username: yup.string().required('Username is required'),
+  name: yup.string().required('Name is required'),
+});
 
 export async function getServerSideProps(context: any) {
-	// TODO: Check for existing cookies
-	const token = getCookie('token', { req: context.req, res: context.res });
+  // TODO: Check for existing cookies
+  const token = getCookie('token', {req: context.req, res: context.res});
 
-	if (token) {
-		// Redirect to profile page
-		return {
-			redirect: {
-				destination: '/profile',
-				permanent: false,
-			},
-		};
-	}
+  if (token) {
+    // Redirect to profile page
+    return {
+      redirect: {
+        destination: '/profile',
+        permanent: false,
+      },
+    };
+  }
 
-	return {
-		props: {},
-	};
+  return {
+    props: {},
+  };
 }
 
 const SignupPage = () => {
-	const { data, error, status, isLoading, mutate } = useMutation(
-		({ username, name, email, password, confirm_password }: SignupProps) =>
-			signup({ username, name, email, password, confirm_password })
-	);
+  const {data, error, status, isLoading, mutate} = useMutation(
+    ({username, name, email, password, confirm_password}: SignupProps) =>
+      signup({username, name, email, password, confirm_password}),
+  );
 
-	const [errorMessage, setErrorMessage] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
 
-	const [username, setUsername] = useState('');
-	const [name, setName] = useState('');
-	const [email, setEmail] = useState('');
-	const [password, setPassword] = useState('');
-	const [confirmPassword, setConfirmPassword] = useState('');
+  const [username, setUsername] = useState('');
+  const [name, setName] = useState('');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [confirmPassword, setConfirmPassword] = useState('');
 
-	useEffect(() => {
-		console.log(status);
-		console.log(error);
+  useEffect(() => {
+    console.log(status);
+    console.log(error);
 
-		if (status === 'success') {
-			setErrorMessage('');
-			// Redirect to login page
-			window.location.href = '/login';
-			return;
-		}
+    if (status === 'success') {
+      setErrorMessage('');
+      // Redirect to login page
+      window.location.href = '/login';
+      return;
+    }
 
-		if (status === 'error') {
-			console.log(error);
-			const {
-				response: {
-					data: { message: errors },
-				},
-			} = error as any;
+    if (status === 'error') {
+      console.log(error);
+      const {
+        response: {
+          data: {message: errors},
+        },
+      } = error as any;
 
-			if (Array.isArray(errors)) {
-				setErrorMessage(errors.join(', '));
-			} else {
-				setErrorMessage(errors);
-			}
-		}
-	}, [status, error]);
+      if (Array.isArray(errors)) {
+        setErrorMessage(errors.join(', '));
+      } else {
+        setErrorMessage(errors);
+      }
+    }
+  }, [status, error]);
 
-	const handleSignUp = async (e: SyntheticEvent) => {
-		e.preventDefault();
+  const handleSignUp = async (e: SyntheticEvent) => {
+    e.preventDefault();
 
-		setErrorMessage('');
+    setErrorMessage('');
 
-		try {
-			await mutate({
-				username: parseUsername(username),
-				name,
-				email,
-				password,
-				confirm_password: confirmPassword,
-			});
-		} catch (error) {
-			console.log(error);
-		}
-	};
-	return (
-		<Container>
-			<Section>
-				{/* Page header */}
-				<header className="my-10">
-					<h1>Sign Up for a Musicn account</h1>
-					<p className="muted">Signup for a free Musicn account!</p>
-				</header>
+    try {
+      await mutate({
+        username: parseUsername(username),
+        name,
+        email,
+        password,
+        confirm_password: confirmPassword,
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  return (
+    <Container maxW={'container.xl'} my={10}>
+      {/* Page header */}
 
-				<div className="form-group">
-					<label
-						htmlFor="username"
-						className="text-center text-lg font-bold"
-					>
-						You profile will look like this:
-					</label>
+      <HStack gap={10}>
+        <Box flex={1}>
+          <Image src={Signup} alt={'Sign Up'} width={400} height={400} />
+          <Heading>Sign Up</Heading>
+          <Text>Signup for a free Musicn account!</Text>
+        </Box>
 
-					<motion.div
-						initial={{ opacity: 0 }}
-						animate={{ opacity: 1 }}
-						exit={{ opacity: 0 }}
-						className="preview_window"
-					>
-						<PreviewProfile
-							username={parseUsername(username)}
-							name={name}
-						/>
-					</motion.div>
-				</div>
+        <Box flex={2}>
+          <form onSubmit={handleSignUp}>
+            <Stack gap={3} my={5}>
+              <Heading fontSize={'2xl'}>Account Details</Heading>
 
-				<p className="error">{errorMessage}</p>
+              <FormControl>
+                <FormLabel>Email address</FormLabel>
+                <Input
+                  type="email"
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder={'johndoe@email.com'}
+                />
+                <FormHelperText>
+                  We&apos;ll never share your email.
+                </FormHelperText>
+              </FormControl>
 
-				<form onSubmit={handleSignUp}>
-					<div className="form-group">
-						<label htmlFor="name" className="">
-							Display Name
-						</label>
-						<input
-							name="name"
-							type="text"
-							className="form-control"
-							id="name"
-							onChange={(e) => setName(e.target.value)}
-							placeholder="Display Name"
-						/>
-					</div>
+              <FormControl>
+                <FormLabel>Password</FormLabel>
+                <Input
+                  type="password"
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  placeholder={'Password'}
+                />
+              </FormControl>
 
-					<div className="form-group">
-						<label htmlFor="username" className="">
-							Username
-						</label>
-						<input
-							name="username"
-							type="text"
-							className="form-control"
-							id="username"
-							value={username}
-							onBlur={(e) =>
-								setUsername(parseUsername(e.target.value))
-							}
-							onChange={(e) => setUsername(e.target.value)}
-							placeholder="Username"
-						/>
-					</div>
+              <FormControl>
+                <FormLabel>Confirm Password</FormLabel>
+                <Input
+                  type="password"
+                  value={confirmPassword}
+                  onChange={e => setConfirmPassword(e.target.value)}
+                  placeholder={'Confirm Password'}
+                />
 
-					<div className="form-group">
-						<label htmlFor="email" className="">
-							Email
-						</label>
-						<input
-							name="email"
-							type="text"
-							className="form-control"
-							id="email"
-							onChange={(e) => setEmail(e.target.value)}
-							placeholder="Email"
-						/>
-					</div>
+                <FormHelperText>
+                  Just confirming you got the right password!
+                </FormHelperText>
+              </FormControl>
+            </Stack>
 
-					<div className="form-group">
-						<label htmlFor="password">Password</label>
-						<input
-							name="password"
-							type="password"
-							className="form-control"
-							id="password"
-							onChange={(e) => setPassword(e.target.value)}
-							placeholder="Password"
-						/>
-					</div>
+            <Divider my={5} />
 
-					<div className="form-group">
-						<label htmlFor="confirm_password">
-							Confirm Password
-						</label>
-						<input
-							name="confirm_password"
-							type="password"
-							className="form-control"
-							id="confirm_password"
-							onChange={(e) => setConfirmPassword(e.target.value)}
-							placeholder="Confirm Password"
-						/>
-					</div>
+            <Stack gap={3} my={5}>
+              <Heading fontSize={'2xl'}>Profile</Heading>
 
-					<ButtonWithLoading
-						data-test-id="signup-button"
-						text="Sign Up"
-						isLoading={isLoading}
-						disabled={false}
-					/>
-				</form>
+              <FormControl>
+                <FormLabel>Display Name</FormLabel>
+                <Input
+                  type="text"
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                  placeholder={'John Doe'}
+                />
+              </FormControl>
 
-				<div className="flex items-center justify-center my-10">
-					<Link href={'/agreement'}>
-						<button
-							data-test-id="agreement-button"
-							className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs"
-						>
-							Important: Click here to read our agreement
-						</button>
-					</Link>
-				</div>
-			</Section>
-		</Container>
-	);
+              <FormControl>
+                <FormLabel>Username</FormLabel>
+                <Input
+                  type="text"
+                  value={username}
+                  onChange={e => setUsername(e.target.value)}
+                  placeholder={'johndoe'}
+                />
+              </FormControl>
+
+              {username.length > 0 && name.length > 0 && (
+                <Card maxW={'fit-content'} rounded={15} p={5}>
+                  <UserCard
+                    username={parseUsername(username)}
+                    display_name={name}
+                  />
+                </Card>
+              )}
+            </Stack>
+
+            <Stack>
+              <Button isLoading={isLoading} data-test-id={'signup-button'}>
+                Sign Up
+              </Button>
+
+              <button
+                data-test-id="agreement-button"
+                className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">
+                By Signing up, you agree to our{' '}
+                <Link href={'/agreement'}>Privacy Policies</Link>
+              </button>
+            </Stack>
+          </form>
+        </Box>
+      </HStack>
+    </Container>
+  );
 };
 
 type PreviewProfileProps = {
-	username: string;
-	name: string;
+  username: string;
+  name: string;
 };
-
-function PreviewProfile({ name, username }: PreviewProfileProps) {
-	return (
-		<div
-			className={
-				styles.section + ' flex items-center justify-center gap-5'
-			}
-		>
-			<DefaultProfilePicture />
-
-			<div>
-				{/* Name */}
-				<h2 className={styles.name + ' break-all'}>
-					{name ? name.slice(0, 30) : 'Display Name'}
-				</h2>
-
-				{/* Username */}
-				<p className="text-sm text-text/70">
-					{username ? `@${username.slice(0, 30)}` : '@username'}
-				</p>
-
-				{/* Spotify link */}
-				<button className="cursor-pointer flex items-center w-min gap-1 bg-spotify p-2 px-4 rounded-lg my-2">
-					<FaSpotify />
-					Spotify
-				</button>
-			</div>
-		</div>
-	);
-}
 
 export default SignupPage;

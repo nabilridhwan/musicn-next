@@ -1,63 +1,64 @@
-import { motion } from 'framer-motion';
-import { useContext } from 'react';
-import { MusicPreviewDialogContext } from '../context/MusicPreviewDialogProvider';
+import {motion} from 'framer-motion';
+import {useContext} from 'react';
+import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
+import {Box, Card, Center, Image, Stack, Text} from '@chakra-ui/react';
+
 type SongCardProps = {
-	name: string;
-	spotifyLink: string;
-	artists: string;
-	imageUrl: string;
-	preview: string;
+  name: string;
+  spotifyLink: string;
+  artists: string;
+  imageUrl: string;
+  preview: string;
 };
 const SongCard = ({
-	name,
-	spotifyLink,
-	artists,
-	imageUrl,
-	preview,
+  name,
+  spotifyLink,
+  artists,
+  imageUrl,
+  preview,
 }: SongCardProps) => {
-	const { showSongPreview, hideSongPreview, songDetails, setVolume } =
-		useContext(MusicPreviewDialogContext);
+  const {showSongPreview, hideSongPreview, songDetails, setVolume} = useContext(
+    MusicPreviewDialogContext
+  );
 
-	const handleSongClick = () => {
-		const song: MusicPreview = {
-			title: name,
-			artist: artists,
-			image: imageUrl,
-			preview,
-			url: spotifyLink,
-		};
+  const handleSongClick = () => {
+    const song: MusicPreview = {
+      title: name,
+      artist: artists,
+      image: imageUrl,
+      preview,
+      url: spotifyLink,
+    };
 
-		console.log(preview);
+    console.log(preview);
 
-		showSongPreview(song);
-	};
-	return (
-		<motion.div
-			whileHover={{
-				scale: 1.1,
-			}}
-			whileTap={{
-				scale: 0.9,
-			}}
-			className="cursor-pointer"
-			data-test-id="song-card"
-			onClick={handleSongClick}
-		>
-			<div className="flex flex-col items-center text-center border border-white/20 rounded-lg">
-				<img
-					className="w-full rounded-tl-lg rounded-tr-lg"
-					src={imageUrl}
-				/>
+    showSongPreview(song);
+  };
+  return (
+    <Card data-test-id="song-card" onClick={handleSongClick} rounded={15}>
+      <Stack gap={3}>
+        <Image borderTopRadius={15} src={imageUrl} alt={'album-cover'} />
 
-				<section className="py-5 px-3">
-					<p data-test-id="song-name" className="font-bold">
-						{name}
-					</p>
-					<p className="muted text-sm mb-0">{artists}</p>
-				</section>
-			</div>
-		</motion.div>
-	);
+        <Box textAlign={'center'} my={5}>
+          <Text
+            noOfLines={2}
+            textAlign={'center'}
+            as={'b'}
+            data-test-id="song-name"
+            className="font-bold">
+            {name}
+          </Text>
+          <Text
+            noOfLines={1}
+            textAlign={'center'}
+            fontSize={'sm'}
+            className="muted text-sm mb-0">
+            {artists}
+          </Text>
+        </Box>
+      </Stack>
+    </Card>
+  );
 };
 
 export default SongCard;

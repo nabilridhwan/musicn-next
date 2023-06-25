@@ -4,7 +4,7 @@ desc: 'The new Musicn-next, and what inspired it!'
 author: 'Nabil Ridhwan (@nabilridhwan)'
 date: '2022-08-26'
 tags:
-    - nextjs
+  - nextjs
 ---
 
 > It's pronounced as Musician.
@@ -17,8 +17,8 @@ As time passes, new technologies emerge and I want to use them to create the bes
 
 ## What does not work in this new Musicn?
 
--   Password reset
--   Activation
+- Password reset
+- Activation
 
 _These features are held back for now! We will revise these features in more details to provide the best security, and developer friendly experience._
 
@@ -32,9 +32,9 @@ The problem with the old [Musicn](https://musicnapp.herokuapp.com) is that it is
 
 In an research by Jakob Nielsen titled **"Respone Times: The 3 Important Limits"**, he said:
 
--   **0.1 second is about the limit for having the user feel that the system is reacting instantaneously**, meaning that no special feedback is necessary except to display the result.
--   **1.0 second is about the limit for the user's flow of thought to stay uninterrupted**, even though the user will notice the delay. Normally, no special feedback is necessary during delays of more than 0.1 but less than 1.0 second, but the user does lose the feeling of operating directly on the data.
--   **10 seconds is about the limit for keeping the user's attention focused on the dialogue.** For longer delays, users will want to perform other tasks while waiting for the computer to finish, so they should be given feedback indicating when the computer expects to be done. Feedback during the delay is especially important if the response time is likely to be highly variable, since users will then not know what to expect.
+- **0.1 second is about the limit for having the user feel that the system is reacting instantaneously**, meaning that no special feedback is necessary except to display the result.
+- **1.0 second is about the limit for the user's flow of thought to stay uninterrupted**, even though the user will notice the delay. Normally, no special feedback is necessary during delays of more than 0.1 but less than 1.0 second, but the user does lose the feeling of operating directly on the data.
+- **10 seconds is about the limit for keeping the user's attention focused on the dialogue.** For longer delays, users will want to perform other tasks while waiting for the computer to finish, so they should be given feedback indicating when the computer expects to be done. Feedback during the delay is especially important if the response time is likely to be highly variable, since users will then not know what to expect.
 
 It is important to note that the response time is not the same as the time it takes to render the page but also the time it takes to send the response to the user. And it is my mission to make the response time as fast as possible.
 

@@ -3,170 +3,169 @@ import axios from 'axios';
 type SpotifyTerm = 'short_term' | 'medium_term' | 'long_term';
 
 export default class Spotify {
-	static getUserAuthorizationUrl(scope: string, redirectUri: string) {
-		return `https://accounts.spotify.com/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}&show_dialog=true`;
-	}
+  static getUserAuthorizationUrl(scope: string, redirectUri: string) {
+    return `https://accounts.spotify.com/authorize?response_type=code&client_id=${process.env.CLIENT_ID}&scope=${scope}&redirect_uri=${redirectUri}&show_dialog=true`;
+  }
 
-	static async getRefreshTokenFromCode(code: string, redirect_uri: string) {
-		const formData = new URLSearchParams();
-		formData.append('grant_type', 'authorization_code');
-		formData.append('code', code);
-		formData.append('redirect_uri', redirect_uri);
+  static async getRefreshTokenFromCode(code: string, redirect_uri: string) {
+    const formData = new URLSearchParams();
+    formData.append('grant_type', 'authorization_code');
+    formData.append('code', code);
+    formData.append('redirect_uri', redirect_uri);
 
-		const results = await axios.post(
-			'https://accounts.spotify.com/api/token',
-			formData,
-			{
-				headers: {
-					Authorization: `Basic ${Buffer.from(
-						`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
-					).toString('base64')}`,
-				},
-			}
-		);
+    const results = await axios.post(
+      'https://accounts.spotify.com/api/token',
+      formData,
+      {
+        headers: {
+          Authorization: `Basic ${Buffer.from(
+            `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`,
+          ).toString('base64')}`,
+        },
+      },
+    );
 
-		return results.data;
-	}
+    return results.data;
+  }
 
-	static async getAccessTokenFromRefreshToken(refreshToken: string) {
-		const formData = new URLSearchParams();
-		formData.append('grant_type', 'refresh_token');
-		formData.append('refresh_token', refreshToken);
+  static async getAccessTokenFromRefreshToken(refreshToken: string) {
+    const formData = new URLSearchParams();
+    formData.append('grant_type', 'refresh_token');
+    formData.append('refresh_token', refreshToken);
 
-		const tokenResponse = await axios({
-			method: 'POST',
-			url: 'https://accounts.spotify.com/api/token',
-			data: formData,
-			headers: {
-				Authorization: `Basic ${Buffer.from(
-					`${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`
-				).toString('base64')}`,
-				'Content-Type': 'application/x-www-form-urlencoded',
-			},
-		});
+    const tokenResponse = await axios({
+      method: 'POST',
+      url: 'https://accounts.spotify.com/api/token',
+      data: formData,
+      headers: {
+        Authorization: `Basic ${Buffer.from(
+          `${process.env.CLIENT_ID}:${process.env.CLIENT_SECRET}`,
+        ).toString('base64')}`,
+        'Content-Type': 'application/x-www-form-urlencoded',
+      },
+    });
 
-		if (tokenResponse.data.error) {
-			throw new Error(tokenResponse.data.error);
-		}
+    if (tokenResponse.data.error) {
+      throw new Error(tokenResponse.data.error);
+    }
 
-		if (!tokenResponse.data.access_token) {
-			throw new Error('No access token');
-		}
+    if (!tokenResponse.data.access_token) {
+      throw new Error('No access token');
+    }
 
-		return tokenResponse.data.access_token;
-	}
+    return tokenResponse.data.access_token;
+  }
 
-	static async getCurrentlyPlayingSong(accessToken: string) {
-		const response = await axios({
-			method: 'GET',
-			url: `https://api.spotify.com/v1/me/player/currently-playing`,
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+  static async getCurrentlyPlayingSong(accessToken: string) {
+    const response = await axios({
+      method: 'GET',
+      url: `https://api.spotify.com/v1/me/player/currently-playing`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-		if (!response.data || !response.data.item) {
-			return {};
-		}
+    if (!response.data || !response.data.item) {
+      return {};
+    }
 
-		return response.data;
-	}
+    return response.data;
+  }
 
-	static async getTopSongs(
-		accessToken: string,
-		limit: number = 15,
-		term: SpotifyTerm = 'short_term'
-	) {
-		const response = await axios({
-			method: 'GET',
-			url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=${term}`,
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+  static async getTopSongs(
+    accessToken: string,
+    limit: number = 15,
+    term: SpotifyTerm = 'short_term',
+  ) {
+    const response = await axios({
+      method: 'GET',
+      url: `https://api.spotify.com/v1/me/top/tracks?limit=${limit}&time_range=${term}`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-		if (!response.data || !response.data.items) {
-			return [];
-		}
+    if (!response.data || !response.data.items) {
+      return [];
+    }
 
-		return response.data.items;
-	}
+    return response.data.items;
+  }
 
-	static async getRecentlyPlayedSongs(accessToken: string) {
-		const response = await axios({
-			method: 'GET',
-			url: `https://api.spotify.com/v1/me/player/recently-played?limit=10`,
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+  static async getRecentlyPlayedSongs(accessToken: string) {
+    const response = await axios({
+      method: 'GET',
+      url: `https://api.spotify.com/v1/me/player/recently-played?limit=10`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-		if (!response.data || !response.data.items) {
-			return [];
-		}
+    if (!response.data || !response.data.items) {
+      return [];
+    }
 
-		return response.data.items;
-	}
+    return response.data.items;
+  }
 
-	static async getRecentlyPlayedSongsByMonth(
-		accessToken: string,
-		notExceeding: Date
-	) {
-		const items = [];
-		let next =
-			'https://api.spotify.com/v1/me/player/recently-played?limit=50';
-		let currentItems = [];
-		do {
-			const response = await axios({
-				method: 'GET',
-				url: next,
-				headers: {
-					Authorization: `Bearer ${accessToken}`,
-				},
-			});
+  static async getRecentlyPlayedSongsByMonth(
+    accessToken: string,
+    notExceeding: Date,
+  ) {
+    const items = [];
+    let next = 'https://api.spotify.com/v1/me/player/recently-played?limit=50';
+    let currentItems = [];
+    do {
+      const response = await axios({
+        method: 'GET',
+        url: next,
+        headers: {
+          Authorization: `Bearer ${accessToken}`,
+        },
+      });
 
-			if (!response.data || !response.data.items) {
-				return [];
-			}
+      if (!response.data || !response.data.items) {
+        return [];
+      }
 
-			currentItems = response.data.items;
-			items.push(...response.data.items);
-			next = response.data.next;
-			// console.log(response.data);
-			console.log('next: ', next, typeof next);
+      currentItems = response.data.items;
+      items.push(...response.data.items);
+      next = response.data.next;
+      // console.log(response.data);
+      console.log('next: ', next, typeof next);
 
-			console.log(currentItems.length);
+      console.log(currentItems.length);
 
-			// console.log(
-			// 	new Date(items[items.length - 1].played_at),
-			// 	notExceeding,
-			// 	new Date(items[items.length - 1].played_at) > notExceeding
-			// );
-		} while (
-			new Date(items[items.length - 1].played_at) > notExceeding &&
-			currentItems.length === 0
-		);
+      // console.log(
+      // 	new Date(items[items.length - 1].played_at),
+      // 	notExceeding,
+      // 	new Date(items[items.length - 1].played_at) > notExceeding
+      // );
+    } while (
+      new Date(items[items.length - 1].played_at) > notExceeding &&
+      currentItems.length === 0
+    );
 
-		// return response.data.items;
+    // return response.data.items;
 
-		console.log(new Date(items[items.length - 1].played_at), notExceeding);
-		console.log(items.length);
-		return items;
-	}
+    console.log(new Date(items[items.length - 1].played_at), notExceeding);
+    console.log(items.length);
+    return items;
+  }
 
-	static async getUserProfile(user_id: string, accessToken: string) {
-		const response = await axios({
-			method: 'GET',
-			url: `https://api.spotify.com/v1/me`,
-			headers: {
-				Authorization: `Bearer ${accessToken}`,
-			},
-		});
+  static async getUserProfile(user_id: string, accessToken: string) {
+    const response = await axios({
+      method: 'GET',
+      url: `https://api.spotify.com/v1/me`,
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+    });
 
-		if (!response.data || !Object.keys(response.data).length) {
-			return {};
-		}
+    if (!response.data || !Object.keys(response.data).length) {
+      return {};
+    }
 
-		return response.data;
-	}
+    return response.data;
+  }
 }
