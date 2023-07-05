@@ -23,6 +23,10 @@ const queryClient = new QueryClient({
 });
 
 const theme = extendTheme({
+  config: {
+    initialColorMode: 'dark',
+    useSystemColorMode: false,
+  },
   colors: {
     primary: {
       400: '#90cdf4',

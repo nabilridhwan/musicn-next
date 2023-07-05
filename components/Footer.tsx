@@ -6,11 +6,11 @@ export default function Footer() {
       <p>
         This little application is created by{' '}
         <Link href="https://github.com/nabilridhwan">
-          <a className="underline">Nabil</a>
+          Nabil
         </Link>{' '}
         and it is{' '}
         <Link href="https://github.com/nabilridhwan/musicn-next">
-          <a className="underline">open-source</a>
+          open source
         </Link>
         !
       </p>

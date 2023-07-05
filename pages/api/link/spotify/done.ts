@@ -66,4 +66,4 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   }
 }
 
-export default withSetupScript(withProtect(handler as IHandler) as IHandler);
+export default withSetupScript(handler as IHandler);

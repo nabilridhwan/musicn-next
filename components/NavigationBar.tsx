@@ -96,7 +96,7 @@ const NavigationBar = () => {
           </Link>
 
           <Link href="/users">
-            <a className="flex items-center gap-2">Users</a>
+            Users
           </Link>
         </HStack>
 

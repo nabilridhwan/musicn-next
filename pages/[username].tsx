@@ -208,7 +208,7 @@ const UserPage = ({user, top}: UsersProps) => {
           <TabPanels>
             <TabPanel>
               <>
-                <SimpleGrid columns={[2, 3, 4]} gap={5}>
+                <SimpleGrid columns={[2, 3, 5]} gap={5}>
                   {top.map((currentSong: any) => (
                     <SongCard
                       key={currentSong.id}
