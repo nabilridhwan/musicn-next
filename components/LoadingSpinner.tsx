@@ -1,17 +1,15 @@
-import Loader from 'react-loader-spinner';
-// import 'react-loader-spinner/dist/loader/css/react-spinner-loader.css';
-
 const LoadingSpinner = ({color = 'white', width = 80, height = 80}) => {
   return (
-    <Loader.Bars
-      height={height}
-      width={width}
-      color={color}
-      ariaLabel="bars-loading"
-      wrapperStyle={{}}
-      wrapperClass="py-1"
-      visible={true}
-    />
+    <p>Loading</p>
+    // <Loader.Bars
+    //   height={height}
+    //   width={width}
+    //   color={color}
+    //   ariaLabel="bars-loading"
+    //   wrapperStyle={{}}
+    //   wrapperClass="py-1"
+    //   visible={true}
+    // />
   );
 };
 

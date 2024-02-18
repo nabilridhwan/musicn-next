@@ -1,7 +1,6 @@
 import {motion} from 'framer-motion';
 import {useContext} from 'react';
 
-import Loader from 'react-loader-spinner';
 import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
 import {Box, Card, HStack, Icon, Image, Text} from '@chakra-ui/react';
 
@@ -76,13 +75,7 @@ export const CurrentlyPlayingSongCard = ({
         </section>
 
         <Box mx={2}>
-          <Loader.Audio
-            height="18"
-            width="18"
-            color="rgba(255,255,255,0.7)"
-            wrapperClass="mr-1"
-            ariaLabel="three-dots-loading"
-          />
+          <p>Loading</p>
         </Box>
       </HStack>
     </Card>
