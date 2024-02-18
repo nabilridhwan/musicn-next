@@ -1,49 +1,49 @@
 interface Array {
-	first(): any;
+  first(): any;
 }
 
 interface BigInt {
-	toJSON(): number;
+  toJSON(): number;
 }
 
 interface IHandler {
-	(req: NextApiRequest, res: NextApiResponse<any>): Promise<void>;
+  (req: NextApiRequest, res: NextApiResponse<any>): Promise<void>;
 }
 
 type TokenData = {
-	user_id: string;
+  user_id: string;
 };
 
 interface MusicPreviewDialogProviderProps {
-	children?: ReactNode;
+  children?: ReactNode;
 }
 
 type MusicPreview = {
-	title: string;
-	artist: string;
-	image: string;
-	preview?: string;
-	url: string;
+  title: string;
+  artist: string;
+  image: string;
+  preview?: string;
+  url: string;
 };
 
 type EditProfileProps = {
-	username?: string;
-	email?: string;
-	name?: string;
-	password?: string;
+  username?: string;
+  email?: string;
+  name?: string;
+  password?: string;
 };
 
 type SignupProps = {
-	username: string;
-	email: string;
-	name: string;
-	password: string;
-	confirm_password: string;
+  username: string;
+  email: string;
+  name: string;
+  password: string;
+  confirm_password: string;
 };
 
 type Preferences = {
-	account: boolean;
-	top: boolean;
-	current: boolean;
-	recent: boolean;
+  account: boolean;
+  top: boolean;
+  current: boolean;
+  recent: boolean;
 };

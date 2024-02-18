@@ -1,104 +1,63 @@
-import CenterStage from '@/components/CenterStage';
-import Container from '@/components/Container';
-import Section from '@/components/Section';
-import { motion } from 'framer-motion';
-import type { NextPage } from 'next';
+import type {Metadata, NextPage} from 'next';
 import Head from 'next/head';
 import Link from 'next/link';
-import { IoArrowForward } from 'react-icons/io5';
+import {IoArrowForward} from 'react-icons/io5';
+import {Box, Button, Center, Heading, Text, VStack} from '@chakra-ui/react';
+import Header from '../public/header.svg';
+import Image from 'next/image';
+
+export const metadata: Metadata = {
+  title: 'Musicn - Discover what other people are listening to',
+};
 
 const Home: NextPage = () => {
-	return (
-		<>
-			<Head>
-				<title>
-					Musicn - Discover what other people are listening to
-				</title>
-			</Head>
-			<Container>
-				<CenterStage>
-					<Section>
-						<div className="text-center">
-							<h1 className="leading-tight">
-								Discover what other people are listening to
-							</h1>
+  return (
+    <>
+      <Center textAlign={'center'}>
+        <VStack>
+          <Box my={5}>
+            <Image
+              src={Header}
+              height={300}
+              alt={'Person listening to music with headphones on ear'}
+            />
+          </Box>
 
-							<p className="muted my-5">
-								With Musicn, you can discover what other people
-								are listening to, and create your own Musicn
-								profile.
-							</p>
+          <Heading>Share, Discover, and Connect with Musicn</Heading>
 
-							<motion.div
-								whileTap={{ scale: 0.9 }}
-								whileHover={{ scale: 1.05 }}
-							>
-								<Link href={'/signup'}>
-									<button
-										data-test-id="get-started-button"
-										className=" bg-white text-black font-bold shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-full flex items-center justify-center gap-2 mt-10"
-									>
-										Get started
-										{/* Arrow */}
-										<motion.div
-											initial={{ x: 0 }}
-											animate={{
-												x: 10,
-												transition: {
-													ease: 'easeInOut',
-													duration: 0.8,
-													repeat: Infinity,
-													repeatType: 'reverse',
-												},
-											}}
-										>
-											<IoArrowForward size={16} />
-										</motion.div>
-									</button>
-								</Link>
-							</motion.div>
+          <Text>
+            Get a glimpse into the musical tastes of your friends and discover
+            new tracks with Musicn!
+          </Text>
 
-							<p className="mt-5 text-xs muted">
-								<strong className="text-white/70">NEW</strong>{' '}
-								Try out Gridify! Read more{' '}
-								<Link href={'/changelog/v0-6-0'}>
-									<a className="underline">here</a>
-								</Link>
-								.
-							</p>
-						</div>
+          {/*TODO: Redirect to /signup*/}
+          <Button rightIcon={<IoArrowForward />} mt={5}>
+            <Link href={'/signup'}>Get started</Link>
+          </Button>
 
-						<div className="flex items-center justify-center gap-2 mt-5 flex-wrap">
-							<motion.div
-								whileTap={{ scale: 0.9 }}
-								whileHover={{ scale: 1.05 }}
-							>
-								<Link href={'/changelog'}>
-									<button
-										data-test-id="changelog-button"
-										className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs"
-									>
-										What&apos;s new? ✨
-									</button>
-								</Link>
-							</motion.div>
+          {/*TODO: Redirect to Changelog*/}
+          <Text my={10}>
+            Musicn comes back with a new look in v0.8.0 🤩! Read more{' '}
+            <Link href={'/changelog/v0-8-0'}>here!</Link>
+          </Text>
 
-							<motion.div
-								whileTap={{ scale: 0.9 }}
-								whileHover={{ scale: 1.05 }}
-							>
-								<Link href={'/blog/introducing-the-new-musicn'}>
-									<button className="text-white border border-white/30 rounded-lg px-4 py-2 w-fit text-xs">
-										Read: Some words from me
-									</button>
-								</Link>
-							</motion.div>
-						</div>
-					</Section>
-				</CenterStage>
-			</Container>
-		</>
-	);
+          {/*<Box bg={'red.500'} borderRadius={15} w={900}>*/}
+          {/*    <img src={"/promo.png"} alt={"Musicn Promo Image"} />*/}
+          {/*</Box>*/}
+
+          {/*<HStack my={10}>*/}
+          {/*    <Button variant={"ghost"} size={"sm"}>*/}
+          {/*        What&apos;s new? ✨*/}
+          {/*    </Button>*/}
+
+          {/*    <Button variant={"ghost"} size={"sm"}>*/}
+          {/*        Read: Some words from me*/}
+          {/*    </Button>*/}
+          {/*</HStack>*/}
+        </VStack>
+      </Center>
+    </>
+  );
 };
 
 export default Home;

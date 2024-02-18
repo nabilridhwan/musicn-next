@@ -1,160 +1,195 @@
 import CenterStage from '@/components/CenterStage';
-import Container from '@/components/Container';
 import DefaultProfilePicture from '@/components/DefaultProfilePicture';
-import Section from '@/components/Section';
-import getAllUsers from '@/frontend-api/user/getAllUsers';
-import { motion } from 'framer-motion';
+import getAllUsers from '@/services/user/getAllUsers';
+import {motion} from 'framer-motion';
 import absoluteUrl from 'next-absolute-url';
 import Link from 'next/link';
-import { FaSpotify } from 'react-icons/fa';
-import { IoPerson } from 'react-icons/io5';
+import {FaSpotify} from 'react-icons/fa';
+import {IoPerson, IoSearch} from 'react-icons/io5';
+import {
+  Avatar,
+  Box,
+  Button,
+  Card,
+  Container,
+  FormControl,
+  FormLabel,
+  Grid,
+  Heading,
+  HStack,
+  Icon,
+  IconButton,
+  Input,
+  InputGroup,
+  InputLeftAddon,
+  InputLeftElement,
+  InputRightElement,
+  SimpleGrid,
+  Stack,
+  Text,
+  VStack,
+} from '@chakra-ui/react';
+import getColors from 'get-image-colors';
+import {useEffect, useMemo, useState} from 'react';
+import axios, {AxiosResponse} from 'axios';
+import {Buffer} from 'buffer';
+import {useRouter} from 'next/router';
+import {NextRequest} from 'next/server';
+import {NextPageContext} from 'next';
 
 type UsersProps = {
-	users: any[];
+  users: any[];
+  query?: string;
 };
 
-export async function getServerSideProps(context: any) {
-	const { origin } = absoluteUrl(context.req);
-	const users = await getAllUsers();
+export async function getServerSideProps(context: NextPageContext) {
+  const {origin} = absoluteUrl(context.req);
 
-	return {
-		props: {
-			users,
-		},
-	};
+  const query = (context.query.q as string | undefined) || '';
+
+  const users = await getAllUsers({query});
+
+  return {
+    props: {
+      users,
+      query,
+    },
+  };
 }
 
-const Users = ({ users }: UsersProps) => {
-	return (
-		<CenterStage>
-			<Container>
-				<Section>
-					{/* Page header */}
-					<header className="my-10">
-						<h1>Musicn Users</h1>
-						<p className="muted">All Musicn users</p>
+const Users = ({users, query = ''}: UsersProps) => {
+  const [searchQuery, setSearchQuery] = useState<string | undefined>(query);
 
-						<p className="muted text-xs mt-20 block">
-							If your profile does not show up. Link your Spotify
-							account in your profile page.
-						</p>
-					</header>
+  return (
+    <Container maxW={'container.lg'}>
+      {/* Page header */}
+      <Stack my={10} gap={3}>
+        <Heading>Musicn Users</Heading>
 
-					<div
-						data-test-id="users-list"
-						className="grid md:grid-cols-2 gap-5"
-					>
-						{users.map((user, index) => {
-							return (
-								<div
-									key={index}
-									className="border border-white/20 break-all p-5 rounded-xl flex flex-col items-center text-center lg:text-left lg:flex-row gap-5 "
-								>
-									{/* Profile Picture */}
-									{user.spotify_users && (
-										<div className="col-span-1">
-											{user.spotify_users
-												.profile_pic_url ? (
-												<picture>
-													<img
-														className="w-20 h-20 lg:w-28 lg:h-28 rounded-full aspect-square"
-														src={
-															user.spotify_users
-																.profile_pic_url
-														}
-														alt={user.name}
-													/>
-												</picture>
-											) : (
-												<DefaultProfilePicture />
-											)}
-										</div>
-									)}
+        <p>All Musicn Users</p>
 
-									{/* Content */}
-									<div className="col-span-3">
-										<h2
-											className={`text-2xl font-bold ${
-												!user.spotify_users &&
-												'text-white/20'
-											}`}
-										>
-											{decodeURI(user.name)}
-										</h2>
-										<p
-											className={`text-sm ${
-												!user.spotify_users
-													? 'text-white/20'
-													: 'muted'
-											}`}
-										>
-											@{user.username}
-										</p>
+        <InputGroup>
+          <InputLeftElement pointerEvents="none">
+            <Icon as={IoSearch} color={'whiteAlpha.500'} />
+          </InputLeftElement>
 
-										{user.spotify_users && (
-											<div className="flex flex-wrap gap-2 items-center justify-center">
-												{/* <p>
-											Spotify name:{' '}
-											{user.spotify_users.name}
-										</p>
-										<p>
-											Spotify user id:{' '}
-											{user.spotify_users.spotify_userid}
-										</p> */}
+          <Input
+            placeholder={'Search for a user'}
+            value={searchQuery}
+            onChange={e => setSearchQuery(e.target.value)}
+            onKeyDown={e => {
+              if (e.key === 'Enter') {
+                window.location.href = `/users?q=${searchQuery}`;
+              }
+            }}
+          />
+        </InputGroup>
 
-												{/* Profile Button */}
-												<motion.div
-													className="w-fit"
-													whileHover={{
-														scale: 1.1,
-													}}
-													whileTap={{
-														scale: 0.9,
-													}}
-												>
-													<Link
-														href={`/user/${user.username}`}
-													>
-														<a className="bg-white text-black shadow-[0px_0px_20px] shadow-white/20 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2">
-															<IoPerson
-																size={16}
-															/>
-															Profile
-														</a>
-													</Link>
-												</motion.div>
+        {/*Search box*/}
+        {/*<FormControl>*/}
+        {/*    <FormLabel>*/}
+        {/*        Search*/}
+        {/*    </FormLabel>*/}
 
-												<motion.div
-													className="w-fit"
-													whileHover={{
-														scale: 1.1,
-													}}
-													whileTap={{
-														scale: 0.9,
-													}}
-												>
-													<Link
-														href={`https://open.spotify.com/user/${user.spotify_users.spotify_userid}?go=1`}
-													>
-														<a className="bg-spotify shadow-[0px_0px_20px] shadow-spotify/50 rounded-lg px-4 py-2 w-fit mt-6 flex items-center gap-2">
-															<FaSpotify
-																size={16}
-															/>
-															Spotify
-														</a>
-													</Link>
-												</motion.div>
-											</div>
-										)}
-									</div>
-								</div>
-							);
-						})}
-					</div>
-				</Section>
-			</Container>
-		</CenterStage>
-	);
+        {/*    <InputGroup rounded={15}>*/}
+        {/*        <Input rounded={15} placeholder={"Search for a user"}/>*/}
+        {/*        <InputRightElement>*/}
+        {/*            <IconButton variant={"ghost"} aria-label={"Search"} icon={<IoSearch/>}/>*/}
+        {/*        </InputRightElement>*/}
+        {/*    </InputGroup>*/}
+        {/*</FormControl>*/}
+      </Stack>
+
+      <SimpleGrid columns={[1, 2]} gap={6} data-test-id="users-list">
+        {users.map(user => {
+          return (
+            <SearchUserCard
+              key={user.spotify_users.spotify_userid ?? user.username}
+              name={user.name}
+              username={user.username}
+              spotify_users={user.spotify_users}
+              num_of_visitors={user.num_of_visitors}
+            />
+          );
+        })}
+      </SimpleGrid>
+    </Container>
+  );
+};
+
+interface UserCardProps {
+  name: string;
+  username: string;
+  num_of_visitors: number;
+  spotify_users?: {
+    profile_pic_url: string;
+    spotify_userid: string;
+  };
+}
+
+const SearchUserCard = ({
+  name,
+  username,
+  spotify_users,
+  num_of_visitors,
+}: UserCardProps) => {
+  const router = useRouter();
+
+  // const [color, setColor] = useState<string | null>(null);
+  //
+  // useEffect(() => {
+  //     (async () => {
+  //         if (!spotify_users) return;
+  //
+  //         // Fetch user image
+  //         const profPicData = await axios.get(spotify_users.profile_pic_url, {
+  //             responseType: 'blob',
+  //         })
+  //
+  //
+  //         const c = await getColors(
+  //             spotify_users.profile_pic_url, {
+  //                 count: 1
+  //             }
+  //         )
+  //
+  //         const hex = c[0].alpha(0.6).hex() || null;
+  //         setColor(hex)
+  //     })();
+  // }, [spotify_users])
+
+  return (
+    <Card
+      rounded={15}
+      p={5}
+      _hover={{
+        scale: 1.5,
+      }}
+      cursor={'pointer'}
+      onClick={() => {
+        router.push(`/@${username}`);
+      }}>
+      {/* Profile Picture */}
+
+      <HStack gap={5}>
+        <Avatar size={'lg'} name={name} src={spotify_users?.profile_pic_url} />
+
+        <Stack gap={0}>
+          <Text fontWeight={'bold'} fontSize={'lg'}>
+            {decodeURI(name)}
+          </Text>
+          <Text fontSize={'sm'} color={'gray.400'}>
+            @{username}
+          </Text>
+          {/*<Text fontSize={'xs'}>{num_of_visitors} Visitors</Text>*/}
+        </Stack>
+      </HStack>
+
+      {/*<Text color={"muted"}>*/}
+      {/*    @{username}*/}
+      {/*</Text>*/}
+    </Card>
+  );
 };
 
 export default Users;
