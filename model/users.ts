@@ -87,7 +87,7 @@ export async function getAllUsers({query = ''}: {query?: string}) {
     },
   });
 
-  return JSON.parse(JSON.stringify(data)) || null;
+  return data;
 }
 
 export async function getUserByEmailOrUsername(input: string) {
@@ -120,7 +120,7 @@ export async function getUserByEmailOrUsername(input: string) {
 }
 
 export async function getUserByUsername(input: string) {
-  const data = await prisma.app_users.findMany({
+  const data = await prisma.app_users.findFirst({
     where: {
       username: input,
     },
@@ -138,11 +138,13 @@ export async function getUserByUsername(input: string) {
     },
   });
 
-  return JSON.parse(JSON.stringify(data)) || null;
+  return data;
 }
 
 export async function getUserByUsername_public(input: string) {
-  const data = await prisma.app_users.findMany({
+  console.log(input);
+
+  const data = await prisma.app_users.findFirst({
     select: {
       name: true,
       username: true,
@@ -164,7 +166,7 @@ export async function getUserByUsername_public(input: string) {
     },
   });
 
-  return JSON.parse(JSON.stringify(data)) || null;
+  return data || null;
 }
 
 export async function getUserById(user_id: any) {
@@ -178,7 +180,7 @@ export async function getUserById(user_id: any) {
     },
   });
 
-  return JSON.parse(JSON.stringify(data)) || null;
+  return data || null;
 }
 
 export async function updateProfilePictureUrl(

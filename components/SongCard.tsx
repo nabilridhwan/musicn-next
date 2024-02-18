@@ -1,3 +1,4 @@
+'use client';
 import {motion} from 'framer-motion';
 import {useContext} from 'react';
 import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
@@ -17,9 +18,9 @@ const SongCard = ({
   imageUrl,
   preview,
 }: SongCardProps) => {
-  const {showSongPreview, hideSongPreview, songDetails, setVolume} = useContext(
-    MusicPreviewDialogContext,
-  );
+  // const {showSongPreview, hideSongPreview, songDetails, setVolume} = useContext(
+  //   MusicPreviewDialogContext,
+  // );
 
   const handleSongClick = () => {
     const song: MusicPreview = {
@@ -32,37 +33,19 @@ const SongCard = ({
 
     console.log(preview);
 
-    showSongPreview(song);
+    // showSongPreview(song);
   };
   return (
-    <Card
-      data-test-id="song-card"
-      onClick={handleSongClick}
-      rounded={5}
-      cursor={'pointer'}
-      p={2}>
-      <Stack gap={1}>
-        <Image rounded={5} src={imageUrl} alt={'album-cover'} />
+    <div className={'p-2 border rounded-lg'}>
+      <div className={'space-y-1'}>
+        <img className={'rounded-lg'} src={imageUrl} alt={'album-cover'} />
 
-        <Box textAlign={'center'} my={2}>
-          <Text
-            noOfLines={2}
-            textAlign={'center'}
-            as={'b'}
-            data-test-id="song-name"
-            className="font-bold">
-            {name}
-          </Text>
-          <Text
-            noOfLines={1}
-            textAlign={'center'}
-            fontSize={'sm'}
-            color={'whiteAlpha.600'}>
-            {artists}
-          </Text>
-        </Box>
-      </Stack>
-    </Card>
+        <div className={'text-center my-2'}>
+          <p className={'font-bold'}>{name}</p>
+          <p>{artists}</p>
+        </div>
+      </div>
+    </div>
   );
 };
 

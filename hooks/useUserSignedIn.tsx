@@ -1,14 +1,6 @@
-import {useEffect, useState} from 'react';
-import {getCookie} from 'cookies-next';
+import {cookies} from 'next/headers';
 
 export default function useUserSignedIn() {
-  const [isUserSignedIn, setIsUserSignedIn] = useState(false);
-
-  useEffect(() => {
-    if (getCookie('signed_in')) {
-      setIsUserSignedIn(true);
-    }
-  }, []);
-
-  return [isUserSignedIn];
+  const cookieStore = cookies();
+  return cookieStore.get('signed_in');
 }
