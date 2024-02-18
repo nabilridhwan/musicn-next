@@ -14,7 +14,7 @@ export default function RootLayout({
       <Head>
         <title>Musicn - Discover what other people are listening to</title>
       </Head>
-      <body>
+      <body className={'container mx-auto'}>
         <NavigationBar />
         {children}
       </body>

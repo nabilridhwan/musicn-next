@@ -1,6 +1,11 @@
 import {getCookie} from 'cookies-next';
 import React from 'react';
 import * as yup from 'yup';
+import {cookies} from 'next/headers';
+import {redirect} from 'next/navigation';
+import {Button} from '@/components/ui/button';
+import {generateState, Spotify} from 'arctic';
+import Link from 'next/link';
 
 const initialValues = {
   username: '',
@@ -36,7 +41,19 @@ const validationSchema = yup.object().shape({
 // }
 
 const LoginPage = () => {
-  return <p>Login page in progress</p>;
+  const cookieStorage = cookies();
+
+  if (cookieStorage.get('token')) {
+    redirect('/profile');
+  }
+
+  return (
+    <div>
+      <Link href={'/api/login'}>
+        <Button>Login with Spotify</Button>
+      </Link>
+    </div>
+  );
 };
 
 export default LoginPage;

@@ -2,6 +2,8 @@ import {getCookie} from 'cookies-next';
 import Signup from '../../public/signup.svg';
 import React from 'react';
 import * as yup from 'yup';
+import {cookies} from 'next/headers';
+import {redirect} from 'next/navigation';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -44,6 +46,11 @@ const initialValues = {
 // }
 
 const SignupPage = () => {
+  const cookieStorage = cookies();
+
+  if (cookieStorage.get('token')) {
+    redirect('/profile');
+  }
   return <h1>Signup page in progress...</h1>;
 };
 

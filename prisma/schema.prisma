@@ -58,3 +58,19 @@ model preferences {
   account    Boolean   @default(true)
   app_users  app_users @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
 }
+
+// LUCIA RELATED TABLES (https://lucia-auth.com/database/prisma)
+model User {
+  id       String    @id
+  sessions Session[]
+}
+
+model Session {
+  id              String   @id
+  userId          String   @db.VarChar(255)
+  username        String
+  user_id         Int
+  spotify_user_id String
+  expiresAt       DateTime
+  user            User     @relation(references: [id], fields: [userId], onDelete: Cascade)
+}

@@ -19,4 +19,7 @@ Here's how the migration is done
 
 - [x] Home Page
 - [x] Users page
+- [x] Login page and logic (uses OAuth2.0, lucia and arctic)
+- [x] Logout
 - [ ] User page (Half done)
+- [ ] Signup page and logic (uses OAuth2.0, lucia and arctic)

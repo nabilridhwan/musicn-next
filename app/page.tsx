@@ -1,5 +1,3 @@
-'use client';
-
 import type {Metadata, NextPage} from 'next';
 import Link from 'next/link';
 import {IoArrowForward} from 'react-icons/io5';
