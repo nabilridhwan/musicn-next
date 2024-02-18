@@ -53,6 +53,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
         top: boolean;
         recent: boolean;
       };
+      num_of_visitors?: number;
     } = {
       name: user.name || '',
       username: user.username,
@@ -62,6 +63,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
         spotify_userid: user.spotify_users.spotify_userid,
       },
       preferences: user.preferences,
+      num_of_visitors: user.num_of_visitors,
     };
 
     // Get profile picture
@@ -70,16 +72,15 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const access_token = await Spotify.getAccessTokenFromRefreshToken(
       refresh_token,
     );
-    const spotify_user = await Spotify.getUserProfile(
-      spotify_userid,
-      access_token,
-    );
+    const spotify_user = await Spotify.getOwnUserProfile(access_token);
 
     if (spotify_user.images.length > 0) {
       // Update profile picture (in the background)
       updateProfilePictureUrl(user.user_id, spotify_user.images[0].url);
       rtnData.spotify_users.profile_pic_url = spotify_user.images[0].url;
     }
+
+    console.log(rtnData);
 
     return new SuccessResponse('Success', rtnData).handleResponse(req, res);
   } catch (error: any) {

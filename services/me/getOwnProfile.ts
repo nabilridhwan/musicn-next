@@ -1,4 +1,4 @@
-import axiosInstance from '@/frontend-api/axiosInstance';
+import axiosInstance from '@/services/axiosInstance';
 import {AxiosResponse} from 'axios';
 
 export interface ApiResponse<T> {

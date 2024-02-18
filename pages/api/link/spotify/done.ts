@@ -32,7 +32,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
         country,
         images,
         id: spotify_userid,
-      } = await Spotify.getUserProfile('noob', access_token);
+      } = await Spotify.getOwnUserProfile(access_token);
 
       const data = APITokenHandler.extractDataFromToken(
         APITokenHandler.getToken(req)!,

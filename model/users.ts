@@ -43,11 +43,12 @@ export async function getNewUsers(limit: number) {
   return JSON.parse(JSON.stringify(data)) || null;
 }
 
-export async function getAllUsers() {
+export async function getAllUsers({query = ''}: {query?: string}) {
   const data = await prisma.app_users.findMany({
     select: {
       name: true,
       username: true,
+      num_of_visitors: true,
       spotify_users: {
         select: {
           name: true,
@@ -58,12 +59,25 @@ export async function getAllUsers() {
     },
 
     orderBy: {
-      spotify_users: {
-        name: 'asc',
-      },
+      num_of_visitors: 'desc',
     },
 
     where: {
+      OR: [
+        {
+          username: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+
+        {
+          name: {
+            contains: query,
+            mode: 'insensitive',
+          },
+        },
+      ],
       spotify_users: {
         isNot: null,
       },

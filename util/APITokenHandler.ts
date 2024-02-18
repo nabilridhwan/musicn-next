@@ -7,6 +7,13 @@ import {NextApiRequest, NextApiResponse} from 'next';
 namespace APITokenHandler {
   const tokenKey = 'token';
 
+  /**
+   * Reject when:
+   * - none: No token
+   * - has: Has token
+   * - invalid: Token is invalid
+   * - expired: Token is expired
+   */
   export type REJECT_WHEN = 'none' | 'has' | 'invalid' | 'expired';
 
   export function getToken(req: NextApiRequest): string {

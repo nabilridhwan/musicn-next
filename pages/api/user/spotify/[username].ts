@@ -46,10 +46,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
     const access_token = await Spotify.getAccessTokenFromRefreshToken(
       refresh_token,
     );
-    const spotify_user = await Spotify.getUserProfile(
-      spotify_userid,
-      access_token,
-    );
+    const spotify_user = await Spotify.getOwnUserProfile(access_token);
 
     // Filter out items needed
     const rtnData = {

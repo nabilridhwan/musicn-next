@@ -1,4 +1,4 @@
-import axiosInstance from '@/frontend-api/axiosInstance';
+import axiosInstance from '@/services/axiosInstance';
 
 export default async function getCurrentSongStatus(username: string) {
   console.log(username);

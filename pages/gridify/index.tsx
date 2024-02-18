@@ -1,8 +1,8 @@
 import CenterStage from '@/components/CenterStage';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import Section from '@/components/Section';
-import getTopSongs from '@/frontend-api/song/getTopSongs';
-import getUserDetails from '@/frontend-api/user/getUserDetails';
+import getTopSongs from '@/services/song/getTopSongs';
+import getUserDetails from '@/services/user/getUserDetails';
 import {getUserById} from '@/model/users';
 import APITokenHandler from '@/util/APITokenHandler';
 import axios, {AxiosError} from 'axios';

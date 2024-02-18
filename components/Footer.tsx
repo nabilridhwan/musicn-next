@@ -5,10 +5,7 @@ export default function Footer() {
     <footer>
       <p>
         This little application is created by{' '}
-        <Link href="https://github.com/nabilridhwan">
-          Nabil
-        </Link>{' '}
-        and it is{' '}
+        <Link href="https://github.com/nabilridhwan">Nabil</Link> and it is{' '}
         <Link href="https://github.com/nabilridhwan/musicn-next">
           open source
         </Link>

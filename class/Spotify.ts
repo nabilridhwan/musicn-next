@@ -153,7 +153,7 @@ export default class Spotify {
     return items;
   }
 
-  static async getUserProfile(user_id: string, accessToken: string) {
+  static async getOwnUserProfile(accessToken: string) {
     const response = await axios({
       method: 'GET',
       url: `https://api.spotify.com/v1/me`,

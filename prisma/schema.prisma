@@ -4,29 +4,24 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = env("DATABASE_URL_POOL")
+  url      = env("DATABASE_URL_MIGRATE")
 }
 
 model app_users {
-  user_id        BigInt         @id(map: "app_users_pkey1") @default(autoincrement())
-  username       String         @unique
-  password       String
-  created_at     DateTime?      @default(now()) @db.Timestamptz(6)
-  email          String?        @unique(map: "app_users_email_key1")
-  name           String?        @db.VarChar
-  spotify_linked Boolean        @default(false)
-  activated      Boolean        @default(false)
-  activation     activation[]
-  preferences    preferences?
-  spotify_users  spotify_users?
-}
+  user_id         BigInt    @id(map: "app_users_pkey1") @default(autoincrement())
+  username        String    @unique
+  password        String?
+  created_at      DateTime? @default(now()) @db.Timestamptz(6)
+  email           String?   @unique(map: "app_users_email_key1")
+  name            String?   @db.VarChar
+  num_of_visitors BigInt    @default(0)
 
-model errors {
-  id          BigInt    @id @default(autoincrement())
-  title       String
-  description String
-  resolution  String
-  created_at  DateTime? @default(now()) @db.Timestamptz(6)
+  spotify_linked Boolean @default(false)
+  activated      Boolean @default(false)
+
+  activation    activation[]
+  preferences   preferences?
+  spotify_users spotify_users?
 }
 
 model spotify_users {
@@ -41,13 +36,6 @@ model spotify_users {
   user_id         BigInt?    @unique
   updated_at      DateTime   @default(now()) @db.Timestamptz(6)
   app_users       app_users? @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model storage_tab {
-  id        Int    @id @default(autoincrement())
-  key       String @unique @db.VarChar
-  data      String @db.VarChar
-  expire_on Int
 }
 
 model activation {

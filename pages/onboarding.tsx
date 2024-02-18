@@ -37,6 +37,8 @@ import UserHeader from '@/components/UserHeader';
 import Image from 'next/image';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
+import {useRouter} from 'next/router';
+import {NextPageContext} from 'next';
 
 const validationSchema = yup.object().shape({
   email: yup.string().email('Invalid email').required('Email is required'),
@@ -52,14 +54,11 @@ const validationSchema = yup.object().shape({
 });
 
 const initialValues = {
-  email: '',
   password: '',
   confirm_password: '',
-  username: '',
-  name: '',
 };
 
-export async function getServerSideProps(context: any) {
+export async function getServerSideProps(context: NextPageContext) {
   // TODO: Check for existing cookies
   const token = getCookie('token', {req: context.req, res: context.res});
 
@@ -78,19 +77,16 @@ export async function getServerSideProps(context: any) {
   };
 }
 
+interface OnboardingDecodedData {}
+
 const SignupPage = () => {
-  const {data, error, status, isLoading, mutate} = useMutation(
-    ({username, name, email, password, confirm_password}: SignupProps) =>
-      signup({username, name, email, password, confirm_password}),
-  );
+  const {query} = useRouter();
 
+  // _d is the data object
+  const {_d: data} = query;
+
+  // Decode the data
   const [errorMessage, setErrorMessage] = useState('');
-
-  const [username, setUsername] = useState('');
-  const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
 
   const {
     values,
@@ -104,56 +100,19 @@ const SignupPage = () => {
   } = useFormik({
     validationSchema,
     initialValues,
-    onSubmit: handleSignUp,
+    onSubmit: handleOnboarding,
   });
 
-  useEffect(() => {
-    console.log(status);
-    console.log(error);
-
-    if (status === 'success') {
-      setErrorMessage('');
-      // Redirect to login page
-      window.location.href = '/login';
-      return;
-    }
-
-    if (status === 'error') {
-      console.log(error);
-      const {
-        response: {
-          data: {message: errors},
-        },
-      } = error as any;
-
-      if (Array.isArray(errors)) {
-        setErrorMessage(errors.join(', '));
-      } else {
-        setErrorMessage(errors);
-      }
-    }
-  }, [status, error]);
-
-  async function handleSignUp(values: typeof initialValues) {
+  async function handleOnboarding(values: typeof initialValues) {
     setErrorMessage('');
 
-    if (parseUsername(values.username).length === 0) {
-      setFieldError(
-        'username',
-        'Username can only start with a letter and contain letters, numbers, underscores, and dashes.',
-      );
-      return;
-    }
-
     try {
-      await mutate({
-        ...values,
-        username: parseUsername(values.username),
-      });
+      console.log(values);
     } catch (error) {
       console.log(error);
     }
   }
+
   return (
     <Container maxW={'container.xl'} my={10}>
       {/* Page header */}
@@ -162,8 +121,11 @@ const SignupPage = () => {
         <Center>
           <Box>
             <Image src={Signup} alt={'Sign Up'} width={400} height={400} />
-            <Heading>Sign Up</Heading>
-            <Text>Signup for a free Musicn account!</Text>
+            <Heading>One Last Thing</Heading>
+            <Text>
+              Set up your account with a password. The next time you log in,
+              you&apos;ll use the password.
+            </Text>
           </Box>
         </Center>
 
@@ -177,32 +139,7 @@ const SignupPage = () => {
 
           <form onSubmit={handleSubmit}>
             <Stack gap={3} my={5}>
-              <Heading fontSize={'2xl'}>Account Details</Heading>
-
-              <Button bg={'green.500'} leftIcon={<FaSpotify />}>
-                <Link href={'/api/auth/spotify'}>Sign Up with Spotify</Link>
-              </Button>
-
-              <Text textAlign={'center'} fontWeight={'bold'} my={3}>
-                OR
-              </Text>
-
-              <FormControl isInvalid={!!errors.email}>
-                <FormLabel>Email address</FormLabel>
-                <Input
-                  type="email"
-                  value={values.email}
-                  onChange={e => setFieldValue('email', e.target.value)}
-                  placeholder={'johndoe@email.com'}
-                />
-
-                <FormErrorMessage>{errors.email}</FormErrorMessage>
-
-                <FormHelperText>
-                  We&apos;ll never share your email.
-                </FormHelperText>
-              </FormControl>
-
+              <Heading fontSize={'2xl'}>Password</Heading>
               <FormControl isInvalid={!!errors.password}>
                 <FormLabel>Password</FormLabel>
                 <Input
@@ -234,54 +171,13 @@ const SignupPage = () => {
               </FormControl>
             </Stack>
 
-            <Divider my={5} />
-
-            <Stack gap={3} my={5}>
-              <Heading fontSize={'2xl'}>Profile</Heading>
-
-              <FormControl isInvalid={!!errors.name}>
-                <FormLabel>Display Name</FormLabel>
-                <Input
-                  type="text"
-                  value={values.name}
-                  onChange={e => setFieldValue('name', e.target.value)}
-                  placeholder={'John Doe'}
-                />
-
-                <FormErrorMessage>{errors.name}</FormErrorMessage>
-              </FormControl>
-
-              <FormControl isInvalid={!!errors.username}>
-                <FormLabel>Username</FormLabel>
-                <Input
-                  type="text"
-                  value={values.username}
-                  onChange={e => setFieldValue('username', e.target.value)}
-                  placeholder={'johndoe'}
-                />
-
-                <FormErrorMessage>{errors.username}</FormErrorMessage>
-              </FormControl>
-
-              <Flex alignItems={'center'} justifyContent={'center'}>
-                {username.length > 0 && name.length > 0 && (
-                  <Card maxW={'fit-content'} rounded={15} p={5}>
-                    <UserHeader
-                      username={parseUsername(username)}
-                      display_name={name}
-                    />
-                  </Card>
-                )}
-              </Flex>
-            </Stack>
-
             <Stack>
               <Button
-                isLoading={isSubmitting || isLoading}
+                // isLoading={isSubmitting || isLoading}
                 isDisabled={!dirty || !isValid || isSubmitting}
                 type={'submit'}
                 data-test-id={'signup-button'}>
-                Sign Up
+                Continue
               </Button>
 
               <Text textAlign={'center'}>

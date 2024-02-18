@@ -18,7 +18,7 @@ const SongCard = ({
   preview,
 }: SongCardProps) => {
   const {showSongPreview, hideSongPreview, songDetails, setVolume} = useContext(
-    MusicPreviewDialogContext
+    MusicPreviewDialogContext,
   );
 
   const handleSongClick = () => {
@@ -35,11 +35,16 @@ const SongCard = ({
     showSongPreview(song);
   };
   return (
-    <Card data-test-id="song-card" onClick={handleSongClick} rounded={15}>
-      <Stack gap={3}>
-        <Image borderTopRadius={15} src={imageUrl} alt={'album-cover'} />
+    <Card
+      data-test-id="song-card"
+      onClick={handleSongClick}
+      rounded={5}
+      cursor={'pointer'}
+      p={2}>
+      <Stack gap={1}>
+        <Image rounded={5} src={imageUrl} alt={'album-cover'} />
 
-        <Box textAlign={'center'} my={5}>
+        <Box textAlign={'center'} my={2}>
           <Text
             noOfLines={2}
             textAlign={'center'}
@@ -52,7 +57,7 @@ const SongCard = ({
             noOfLines={1}
             textAlign={'center'}
             fontSize={'sm'}
-            className="muted text-sm mb-0">
+            color={'whiteAlpha.600'}>
             {artists}
           </Text>
         </Box>

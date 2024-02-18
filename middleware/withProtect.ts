@@ -2,6 +2,11 @@
 import APITokenHandler from '@/util/APITokenHandler';
 import {NextApiRequest, NextApiResponse} from 'next';
 
+/**
+ * A handler that checks for an API token before running the handler.
+ * @param handler
+ * @param rejectWhen {APITokenHandler.REJECT_WHEN}
+ */
 export default function withProtect(
   handler: IHandler,
   rejectWhen: APITokenHandler.REJECT_WHEN = 'none',

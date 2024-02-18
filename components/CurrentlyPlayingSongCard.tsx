@@ -13,7 +13,7 @@ type MusicPlayerProps = {
   preview: string;
 };
 
-export const MusicPlayer = ({
+export const CurrentlyPlayingSongCard = ({
   name,
   spotifyLink,
   artists,
@@ -41,22 +41,36 @@ export const MusicPlayer = ({
   return (
     <Card
       onClick={handleSongClick}
+      cursor={'pointer'}
       className="flex items-center gap-3 border border-white/20 w-fit rounded-lg p-2"
-      rounded={15}>
-      <HStack>
-        <Image
-          borderLeftRadius={15}
-          src={imageUrl}
-          alt={'album-cover'}
-          height={12}
-        />
+      rounded={5}
+      minW={300}
+      p={10}
+      justifyContent={'center'}
+      alignItems={'center'}
+      sx={{
+        background: `url(${imageUrl})`,
+        backgroundPosition: 'center',
+      }}>
+      <Box
+        bg={'blackAlpha.700'}
+        w={'full'}
+        h={'full'}
+        pos={'absolute'}
+        top={0}
+        left={0}
+        rounded={5}
+      />
 
-        <section className="px-2">
-          <Text as={'b'} noOfLines={1}>
+      <HStack zIndex={10} gap={3}>
+        <Image src={imageUrl} alt={'album-cover'} height={20} />
+
+        <section>
+          <Text as={'b'} noOfLines={2}>
             {name}
           </Text>
 
-          <Text fontSize={'xs'} noOfLines={1}>
+          <Text fontSize={'xs'} color={'whiteAlpha.600'} noOfLines={2}>
             {artists}
           </Text>
         </section>

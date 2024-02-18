@@ -1,4 +1,4 @@
-import axiosInstance from '@/frontend-api/axiosInstance';
+import axiosInstance from '@/services/axiosInstance';
 
 export type LoginProps = {
   username: string;

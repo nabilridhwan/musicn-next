@@ -1,16 +1,16 @@
 import LoadingSpinner from '@/components/LoadingSpinner';
 import {
-  MusicPlayer,
+  CurrentlyPlayingSongCard,
   MusicPlayerError,
   MusicPlayerNotPlaying,
   MusicPlayerPrivate,
-} from '@/components/MusicPlayer';
+} from '@/components/CurrentlyPlayingSongCard';
 import RecentlyPlayedSongCard from '@/components/RecentlyPlayedSongCard';
 import SongCard from '@/components/SongCard';
-import getCurrentSong from '@/frontend-api/song/getCurrentSong';
-import getRecentSongs from '@/frontend-api/song/getRecentSongs';
-import getTopSongs from '@/frontend-api/song/getTopSongs';
-import getUserDetails from '@/frontend-api/user/getUserDetails';
+import getCurrentSong from '@/services/song/getCurrentSong';
+import getRecentSongs from '@/services/song/getRecentSongs';
+import getTopSongs from '@/services/song/getTopSongs';
+import getUserDetails from '@/services/user/getUserDetails';
 import styles from '@/styles/UserPage.module.css';
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
@@ -37,10 +37,11 @@ import {
   Text,
 } from '@chakra-ui/react';
 import Link from 'next/link';
-import UserCard from '@/components/UserCard';
+import UserHeader from '@/components/UserHeader';
+import {app_users, spotify_users} from '@prisma/client';
 
 type UsersProps = {
-  user: any;
+  user: app_users & {spotify_users: spotify_users} & {name: string};
   top: any;
 };
 
@@ -53,6 +54,16 @@ export async function getServerSideProps(context: any) {
       getUserDetails(username),
       getTopSongs(username),
     ]);
+
+    // Update the number of users
+    await prisma?.app_users.update({
+      data: {
+        num_of_visitors: user.num_of_visitors + 1,
+      },
+      where: {
+        username,
+      },
+    });
 
     if (!user.spotify_users) {
       throw new Error('No spotify user found');
@@ -169,12 +180,13 @@ const UserPage = ({user, top}: UsersProps) => {
             .join(', ')}`}></meta>
       </Head>
 
-      <Container maxW={'container.lg'}>
+      <Container my={10} maxW={'container.lg'}>
         <Center>
-          <UserCard
-            username={user.username}
+          <UserHeader
+            num_of_visitors={user.num_of_visitors as unknown as number}
+            username={user.username || ''}
             display_name={user.name}
-            profile_pic_url={user.spotify_users.profile_pic_url}
+            profile_pic_url={user.spotify_users.profile_pic_url || ''}
             spotify_userid={user.spotify_users.spotify_userid}
           />
         </Center>
@@ -184,7 +196,7 @@ const UserPage = ({user, top}: UsersProps) => {
             <>
               {Object.keys(currentSongData).length > 0 && (
                 <Box my={5}>
-                  <MusicPlayer
+                  <CurrentlyPlayingSongCard
                     name={currentSongData.name}
                     artists={currentSongData.artists
                       .map((a: any) => a.name)
@@ -199,71 +211,86 @@ const UserPage = ({user, top}: UsersProps) => {
           )}
         </Center>
 
-        <Tabs variant={'enclosed'}>
-          <TabList>
-            <Tab>Top</Tab>
-            <Tab>Recently Played</Tab>
-          </TabList>
+        {/*Tab buttons*/}
+        <HStack w={'fit-content'} mt={40} my={5}>
+          <Button
+            p={2}
+            fontSize={'sm'}
+            bg={currentSection === SECTION.TOP_SONGS ? 'gray.700' : 'gray.800'}
+            onClick={() => setCurrentSection(SECTION.TOP_SONGS)}>
+            Top Songs
+          </Button>
 
-          <TabPanels>
-            <TabPanel>
-              <>
-                <SimpleGrid columns={[2, 3, 5]} gap={5}>
-                  {top.map((currentSong: any) => (
-                    <SongCard
-                      key={currentSong.id}
-                      name={currentSong.name}
-                      artists={currentSong.artists
-                        .map((a: any) => a.name)
-                        .join(', ')}
-                      imageUrl={currentSong.album_art}
-                      preview={currentSong.preview}
-                      spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
-                    />
-                  ))}
+          <Button
+            p={2}
+            fontSize={'sm'}
+            bg={
+              currentSection === SECTION.RECENTLY_PLAYED_SONGS
+                ? 'gray.700'
+                : 'gray.800'
+            }
+            onClick={() => setCurrentSection(SECTION.RECENTLY_PLAYED_SONGS)}>
+            Recently Played Songs
+          </Button>
+        </HStack>
 
-                  {top.length === 0 && (
-                    <Nothing
-                      text={'No top songs or the user has made it private :('}
-                    />
-                  )}
-                </SimpleGrid>
-              </>
-            </TabPanel>
-            <TabPanel>
-              <>
-                <Grid gap={5}>
-                  {recentSongsStatus === 'success' &&
-                    recentSongsData.map((currentSong: any) => (
-                      <RecentlyPlayedSongCard
-                        key={currentSong.id}
-                        name={currentSong.name}
-                        artists={currentSong.artists
-                          .map((a: any) => a.name)
-                          .join(', ')}
-                        imageUrl={currentSong.album_art}
-                        preview={currentSong.preview}
-                        played_at={currentSong.played_at}
-                        spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
-                      />
-                    ))}
-                </Grid>
+        {currentSection === SECTION.TOP_SONGS && (
+          <>
+            <SimpleGrid columns={[2, 3, 5]} gap={5}>
+              {top.map((currentSong: any) => (
+                <SongCard
+                  key={currentSong.id}
+                  name={currentSong.name}
+                  artists={currentSong.artists
+                    .map((a: any) => a.name)
+                    .join(', ')}
+                  imageUrl={currentSong.album_art}
+                  preview={currentSong.preview}
+                  spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
+                />
+              ))}
 
-                {isRecentSongsError &&
-                  (typeof recentSongsData === 'undefined' ||
-                    recentSongsData.length === 0) && (
-                    <Nothing
-                      text={
-                        'No recently played songs or the user has made it private :('
-                      }
-                    />
-                  )}
+              {top.length === 0 && (
+                <Nothing
+                  text={'No top songs or the user has made it private :('}
+                />
+              )}
+            </SimpleGrid>
+          </>
+        )}
 
-                {isRecentSongsLoading && <LoadingSpinner />}
-              </>
-            </TabPanel>
-          </TabPanels>
-        </Tabs>
+        {currentSection === SECTION.RECENTLY_PLAYED_SONGS && (
+          <>
+            <Grid gap={5}>
+              {recentSongsStatus === 'success' &&
+                recentSongsData.map((currentSong: any) => (
+                  <RecentlyPlayedSongCard
+                    key={currentSong.id}
+                    name={currentSong.name}
+                    artists={currentSong.artists
+                      .map((a: any) => a.name)
+                      .join(', ')}
+                    imageUrl={currentSong.album_art}
+                    preview={currentSong.preview}
+                    played_at={currentSong.played_at}
+                    spotifyLink={`https://open.spotify.com/track/${currentSong.id}`}
+                  />
+                ))}
+            </Grid>
+
+            {isRecentSongsError &&
+              (typeof recentSongsData === 'undefined' ||
+                recentSongsData.length === 0) && (
+                <Nothing
+                  text={
+                    'No recently played songs or the user has made it private :('
+                  }
+                />
+              )}
+
+            {isRecentSongsLoading && <LoadingSpinner />}
+          </>
+        )}
       </Container>
       {/* <ShareButton overrideText="Share" /> */}
     </>

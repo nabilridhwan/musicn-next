@@ -14,7 +14,7 @@ async function handler(req: NextApiRequest, res: NextApiResponse<any>) {
   Cache.revalidateInBackground(res);
 
   try {
-    const data = await getAllUsers();
+    const data = await getAllUsers({query: (req.query.q as string) ?? ''});
     return new SuccessResponse('Success', data).handleResponse(req, res);
   } catch (error: any) {
     return new InternalServerError(error.message).handleResponse(req, res);
