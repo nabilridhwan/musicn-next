@@ -33,7 +33,7 @@ import {
   Text,
   VStack,
 } from '@chakra-ui/react';
-import UserHeader from '@/components/UserHeader';
+import UserHeader from '@/components/user/UserHeader';
 import Image from 'next/image';
 import * as yup from 'yup';
 import {useFormik} from 'formik';

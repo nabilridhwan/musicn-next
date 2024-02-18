@@ -3,9 +3,12 @@ import SongCard from '@/components/SongCard';
 import getCurrentSong from '@/api/getCurrentSong';
 import getRecentSongs from '@/api/getRecentSongs';
 import getTopSongs from '@/api/getTopSongs';
-import UserHeader from '@/components/UserHeader';
+import UserHeader from '@/components/user/UserHeader';
 import {getUserByUsername_public} from '@/model/users';
+import {Skeleton} from '@/components/ui/skeleton';
 import type {Metadata, ResolvingMetadata} from 'next';
+import {Suspense} from 'react';
+import TopSongsSection from '@/components/user/TopSongsSection';
 
 type PageProps = {
   params: {username: string};
@@ -42,9 +45,7 @@ const UserPage = async ({params: {username: _username}}: PageProps) => {
   // const username = ((params?.username as string) || '').split('%40')[1];
   const username = _username.split('%40')[1];
 
-  const user = await getUserByUsername_public(username);
   const recentSongsData = await getRecentSongs(username);
-  const topSongsData = await getTopSongs(username);
   const currentSongsData = await getCurrentSong(username);
 
   // const [currentSection, setCurrentSection] = useState<SECTION>(
@@ -74,29 +75,20 @@ const UserPage = async ({params: {username: _username}}: PageProps) => {
       {/*  <p>current: {JSON.stringify(currentSongsData, null, 2)}</p>*/}
       {/*</div>*/}
 
-      {user && (
-        <UserHeader
-          username={user.username}
-          display_name={user.name || ''}
-          profile_pic_url={user.spotify_users?.profile_pic_url || ''}
-          spotify_userid={user.spotify_users?.spotify_userid}
-        />
-      )}
+      <Suspense fallback={<p>Loading user</p>}>
+        <UserHeader username={username} />
+      </Suspense>
 
-      {topSongsData && (
-        <div className={'grid grid-cols-2 lg:grid-cols-5 gap-2'}>
-          {topSongsData.map((song: any) => (
-            <SongCard
-              key={song.id}
-              name={song.name}
-              artists={song.artists.map((a: any) => a.name).join(', ')}
-              imageUrl={song.album_art}
-              preview={song.preview}
-              spotifyLink={`https://open.spotify.com/track/${song.id}`}
-            />
-          ))}
-        </div>
-      )}
+      <Suspense
+        fallback={
+          <div className={'grid grid-cols-2 lg:grid-cols-5 gap-2'}>
+            {Array(12)?.map((_, i: number) => (
+              <Skeleton key={i} className={'w-[250px] h-[250px]'} />
+            ))}
+          </div>
+        }>
+        <TopSongsSection username={username} />
+      </Suspense>
 
       {/*    name="description"*/}
       {/*    content={`Check out my profile! My top songs are ${top*/}

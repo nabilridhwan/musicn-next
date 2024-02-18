@@ -1,5 +1,5 @@
 import updatePreferences from '@/services/user/updatePreferences';
-import {Header} from '@/pages/profile';
+import {Header} from '@/pages/profile/__index';
 import {useMutation} from '@tanstack/react-query';
 import {DateTime} from 'luxon';
 import {SyntheticEvent, useEffect, useState} from 'react';

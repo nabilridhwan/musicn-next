@@ -5,6 +5,12 @@ import SuccessResponse from '@/class/Responses/SuccessResponse';
 import {cookies} from 'next/headers';
 import {lucia} from '@/auth';
 
+/**
+ * This function gets the session information via the sessionId (optional)
+ * If sessionId is not provided, it will attempt to get the session from the cookie
+ * @param sessionId
+ * @returns Prisma Session Information
+ */
 export async function getSessionInformation(sessionId?: string) {
   // const token = APITokenHandler.getToken(req);
   // const dataFromToken: any = APITokenHandler.extractDataFromToken(token!);

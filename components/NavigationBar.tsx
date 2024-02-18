@@ -22,11 +22,9 @@ const NavigationBar = async () => {
           <LoggedInNavigationItems profile={profile} />
         ) : (
           <>
-            <Link href={'/login'}>
-              <Button>Login</Button>
+            <Link href={'/api/login'}>
+              <Button>Login/Signup</Button>
             </Link>
-
-            <Link href="/signup">Signup</Link>
           </>
         )}
       </div>

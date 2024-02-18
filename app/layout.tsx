@@ -1,6 +1,7 @@
 import Head from 'next/head';
 import NavigationBar from '@/components/NavigationBar';
 import '../globals.css';
+import {Toaster} from '@/components/ui/toaster';
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -16,7 +17,8 @@ export default function RootLayout({
       </Head>
       <body className={'container mx-auto'}>
         <NavigationBar />
-        {children}
+        <main>{children}</main>
+        <Toaster />
       </body>
     </html>
   );

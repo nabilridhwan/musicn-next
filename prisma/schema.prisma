@@ -16,10 +16,6 @@ model app_users {
   name            String?   @db.VarChar
   num_of_visitors BigInt    @default(0)
 
-  spotify_linked Boolean @default(false)
-  activated      Boolean @default(false)
-
-  activation    activation[]
   preferences   preferences?
   spotify_users spotify_users?
 }
@@ -35,16 +31,7 @@ model spotify_users {
   refresh_token   String
   user_id         BigInt?    @unique
   updated_at      DateTime   @default(now()) @db.Timestamptz(6)
-  app_users       app_users? @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
-}
-
-model activation {
-  id         BigInt    @id @default(autoincrement())
-  user_id    BigInt
-  code       String    @db.VarChar
-  expires    DateTime  @db.Timestamptz(6)
-  created_at DateTime? @default(now()) @db.Timestamptz(6)
-  app_users  app_users @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  app_users       app_users? @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 model preferences {
@@ -56,7 +43,7 @@ model preferences {
   created_at DateTime? @default(now()) @db.Timestamptz(6)
   updated_at DateTime? @default(now()) @db.Timestamptz(6)
   account    Boolean   @default(true)
-  app_users  app_users @relation(fields: [user_id], references: [user_id], onDelete: NoAction, onUpdate: NoAction)
+  app_users  app_users @relation(fields: [user_id], references: [user_id], onDelete: Cascade, onUpdate: Cascade)
 }
 
 // LUCIA RELATED TABLES (https://lucia-auth.com/database/prisma)

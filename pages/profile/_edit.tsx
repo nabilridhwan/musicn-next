@@ -8,7 +8,7 @@ import {getCookie} from 'cookies-next';
 import Link from 'next/link';
 import {SyntheticEvent, useEffect, useState} from 'react';
 import * as yup from 'yup';
-import {Header} from '@/pages/profile/index';
+import {Header} from '@/pages/profile/__index';
 import {useFormik} from 'formik';
 import {
   Button,
@@ -295,7 +295,7 @@ const ProfilePage = ({...props}: ProfilePageProps) => {
           </Button>
 
           <Button variant={'ghost'}>
-            <Link href="/profile">Cancel</Link>
+            <Link href="/profile/__index">Cancel</Link>
           </Button>
         </Stack>
       </form>

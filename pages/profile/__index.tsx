@@ -42,6 +42,7 @@ import SongCard from '@/components/SongCard';
 import RecentlyPlayedSongCard from '@/components/RecentlyPlayedSongCard';
 import LoadingSpinner from '@/components/LoadingSpinner';
 import {useRouter} from 'next/router';
+import Header from '@/components/profile/Header';
 
 export async function getServerSideProps(context: any) {
   // TODO: Check for existing cookies
@@ -143,13 +144,11 @@ const ProfilePage = ({...props}: ProfilePageProps) => {
 
         <TabPanels>
           <TabPanel>
-            <ProfileTab user={user} hasSpotify={hasSpotify} />
+            {/*<ProfileTab user={user} hasSpotify={hasSpotify} />*/}
           </TabPanel>
+          <TabPanel>{/*<PreferencesSection user={user} />*/}</TabPanel>
           <TabPanel>
-            <PreferencesSection user={user} />
-          </TabPanel>
-          <TabPanel>
-            <SpotifyTab user={user} hasSpotify={hasSpotify} />
+            {/*<SpotifyTab user={user} hasSpotify={hasSpotify} />*/}
           </TabPanel>
         </TabPanels>
       </Tabs>
@@ -186,15 +185,6 @@ function NoSpotifyAccountWarning() {
         Link Spotify Account
       </Button>
     </Alert>
-  );
-}
-
-export function Header({title, lead}: {title: string; lead: string}) {
-  return (
-    <Box my={10}>
-      <Heading>{title}</Heading>
-      <Text>{lead}</Text>
-    </Box>
   );
 }
 

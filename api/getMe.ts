@@ -12,14 +12,16 @@ export async function getMe() {
 
   const prismaSession = await getSessionInformation();
 
+  // TODO: Force user to sign out
   if (!prismaSession) {
     return null;
   }
 
   const user = await getUserByUsername(prismaSession.username);
 
+  // TODO: Force user to sign out
   if (!user) {
-    throw new Error('User not found');
+    return null;
   }
 
   return user;

@@ -3,33 +3,26 @@ import Link from 'next/link';
 import {IoEyeOutline} from 'react-icons/io5';
 import {Avatar, AvatarImage, AvatarFallback} from '@/components/ui/avatar';
 import {Button} from '@/components/ui/button';
+import {getUserByUsername_public} from '@/model/users';
 
 interface UserCardProps {
   username: string;
-  display_name: string;
-  profile_pic_url?: string;
-  spotify_userid?: string;
-  num_of_visitors?: number;
 }
 
-export default function UserHeader({
-  username,
-  display_name,
-  spotify_userid,
-  profile_pic_url,
-  num_of_visitors,
-}: UserCardProps) {
+export default async function UserHeader({username}: UserCardProps) {
+  const user = await getUserByUsername_public(username);
+
   return (
     <div className={'border flex items-center gap-2 w-fit p-5 rounded-2xl'}>
       <Avatar>
-        <AvatarImage src={profile_pic_url} />
-        <AvatarFallback>{display_name}</AvatarFallback>
+        <AvatarImage src={user?.spotify_users?.profile_pic_url || undefined} />
+        <AvatarFallback>{user?.name}</AvatarFallback>
       </Avatar>
 
       {/*User information*/}
       <div>
         {/* Name */}
-        <h1 className={'text-lg bold'}>{decodeURI(display_name)}</h1>
+        <h1 className={'text-lg bold'}>{decodeURI(user?.name || '')}</h1>
 
         {/* Username */}
         <p className={'text-sm opacity-70'}>@{username}</p>
@@ -42,8 +35,9 @@ export default function UserHeader({
         {/*</HStack>*/}
 
         {/* Spotify link */}
-        {spotify_userid && (
-          <Link href={`https://open.spotify.com/user/${spotify_userid}?go=1`}>
+        {user?.spotify_users?.spotify_userid && (
+          <Link
+            href={`https://open.spotify.com/user/${user?.spotify_users?.spotify_userid}?go=1`}>
             <Button size={'sm'}>
               <FaSpotify size={20} className={'mr-2'} />
               Spotify
