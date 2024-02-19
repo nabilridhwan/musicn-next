@@ -31,12 +31,25 @@ export async function generateMetadata(
   }
 
   return {
+    metadataBase: new URL('https://musicnapp.com'),
     title: `@${username} – Musicn`,
     description: description,
     openGraph: {
       images: [
         {
-          url: `https://musicnapp.com/api/og/${username}`,
+          url: `/api/og/${username}`,
+          width: 800,
+          height: 400,
+        },
+      ],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title: `@${username} – Musicn`,
+      description: description,
+      images: [
+        {
+          url: `/api/og/${username}`,
           width: 800,
           height: 400,
         },
