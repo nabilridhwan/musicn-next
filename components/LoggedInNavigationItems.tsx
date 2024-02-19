@@ -12,6 +12,7 @@ import {
 import {Button, Avatar, Image, Text, HStack, Icon} from '@chakra-ui/react';
 import {ChevronDownIcon} from 'lucide-react';
 import {IoLogoUsd} from 'react-icons/io';
+import {IoCog, IoPerson} from 'react-icons/io5';
 
 interface LoggedInNavigationItemsProps {
   profile: Awaited<ReturnType<typeof getMe>>;
@@ -39,13 +40,18 @@ export const LoggedInNavigationItems = ({
         </MenuButton>
         <MenuList>
           <Link href={'/profile'}>
-            <MenuItem>My Account</MenuItem>
+            <MenuItem>
+              <Icon mr={2}>
+                <IoCog size={25} />
+              </Icon>
+              Account Settings
+            </MenuItem>
           </Link>
 
           <Link href={`/@${profile?.username}`}>
             <MenuItem>
-              <Icon mr={1}>
-                <IoLogoUsd size={25} />
+              <Icon mr={2}>
+                <IoPerson size={25} />
               </Icon>
               Musicn Profile
             </MenuItem>

@@ -1,18 +1,10 @@
 import {generateState, OAuth2RequestError, Spotify} from 'arctic';
 import SpotifyAPI from '@/class/Spotify';
 import {cookies} from 'next/headers';
-import {lucia} from '@/auth';
+import {lucia} from '@/util/auth';
 import {generateRandomString} from 'oslo/dist/crypto';
 import {generateId} from 'lucia';
 import {redirect} from 'next/navigation';
-
-const REDIRECT_URL = 'http://localhost:3000/api/login/callback';
-
-const spotify = new Spotify(
-  'e849dc093c46431e99a380047315750d',
-  '01c270e3ca77492a99fa2222c6b7ec2b',
-  REDIRECT_URL,
-);
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 

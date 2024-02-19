@@ -1,6 +1,6 @@
 'use client';
 
-import parseUsername from '@/util/ParseUsername';
+import parseUsername from '@/util/parseUsername';
 import * as yup from 'yup';
 import {useFormik} from 'formik';
 import Header from '@/components/profile/Header';

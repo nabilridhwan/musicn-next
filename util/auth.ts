@@ -2,6 +2,7 @@
 import {Lucia, TimeSpan} from 'lucia';
 import {PrismaAdapter} from '@lucia-auth/adapter-prisma';
 import {PrismaClient} from '@prisma/client';
+import {Spotify} from 'arctic';
 
 const client = new PrismaClient();
 
@@ -19,6 +20,12 @@ export const lucia = new Lucia(adapter, {
     },
   },
 });
+
+export const spotify = new Spotify(
+  process.env.CLIENT_ID!,
+  process.env.CLIENT_SECRET!,
+  process.env.SPOTIFY_REDIRECT_URL!,
+);
 
 // TODO: MOVE THIS TO OTHER FILE
 // IMPORTANT!

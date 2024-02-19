@@ -1,9 +1,5 @@
-import APITokenHandler from '@/util/APITokenHandler';
-import {getUserById, getUserByUsername} from '@/model/users';
-import NotFoundResponse from '@/class/Responses/NotFoundResponse';
-import SuccessResponse from '@/class/Responses/SuccessResponse';
 import {cookies} from 'next/headers';
-import {lucia} from '@/auth';
+import {lucia} from '@/util/auth';
 
 /**
  * This function gets the session information via the sessionId (optional)

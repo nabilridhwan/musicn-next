@@ -1,13 +1,8 @@
 import {generateState, Spotify} from 'arctic';
 import {cookies} from 'next/headers';
+import {spotify} from '@/util/auth';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
-
-const spotify = new Spotify(
-  'e849dc093c46431e99a380047315750d',
-  '01c270e3ca77492a99fa2222c6b7ec2b',
-  'http://localhost:3000/api/login/callback',
-);
 
 const generateLoginRoute = async () => {
   const cookieStore = cookies();

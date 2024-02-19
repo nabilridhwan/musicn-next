@@ -2,7 +2,7 @@ import ButtonWithLoading from '@/components/ButtonWithLoading';
 import DefaultProfilePicture from '@/components/DefaultProfilePicture';
 import Section from '@/components/Section';
 import signup from '@/services/user/signup';
-import parseUsername from '@/util/ParseUsername';
+import parseUsername from '@/util/parseUsername';
 import {useMutation} from '@tanstack/react-query';
 import {getCookie} from 'cookies-next';
 import {motion} from 'framer-motion';

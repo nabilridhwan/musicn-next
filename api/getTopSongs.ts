@@ -1,15 +1,5 @@
-import BaseErrorResponse from '@/class/Responses/BaseErrorResponse';
-import InternalServerError from '@/class/Responses/InternalServerError';
-import NotFoundResponse from '@/class/Responses/NotFoundResponse';
-import SpotifyInvalidPermissionResponse from '@/class/Responses/SpotifyInvalidPermissionResponse';
-import SuccessResponse from '@/class/Responses/SuccessResponse';
 import Spotify from '@/class/Spotify';
-import withSetupScript from '@/middleware/withSetupScript';
 import {getUserByUsername} from '@/model/users';
-import Cache from '@/util/Cache';
-import {AxiosError} from 'axios';
-import type {NextApiRequest, NextApiResponse} from 'next';
-import * as yup from 'yup';
 
 export default async function getTopSongs(username: string) {
   try {

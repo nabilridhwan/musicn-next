@@ -1,4 +1,7 @@
-// This files parses the username so that it removes special characters front and back and also replaces them with underscores
+/**
+ * This files parses the username so that it removes special characters front and back and also replaces them with underscores
+ * @param username
+ */
 export default function parseUsername(username: string) {
   return username
     .toLowerCase()
