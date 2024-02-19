@@ -54,7 +54,7 @@ export async function GET(request: Request): Promise<Response> {
     } = await SpotifyAPI.getOwnUserProfile(tokens.accessToken);
 
     // Tries to check if the user already exists in the database via the spotify user id
-    let appUserFromPrisma = await prisma?.app_users.findFirst({
+    let appUserFromPrisma = await prisma!.app_users.findFirst({
       where: {
         spotify_users: {
           spotify_userid: spotify_userid,
@@ -64,7 +64,7 @@ export async function GET(request: Request): Promise<Response> {
 
     // if they don't exist (i.e, they're new), create a new user for them in the database
     if (!appUserFromPrisma) {
-      appUserFromPrisma = await prisma?.app_users.create({
+      appUserFromPrisma = await prisma!.app_users.create({
         data: {
           name: display_name,
           username: spotify_userid,

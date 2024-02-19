@@ -1,27 +1,17 @@
 'use client';
 
 import {getMe} from '@/api/getMe';
-import {Button} from '@/components/ui/button';
 import Link from 'next/link';
 import {
-  NavigationMenu,
-  NavigationMenuContent,
-  NavigationMenuIndicator,
-  NavigationMenuItem,
-  NavigationMenuLink,
-  NavigationMenuList,
-  NavigationMenuTrigger,
-  NavigationMenuViewport,
-} from '@/components/ui/navigation-menu';
-import {Avatar, AvatarImage} from '@/components/ui/avatar';
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from '@/components/ui/dropdown-menu';
+  Menu,
+  MenuButton,
+  MenuDivider,
+  MenuItem,
+  MenuList,
+} from '@chakra-ui/menu';
+import {Button, Avatar, Image, Text, HStack, Icon} from '@chakra-ui/react';
+import {ChevronDownIcon} from 'lucide-react';
+import {IoLogoUsd} from 'react-icons/io';
 
 interface LoggedInNavigationItemsProps {
   profile: Awaited<ReturnType<typeof getMe>>;
@@ -32,33 +22,69 @@ export const LoggedInNavigationItems = ({
 }: LoggedInNavigationItemsProps) => {
   return (
     <>
-      <DropdownMenu>
-        <DropdownMenuTrigger className={'absolute'}>
-          <Avatar>
-            <AvatarImage
+      <Menu>
+        <MenuButton
+          as={Button}
+          variant={'ghost'}
+          rightIcon={<ChevronDownIcon size={14} />}>
+          <HStack>
+            <Avatar
+              size={'sm'}
               src={profile?.spotify_users?.profile_pic_url || undefined}
+              name={'dk'}
             />
-          </Avatar>
-        </DropdownMenuTrigger>
 
-        <DropdownMenuContent className={'relative'}>
-          <DropdownMenuItem>
-            <Link href={`/profile`}>My Account</Link>
-          </DropdownMenuItem>
+            <Text>{profile?.name || profile?.username}</Text>
+          </HStack>
+        </MenuButton>
+        <MenuList>
+          <Link href={'/profile'}>
+            <MenuItem>My Account</MenuItem>
+          </Link>
 
-          <DropdownMenuItem>
-            <Link href={`/@${profile?.username}`}>Musicn Profile</Link>
-          </DropdownMenuItem>
+          <Link href={`/@${profile?.username}`}>
+            <MenuItem>
+              <Icon mr={1}>
+                <IoLogoUsd size={25} />
+              </Icon>
+              Musicn Profile
+            </MenuItem>
+          </Link>
 
-          <DropdownMenuSeparator />
+          <MenuDivider />
 
-          <DropdownMenuItem>
-            <Link href={'/api/logout'} className={'text-red-500'}>
-              Logout
-            </Link>
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <Link href={'/api/logout'}>
+            <MenuItem color={'red.500'}>Logout</MenuItem>
+          </Link>
+        </MenuList>
+      </Menu>
+      {/*<DropdownMenu>*/}
+      {/*  <DropdownMenuTrigger className={'absolute'}>*/}
+      {/*    <Avatar>*/}
+      {/*      <AvatarImage*/}
+      {/*        src={profile?.spotify_users?.profile_pic_url || undefined}*/}
+      {/*      />*/}
+      {/*    </Avatar>*/}
+      {/*  </DropdownMenuTrigger>*/}
+
+      {/*  <DropdownMenuContent className={'relative'}>*/}
+      {/*    <DropdownMenuItem>*/}
+      {/*      <Link href={`/profile`}>My Account</Link>*/}
+      {/*    </DropdownMenuItem>*/}
+
+      {/*    <DropdownMenuItem>*/}
+      {/*      <Link href={``}></Link>*/}
+      {/*    </DropdownMenuItem>*/}
+
+      {/*    <DropdownMenuSeparator />*/}
+
+      {/*    <DropdownMenuItem>*/}
+      {/*      <Link href={'/api/logout'} className={'text-red-500'}>*/}
+      {/*        Logout*/}
+      {/*      </Link>*/}
+      {/*    </DropdownMenuItem>*/}
+      {/*  </DropdownMenuContent>*/}
+      {/*</DropdownMenu>*/}
     </>
   );
 };

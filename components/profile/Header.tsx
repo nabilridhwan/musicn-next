@@ -1,8 +1,10 @@
+import {Box, Heading, Text} from '@chakra-ui/react';
+
 export default function Header({title, lead}: {title: string; lead: string}) {
   return (
-    <div className={'my-10'}>
-      <h1>{title}</h1>
-      <p>{lead}</p>
-    </div>
+    <Box my={10}>
+      <Heading>{title}</Heading>
+      <Text>{lead}</Text>
+    </Box>
   );
 }

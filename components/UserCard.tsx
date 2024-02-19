@@ -1,14 +1,6 @@
 'use client';
 import {useRouter} from 'next/navigation';
-import {Avatar, AvatarFallback, AvatarImage} from '@/components/ui/avatar';
-import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from '@/components/ui/card';
+import {Avatar, Box, Card, HStack, Text} from '@chakra-ui/react';
 
 interface UserCardProps {
   name: string;
@@ -57,27 +49,30 @@ const UserCard = ({
       onClick={() => {
         router.push(`/@${username}`);
       }}
-      className={'cursor-pointer'}>
-      <div className={'p-4'}>
-        <div className={'flex gap-2'}>
-          <Avatar>
-            <AvatarImage src={spotify_users?.profile_pic_url || undefined} />
-            <AvatarFallback className={'bg-red-800 font-bold'}>
-              {name.slice(0, 1).toUpperCase()}
-            </AvatarFallback>
-          </Avatar>
+      cursor={'pointer'}
+      p={2}
+      dropShadow={'none'}
+      shadow={'none'}
+      border={'1px solid'}
+      borderColor={'whiteAlpha.300'}>
+      <HStack>
+        <Avatar
+          src={spotify_users?.profile_pic_url || undefined}
+          name={name.slice(0, 1).toUpperCase()}
+        />
 
-          <div className={'gap-0'}>
-            <p className={'font-bold text-lg'}>{decodeURI(name)}</p>
-            <p className={'text-sm text-white/50'}>@{username}</p>
-          </div>
-        </div>
-        {/*<Text fontSize={'xs'}>{num_of_visitors} Visitors</Text>*/}
+        <Box>
+          <Text fontWeight={'bold'}>{decodeURI(name)}</Text>
+          <Text color={'whiteAlpha.500'} fontSize={'sm'}>
+            @{username}
+          </Text>
+        </Box>
+      </HStack>
+      {/*<Text fontSize={'xs'}>{num_of_visitors} Visitors</Text>*/}
 
-        {/*<Text color={"muted"}>*/}
-        {/*    @{username}*/}
-        {/*</Text>*/}
-      </div>
+      {/*<Text color={"muted"}>*/}
+      {/*    @{username}*/}
+      {/*</Text>*/}
     </Card>
   );
 };

@@ -1,11 +1,12 @@
 import getTopSongs from '@/api/getTopSongs';
 import SongCard from '@/components/SongCard';
+import {SimpleGrid} from '@chakra-ui/react';
 
 export default async function TopSongsSection({username}: {username: string}) {
   const topSongsData = await getTopSongs(username);
 
   return (
-    <div className={'grid grid-cols-2 lg:grid-cols-5 gap-2'}>
+    <SimpleGrid columns={[2, 2, 3]} gap={4}>
       {topSongsData?.map((song: any) => (
         <SongCard
           key={song.id}
@@ -16,6 +17,6 @@ export default async function TopSongsSection({username}: {username: string}) {
           spotifyLink={`https://open.spotify.com/track/${song.id}`}
         />
       ))}
-    </div>
+    </SimpleGrid>
   );
 }

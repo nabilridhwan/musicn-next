@@ -1,5 +1,5 @@
 import setup from '@/util/FirstUtilScriptRun';
-import prisma from '@/util/PrismaClient';
+import prisma from '@/prisma';
 
 // Serializers and etc
 setup();

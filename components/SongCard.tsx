@@ -36,16 +36,18 @@ const SongCard = ({
     // showSongPreview(song);
   };
   return (
-    <div className={'p-2 border rounded-lg'}>
-      <div className={'space-y-1'}>
-        <img className={'rounded-lg'} src={imageUrl} alt={'album-cover'} />
+    <Card border={'1px solid'} borderColor={'whiteAlpha.300'}>
+      <Stack>
+        <Image rounded={'lg'} src={imageUrl} alt={'album-cover'} />
 
-        <div className={'text-center my-2'}>
-          <p className={'font-bold'}>{name}</p>
-          <p>{artists}</p>
-        </div>
-      </div>
-    </div>
+        <Box mb={2} textAlign={'center'}>
+          <Text fontWeight={'bold'}>{name}</Text>
+          <Text color={'whiteAlpha.700'} fontSize={'sm'}>
+            {artists}
+          </Text>
+        </Box>
+      </Stack>
+    </Card>
   );
 };
 

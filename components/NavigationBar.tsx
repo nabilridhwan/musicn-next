@@ -1,21 +1,22 @@
 import Link from 'next/link';
 import useUserSignedIn from '@/hooks/useUserSignedIn';
-import {Button} from '@/components/ui/button';
 import {LoggedInNavigationItems} from '@/components/LoggedInNavigationItems';
 import {getMe} from '@/api/getMe';
+import {Button, Container, HStack, Spacer} from '@chakra-ui/react';
+import {Space} from 'lucide-react';
 
 const NavigationBar = async () => {
   const isUserSignedIn = useUserSignedIn();
   const profile = await getMe();
 
   return (
-    <div className={'container mx-auto my-4 flex'}>
-      <div className={'flex gap-2'}>
+    <Container maxW={'6xl'} px={10} py={3}>
+      <HStack>
         <Link href="/">Home</Link>
         <Link href="/users">Users</Link>
-      </div>
 
-      <div className={'flex gap-2'}>
+        <Spacer />
+
         {/*<SearchBar searchQuery={searchQuery} setSearchQuery={setSearchQuery} />*/}
 
         {isUserSignedIn ? (
@@ -23,12 +24,12 @@ const NavigationBar = async () => {
         ) : (
           <>
             <Link href={'/api/login'}>
-              <Button>Login/Signup</Button>
+              <Button>Login / Signup</Button>
             </Link>
           </>
         )}
-      </div>
-    </div>
+      </HStack>
+    </Container>
   );
 };
 

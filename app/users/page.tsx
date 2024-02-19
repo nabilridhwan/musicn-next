@@ -1,5 +1,6 @@
 import {getAllUsers} from '@/model/users';
 import UserCard from '@/components/UserCard';
+import {Container, SimpleGrid} from '@chakra-ui/react';
 
 type UsersProps = {
   users: any[];
@@ -12,8 +13,8 @@ const Users = async ({query = ''}: UsersProps) => {
   );
 
   return (
-    <div className={'container mx-auto'}>
-      <div className={'grid grid-cols-2 gap-2'}>
+    <Container my={10} maxW={'6xl'}>
+      <SimpleGrid columns={[1, 2, 3]} gap={2}>
         {users.map(user => {
           return (
             <UserCard
@@ -21,12 +22,12 @@ const Users = async ({query = ''}: UsersProps) => {
               name={user.name || ''}
               username={user.username}
               spotify_users={user.spotify_users ?? undefined}
-              num_of_visitors={0}
+              num_of_visitors={parseInt(user.num_of_visitors.toString())}
             />
           );
         })}
-      </div>
-    </div>
+      </SimpleGrid>
+    </Container>
   );
 };
 

@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import NavigationBar from '@/components/NavigationBar';
 import '../globals.css';
-import {Toaster} from '@/components/ui/toaster';
+import {ChakraProvider} from '@chakra-ui/provider';
+import Providers from '@/providers';
 
 export default function RootLayout({
   // Layouts must accept a children prop.
@@ -16,9 +17,10 @@ export default function RootLayout({
         <title>Musicn - Discover what other people are listening to</title>
       </Head>
       <body className={'container mx-auto'}>
-        <NavigationBar />
-        <main>{children}</main>
-        <Toaster />
+        <Providers>
+          <NavigationBar />
+          <main>{children}</main>
+        </Providers>
       </body>
     </html>
   );
