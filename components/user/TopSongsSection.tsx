@@ -1,9 +1,18 @@
 import getTopSongs from '@/api/getTopSongs';
 import SongCard from '@/components/user/SongCard';
-import {SimpleGrid} from '@chakra-ui/react';
+import {Box, SimpleGrid} from '@chakra-ui/react';
 
 export default async function TopSongsSection({username}: {username: string}) {
   const topSongsData = await getTopSongs(username);
+
+  if (!topSongsData) {
+    return (
+      <Box textAlign={'center'}>
+        @{username} has no top songs (or there was an error trying to retrieve
+        their top songs)
+      </Box>
+    );
+  }
 
   return (
     <SimpleGrid columns={[2, 2, 3]} gap={4}>
