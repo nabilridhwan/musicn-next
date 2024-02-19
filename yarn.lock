@@ -2547,9 +2547,9 @@ arch@^2.2.0:
   integrity sha512-Of/R0wqp83cgHozfIYLbBMnej79U/SVGOOyuB3VVFv1NRM/PSFMK12x9KVtiYzJqmnU5WR2qp0Z5rHb7sWGnFQ==
 
 arctic@^1.1.6:
-  version "1.1.6"
-  resolved "https://registry.yarnpkg.com/arctic/-/arctic-1.1.6.tgz#2a8346757729fe3bdf04aaccb8b8d6a2dbbab75b"
-  integrity sha512-tE24DLtMn0s7BBqH3D8f8kWSqrg2AFYS3FVAvnj8N9h1Pu/dYmhyAy7WmW1/rrpLY4yP8q3D5s+PqfF3XybI+A==
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/arctic/-/arctic-1.2.0.tgz#51696b61a6df46277c08d330c6131ee6b2705cef"
+  integrity sha512-fzJQgTGrjPtRU69Oz0091w1cGdfAKlnEoawaKuTJ52DOnpyQM2N18i1aeyvsvJKqb9P/PbPPfsyXgOEQS9wMTQ==
   dependencies:
     auri "1.0.2"
     oslo "1.0.1"

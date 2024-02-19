@@ -1,9 +1,10 @@
 import {cookies} from 'next/headers';
 import {lucia} from '@/util/auth';
+import {NextApiRequest, NextApiResponse} from 'next';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 
-export async function GET(request: Request): Promise<Response> {
+export async function GET(request: NextApiRequest, response: NextApiResponse) {
   try {
     const cookieStore = cookies();
 
@@ -12,7 +13,7 @@ export async function GET(request: Request): Promise<Response> {
     console.log(sessionId);
 
     if (!sessionId) {
-      return Response.json({
+      return response.json({
         message: 'Invalid request. Session not available in cookie!',
       });
     }
@@ -20,7 +21,7 @@ export async function GET(request: Request): Promise<Response> {
     const {session} = await lucia.validateSession(sessionId);
 
     if (!session) {
-      return Response.json({
+      return response.json({
         message: 'Invalid session',
         sessionId,
       });
@@ -28,12 +29,12 @@ export async function GET(request: Request): Promise<Response> {
 
     const sessions = await lucia.getUserSessions(session.userId);
 
-    return Response.json({
+    return response.json({
       session,
       sessions,
     });
-  } catch (e) {
+  } catch (e: any) {
     console.error(e);
-    return Response.error(e.message);
+    return response.json({error: e.message});
   }
 }
