@@ -15,7 +15,6 @@ export interface Data {
   created_at: string;
   email: string;
   name: string;
-  spotify_linked: boolean;
   activated: boolean;
   spotify_users?: SpotifyUsers;
   preferences?: Preferences;
