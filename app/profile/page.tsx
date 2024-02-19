@@ -42,7 +42,7 @@ const ProfilePage = () => {
     top: boolean;
     current: boolean;
     recent: boolean;
-  } | null>({
+  }>({
     account: false,
     current: false,
     recent: false,

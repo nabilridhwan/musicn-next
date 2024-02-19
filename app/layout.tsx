@@ -17,6 +17,7 @@ export default function RootLayout({
       </Head>
       <body className={'container mx-auto'}>
         <Providers>
+          {/* @ts-expect-error Server Component */}
           <NavigationBar />
           <main>{children}</main>
         </Providers>
