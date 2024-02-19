@@ -50,13 +50,15 @@ const UserCard = ({
         router.push(`/@${username}`);
       }}
       cursor={'pointer'}
-      p={2}
+      p={4}
       dropShadow={'none'}
       shadow={'none'}
       border={'1px solid'}
-      borderColor={'whiteAlpha.300'}>
+      borderColor={'whiteAlpha.300'}
+      rounded={'2xl'}>
       <HStack>
         <Avatar
+          size={'lg'}
           src={spotify_users?.profile_pic_url || undefined}
           name={name.slice(0, 1).toUpperCase()}
         />

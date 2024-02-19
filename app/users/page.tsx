@@ -10,7 +10,7 @@ const Users = async () => {
 
   return (
     <Container my={10} maxW={'6xl'}>
-      <SimpleGrid columns={[1, 2, 3]} gap={2}>
+      <SimpleGrid columns={[1, 2]} gap={2}>
         {users.map(user => {
           return (
             <UserCard
