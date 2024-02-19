@@ -1,7 +1,7 @@
 import {generateState} from 'arctic';
 import {cookies} from 'next/headers';
 import {spotify} from '@/util/auth';
-import {NextRequest} from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 
@@ -32,5 +32,5 @@ const generateLoginRoute = async () => {
 
 export async function GET(request: NextRequest): Promise<Response> {
   const route = await generateLoginRoute();
-  return Response.redirect(route);
+  return NextResponse.redirect(route);
 }

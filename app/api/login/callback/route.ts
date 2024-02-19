@@ -3,8 +3,7 @@ import SpotifyAPI from '@/class/Spotify';
 import {cookies} from 'next/headers';
 import {lucia, spotify} from '@/util/auth';
 import {generateId} from 'lucia';
-import {NextApiResponse} from 'next';
-import {NextRequest} from 'next/server';
+import {NextRequest, NextResponse} from 'next/server';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 
@@ -14,10 +13,9 @@ export const dynamic = 'force-dynamic'; // defaults to auto
  * Otherwise, if it is their first time, an account will be automatically made using their Spotify credentials first. (To avoid conflict, the Musicn's username will be the same as their Spotify user id)
  * And then, preferences will be true for everything except for account. This is so that we can bring the user to the onboarding to set their display name, username, preferences and, etc.
  * @param request
- * @param response
  * @constructor
  */
-export async function GET(request: NextRequest, response: NextApiResponse) {
+export async function GET(request: NextRequest) {
   const cookieStore = cookies();
   //     Get searchParams from request
   const searchParams = new URL(request.url || '').searchParams;
@@ -117,21 +115,21 @@ export async function GET(request: NextRequest, response: NextApiResponse) {
     );
 
     // TODO: Change this to redirect to the app
-    return Response.redirect('http://localhost:3000');
+    return NextResponse.redirect('http://localhost:3000');
   } catch (e) {
     console.error(e);
 
     if (e instanceof OAuth2RequestError) {
       const {message, description, request} = e;
 
-      return response.json({
+      return NextResponse.json({
         message,
         description,
         request,
       });
     }
 
-    return response.json({
+    return NextResponse.json({
       message: 'Unknown error',
       error: e,
     });
