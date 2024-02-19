@@ -33,6 +33,15 @@ export async function generateMetadata(
   return {
     title: `@${username} – Musicn`,
     description: description,
+    openGraph: {
+      images: [
+        {
+          url: `https://musicnapp.com/api/og/${username}`,
+          width: 800,
+          height: 400,
+        },
+      ],
+    },
   };
 }
 
