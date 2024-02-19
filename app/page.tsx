@@ -1,3 +1,5 @@
+'use client';
+
 import Link from 'next/link';
 import {IoArrowForward} from 'react-icons/io5';
 import Header from '../public/header.svg';
