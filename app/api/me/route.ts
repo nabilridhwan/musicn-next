@@ -1,14 +1,15 @@
 import {getMe} from '@/api/getMe';
 import {getSessionInformation} from '@/api/getSessionInformation';
-import {NextApiRequest, NextApiResponse} from 'next';
+import {NextApiResponse} from 'next';
+import {NextRequest} from 'next/server';
 
 export const dynamic = 'auto'; // defaults to auto
 
-export async function GET(request: NextApiRequest, response: NextApiResponse) {
+export async function GET(request: NextRequest, response: NextApiResponse) {
   return response.json(await getMe());
 }
 
-export async function PUT(request: Request, response: NextApiResponse) {
+export async function PUT(request: NextRequest, response: NextApiResponse) {
   //   TODO: Validate body to have username and name
   const body = await request.json();
 

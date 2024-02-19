@@ -1,13 +1,15 @@
 import {getMe} from '@/api/getMe';
 import {getSessionInformation} from '@/api/getSessionInformation';
+import {NextRequest} from 'next/server';
+import {NextApiResponse} from 'next';
 
 export const dynamic = 'auto'; // defaults to auto
 
-export async function GET(request: Request): Promise<Response> {
-  return Response.json(await getMe());
+export async function GET(request: NextRequest, response: NextApiResponse) {
+  return response.json(await getMe());
 }
 
-export async function PUT(request: Request) {
+export async function PUT(request: NextRequest, response: NextApiResponse) {
   //   TODO: Validate body to have username and name
   const body = await request.json();
 
@@ -16,7 +18,7 @@ export async function PUT(request: Request) {
   const sessionInfo = await getSessionInformation();
 
   if (!sessionInfo) {
-    throw Response.json('Session not found', {status: 401});
+    throw response.json({error: 'Session not found', status: 401});
   }
 
   //   Write to database
@@ -32,7 +34,7 @@ export async function PUT(request: Request) {
     },
   });
 
-  return Response.json({
+  return response.json({
     message: 'Success',
     username: 'new username',
     name: 'new name',

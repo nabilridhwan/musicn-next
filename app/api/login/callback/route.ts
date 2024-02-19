@@ -3,7 +3,8 @@ import SpotifyAPI from '@/class/Spotify';
 import {cookies} from 'next/headers';
 import {lucia, spotify} from '@/util/auth';
 import {generateId} from 'lucia';
-import {NextApiRequest, NextApiResponse} from 'next';
+import {NextApiResponse} from 'next';
+import {NextRequest} from 'next/server';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 
@@ -16,7 +17,7 @@ export const dynamic = 'force-dynamic'; // defaults to auto
  * @param response
  * @constructor
  */
-export async function GET(request: NextApiRequest, response: NextApiResponse) {
+export async function GET(request: NextRequest, response: NextApiResponse) {
   const cookieStore = cookies();
   //     Get searchParams from request
   const searchParams = new URL(request.url || '').searchParams;

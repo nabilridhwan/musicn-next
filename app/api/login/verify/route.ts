@@ -1,10 +1,11 @@
 import {cookies} from 'next/headers';
 import {lucia} from '@/util/auth';
-import {NextApiRequest, NextApiResponse} from 'next';
+import {NextApiResponse} from 'next';
+import {NextRequest} from 'next/server';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 
-export async function GET(request: NextApiRequest, response: NextApiResponse) {
+export async function GET(request: NextRequest, response: NextApiResponse) {
   try {
     const cookieStore = cookies();
 
