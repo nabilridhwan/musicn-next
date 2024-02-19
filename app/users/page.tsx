@@ -2,13 +2,9 @@ import {getAllUsers} from '@/model/users';
 import UserCard from '@/components/UserCard';
 import {Container, SimpleGrid} from '@chakra-ui/react';
 
-type UsersProps = {
-  users: any[];
-  query?: string;
-};
-
-const Users = async ({query = ''}: UsersProps) => {
-  const users = (await getAllUsers({query})).filter(
+const Users = async () => {
+  //   TODO: Set the query properly
+  const users = (await getAllUsers({query: ''})).filter(
     user => !!user.spotify_users,
   );
 
