@@ -1,7 +1,8 @@
-import {useContext} from 'react';
+'use client';
 
-import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
+// import {MusicPreviewDialogContext} from '../../context/MusicPreviewDialogProvider';
 import {Box, Card, HStack, Image, Text} from '@chakra-ui/react';
+import {redirect} from 'next/navigation';
 
 type MusicPlayerProps = {
   name: string;
@@ -18,22 +19,23 @@ export const CurrentlyPlayingSongCard = ({
   imageUrl,
   preview,
 }: MusicPlayerProps) => {
-  const {showSongPreview, hideSongPreview, songDetails, setVolume} = useContext(
-    MusicPreviewDialogContext,
-  );
+  // const {showSongPreview, hideSongPreview, songDetails, setVolume} = useContext(
+  //   MusicPreviewDialogContext,
+  // );
 
   const handleSongClick = () => {
-    const song: MusicPreview = {
-      title: name,
-      artist: artists,
-      image: imageUrl,
-      preview,
-      url: spotifyLink,
-    };
+    redirect(spotifyLink);
+    // const song: MusicPreview = {
+    //   title: name,
+    //   artist: artists,
+    //   image: imageUrl,
+    //   preview,
+    //   url: spotifyLink,
+    // };
+    //
+    // console.log(preview);
 
-    console.log(preview);
-
-    showSongPreview(song);
+    // showSongPreview(song);
   };
 
   return (
@@ -41,9 +43,10 @@ export const CurrentlyPlayingSongCard = ({
       onClick={handleSongClick}
       cursor={'pointer'}
       className="flex items-center gap-3 border border-white/20 w-fit rounded-lg p-2"
-      rounded={5}
+      rounded={'2xl'}
       minW={300}
-      p={10}
+      p={5}
+      py={3}
       justifyContent={'center'}
       alignItems={'center'}
       sx={{
@@ -51,17 +54,17 @@ export const CurrentlyPlayingSongCard = ({
         backgroundPosition: 'center',
       }}>
       <Box
-        bg={'blackAlpha.700'}
+        bg={'blackAlpha.800'}
         w={'full'}
         h={'full'}
         pos={'absolute'}
         top={0}
         left={0}
-        rounded={5}
+        rounded={'2xl'}
       />
 
       <HStack zIndex={10} gap={3}>
-        <Image src={imageUrl} alt={'album-cover'} height={20} />
+        <Image rounded={'2xl'} src={imageUrl} alt={'album-cover'} height={20} />
 
         <section>
           <Text as={'b'} noOfLines={2}>
@@ -73,9 +76,9 @@ export const CurrentlyPlayingSongCard = ({
           </Text>
         </section>
 
-        <Box mx={2}>
-          <p>Loading</p>
-        </Box>
+        {/*<Box mx={2}>*/}
+        {/*  <p>Loading</p>*/}
+        {/*</Box>*/}
       </HStack>
     </Card>
   );
