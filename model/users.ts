@@ -86,35 +86,6 @@ export async function getAllUsers({query = ''}: {query?: string}) {
   return data;
 }
 
-export async function getUserByEmailOrUsername(input: string) {
-  const data = await prisma.app_users.findMany({
-    where: {
-      OR: [
-        {
-          email: input,
-        },
-        {
-          username: input,
-        },
-      ],
-    },
-    include: {
-      spotify_users: true,
-      preferences: {
-        select: {
-          account: true,
-          top: true,
-          recent: true,
-          current: true,
-          updated_at: true,
-        },
-      },
-    },
-  });
-
-  return JSON.parse(JSON.stringify(data)) || null;
-}
-
 export async function getUserByUsername(input: string) {
   const data = await prisma.app_users.findFirst({
     where: {
@@ -137,9 +108,11 @@ export async function getUserByUsername(input: string) {
   return data;
 }
 
+/**
+ * The public version of getUserByUsername which doesn't include preferences and spotify users (which includes refresh tokens)
+ * @param input
+ */
 export async function getUserByUsername_public(input: string) {
-  console.log(input);
-
   const data = await prisma.app_users.findFirst({
     select: {
       name: true,
@@ -177,154 +150,4 @@ export async function getUserById(user_id: any) {
   });
 
   return data || null;
-}
-
-export async function updateProfilePictureUrl(
-  user_id: any,
-  profile_pic_url: string,
-) {
-  const data = await prisma.app_users.update({
-    where: {
-      user_id: user_id,
-    },
-    data: {
-      spotify_users: {
-        update: {
-          profile_pic_url: profile_pic_url,
-        },
-      },
-    },
-  });
-
-  return JSON.parse(JSON.stringify(data)) || null;
-}
-
-export async function updateOnlyUser(user_id: any, updatedData: any) {
-  const data = await prisma.app_users.update({
-    where: {
-      user_id: user_id,
-    },
-    data: updatedData,
-  });
-
-  return JSON.parse(JSON.stringify(data)) || null;
-}
-
-type AddNewUserProps = {
-  username: string;
-  email: string;
-  name: string;
-  password: string;
-};
-
-export async function addNewUser({
-  username,
-  email,
-  name,
-  password,
-}: AddNewUserProps) {
-  const data = await prisma.app_users.create({
-    data: {
-      username: username,
-      email: email,
-      name: name,
-      password: password,
-      preferences: {
-        create: {
-          account: true,
-          top: true,
-          recent: true,
-          current: true,
-        },
-      },
-    },
-    select: {
-      user_id: true,
-    },
-  });
-
-  return JSON.parse(JSON.stringify(data)) || null;
-}
-
-type LinkSpotifyUserProps = {
-  email: string;
-  name: string;
-  spotify_userid: string;
-  profile_pic_url: string;
-  refresh_token: string;
-  country: string;
-  user_id: any;
-};
-
-export async function deleteSpotifyUserByUserID(user_id: any) {
-  console.log('Deleting spotify user by user id');
-  const data = await prisma.spotify_users.deleteMany({
-    where: {
-      user_id: user_id,
-    },
-  });
-
-  return JSON.parse(JSON.stringify(data)) || null;
-}
-
-export async function linkSpotifyUser({
-  email,
-  name,
-  spotify_userid,
-  profile_pic_url,
-  refresh_token,
-  country,
-  user_id,
-}: LinkSpotifyUserProps) {
-  // Update spotify user first
-
-  // Find existing spotify user
-  const existingSpotifyUser = await prisma.spotify_users.findFirst({
-    where: {
-      OR: [
-        {
-          user_id: user_id,
-        },
-        {
-          email: email,
-        },
-      ],
-    },
-  });
-
-  // If no spotify user
-  if (!existingSpotifyUser) {
-    // Create new spotify user
-    console.log(`====CREATING NEW SPOTIFY USER TO USER ID ${user_id}====`);
-    return await prisma.spotify_users.create({
-      data: {
-        user_id,
-        email,
-        name,
-        spotify_userid,
-        profile_pic_url,
-        refresh_token,
-        country,
-      },
-    });
-  } else {
-    // If existing one exists
-    // Update existing spotify user
-    console.log(`====UPDATING NEW SPOTIFY USER TO USER ID ${user_id}====`);
-    return await prisma.spotify_users.update({
-      where: {
-        id: existingSpotifyUser.id,
-      },
-      data: {
-        user_id,
-        email,
-        name,
-        spotify_userid,
-        profile_pic_url,
-        refresh_token,
-        country,
-        updated_at: new Date(),
-      },
-    });
-  }
 }
