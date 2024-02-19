@@ -7,6 +7,7 @@ import {Container, Stack} from '@chakra-ui/react';
 import {getUserByUsername_public} from '@/model/users';
 import {redirect} from 'next/navigation';
 import {CurrentlyPlayingSongCard} from '@/components/user/CurrentlyPlayingSongCard';
+import getTopSongs from '@/api/getTopSongs';
 
 type PageProps = {
   params: {username: string};
@@ -16,9 +17,22 @@ export async function generateMetadata(
   {params}: PageProps,
   parent: ResolvingMetadata,
 ): Promise<Metadata> {
+  const username = decodeURI(params.username.split('%40')[1]);
+
+  const topSongsData = await getTopSongs(username);
+
+  let description = `Check out my Musicn profile to see my top songs!`;
+
+  if (topSongsData) {
+    description = `Check out my Musicn profile to see my top songs: ${topSongsData
+      .slice(0, 3)
+      .map((song: any) => song.name)
+      .join(', ')}`;
+  }
+
   return {
-    title: params.username,
-    description: params.username,
+    title: `@${username} – Musicn`,
+    description: description,
   };
 }
 
