@@ -1,5 +1,6 @@
 'use client';
 import {Box, Card, Image, Stack, Text} from '@chakra-ui/react';
+import {redirect} from 'next/navigation';
 
 type SongCardProps = {
   name: string;
@@ -20,20 +21,26 @@ const SongCard = ({
   // );
 
   const handleSongClick = () => {
-    const song: MusicPreview = {
-      title: name,
-      artist: artists,
-      image: imageUrl,
-      preview,
-      url: spotifyLink,
-    };
-
-    console.log(preview);
+    redirect(spotifyLink);
+    // const song: MusicPreview = {
+    //   title: name,
+    //   artist: artists,
+    //   image: imageUrl,
+    //   preview,
+    //   url: spotifyLink,
+    // };
+    //
+    // console.log(preview);
 
     // showSongPreview(song);
   };
+
   return (
-    <Card border={'1px solid'} borderColor={'whiteAlpha.300'}>
+    <Card
+      border={'1px solid'}
+      borderColor={'whiteAlpha.300'}
+      cursor={'pointer'}
+      onClick={handleSongClick}>
       <Stack>
         <Image rounded={'lg'} src={imageUrl} alt={'album-cover'} />
 
