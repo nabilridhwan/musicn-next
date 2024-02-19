@@ -15,7 +15,7 @@ export default function RootLayout({
       <Head>
         <title>Musicn - Discover what other people are listening to</title>
       </Head>
-      <body className={'container mx-auto'}>
+      <body>
         <Providers>
           {/* @ts-expect-error Server Component */}
           <NavigationBar />
