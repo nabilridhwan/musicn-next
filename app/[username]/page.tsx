@@ -1,5 +1,4 @@
 import getCurrentSong from '@/api/getCurrentSong';
-import getRecentSongs from '@/api/getRecentSongs';
 import UserHeader from '@/components/user/UserHeader';
 import type {Metadata, ResolvingMetadata} from 'next';
 import {Suspense} from 'react';
@@ -46,7 +45,7 @@ const UserPage = async ({params: {username: _username}}: PageProps) => {
 
   const user = await getUserByUsername_public(username);
 
-  const recentSongsData = await getRecentSongs(username);
+  // const recentSongsData = await getRecentSongs(username);
   const currentSongsData = await getCurrentSong(username);
 
   if (!user?.spotify_users) {
