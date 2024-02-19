@@ -1,8 +1,5 @@
 'use client';
-import {motion} from 'framer-motion';
-import {useContext} from 'react';
-import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
-import {Box, Card, Center, Image, Stack, Text} from '@chakra-ui/react';
+import {Box, Card, Image, Stack, Text} from '@chakra-ui/react';
 
 type SongCardProps = {
   name: string;

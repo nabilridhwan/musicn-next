@@ -1,6 +1,5 @@
 import {FaSpotify} from 'react-icons/fa';
 import Link from 'next/link';
-import {IoEyeOutline} from 'react-icons/io5';
 import {getUserByUsername_public} from '@/model/users';
 import {Avatar, Button, Card, HStack, Stack, Text} from '@chakra-ui/react';
 

@@ -7,7 +7,6 @@ import Header from '@/components/profile/Header';
 import {getMe} from '@/api/getMe';
 import {useMemo, useState} from 'react';
 import axios from 'axios';
-import {redirect} from 'next/navigation';
 import {
   Alert,
   AlertDescription,
@@ -27,9 +26,7 @@ import {
   Switch,
   useToast,
 } from '@chakra-ui/react';
-import {getSessionInformation} from '@/api/getSessionInformation';
 import {useLayoutEffect} from '@radix-ui/react-use-layout-effect';
-import {Heading3} from 'lucide-react';
 
 type User = Awaited<ReturnType<typeof getMe>>;
 
@@ -40,9 +37,12 @@ const initialValues = {
 
 const ProfilePage = () => {
   const [user, setUser] = useState<User | null>(null);
-  const [userPreferences, setUserPreferences] = useState<
-    User['preferences'] | null
-  >({
+  const [userPreferences, setUserPreferences] = useState<{
+    account: boolean;
+    top: boolean;
+    current: boolean;
+    recent: boolean;
+  } | null>({
     account: false,
     current: false,
     recent: false,

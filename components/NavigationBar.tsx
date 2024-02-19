@@ -3,7 +3,6 @@ import useUserSignedIn from '@/hooks/useUserSignedIn';
 import {LoggedInNavigationItems} from '@/components/LoggedInNavigationItems';
 import {getMe} from '@/api/getMe';
 import {Button, Container, HStack, Spacer} from '@chakra-ui/react';
-import {Space} from 'lucide-react';
 
 const NavigationBar = async () => {
   const isUserSignedIn = useUserSignedIn();

@@ -9,9 +9,8 @@ import {
   MenuItem,
   MenuList,
 } from '@chakra-ui/menu';
-import {Button, Avatar, Image, Text, HStack, Icon} from '@chakra-ui/react';
+import {Avatar, Button, HStack, Icon, Text} from '@chakra-ui/react';
 import {ChevronDownIcon} from 'lucide-react';
-import {IoLogoUsd} from 'react-icons/io';
 import {IoCog, IoPerson} from 'react-icons/io5';
 
 interface LoggedInNavigationItemsProps {

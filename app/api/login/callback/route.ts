@@ -1,10 +1,8 @@
-import {generateState, OAuth2RequestError, Spotify} from 'arctic';
+import {OAuth2RequestError} from 'arctic';
 import SpotifyAPI from '@/class/Spotify';
 import {cookies} from 'next/headers';
 import {lucia, spotify} from '@/util/auth';
-import {generateRandomString} from 'oslo/dist/crypto';
 import {generateId} from 'lucia';
-import {permanentRedirect} from 'next/navigation';
 
 export const dynamic = 'force-dynamic'; // defaults to auto
 

@@ -1,7 +1,6 @@
 import Head from 'next/head';
 import NavigationBar from '@/components/NavigationBar';
 import '../globals.css';
-import {ChakraProvider} from '@chakra-ui/provider';
 import Providers from '@/providers';
 
 export default function RootLayout({

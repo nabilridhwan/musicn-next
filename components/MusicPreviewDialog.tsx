@@ -2,11 +2,10 @@ import {AnimatePresence, motion} from 'framer-motion';
 import Link from 'next/link';
 import React, {useContext, useEffect} from 'react';
 import {FaSpotify} from 'react-icons/fa';
-import {IoClose, IoPause, IoPlay, IoStop} from 'react-icons/io5';
+import {IoClose, IoPause, IoPlay} from 'react-icons/io5';
 import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
 import {
   Box,
-  Button,
   Card,
   Heading,
   HStack,

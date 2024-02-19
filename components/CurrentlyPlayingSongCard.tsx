@@ -1,8 +1,7 @@
-import {motion} from 'framer-motion';
 import {useContext} from 'react';
 
 import {MusicPreviewDialogContext} from '../context/MusicPreviewDialogProvider';
-import {Box, Card, HStack, Icon, Image, Text} from '@chakra-ui/react';
+import {Box, Card, HStack, Image, Text} from '@chakra-ui/react';
 
 type MusicPlayerProps = {
   name: string;

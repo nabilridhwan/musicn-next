@@ -1,10 +1,6 @@
-import RecentlyPlayedSongCard from '@/components/RecentlyPlayedSongCard';
-import SongCard from '@/components/SongCard';
 import getCurrentSong from '@/api/getCurrentSong';
 import getRecentSongs from '@/api/getRecentSongs';
-import getTopSongs from '@/api/getTopSongs';
 import UserHeader from '@/components/user/UserHeader';
-import {getUserByUsername_public} from '@/model/users';
 import type {Metadata, ResolvingMetadata} from 'next';
 import {Suspense} from 'react';
 import TopSongsSection from '@/components/user/TopSongsSection';

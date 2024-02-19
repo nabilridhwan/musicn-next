@@ -1,5 +1,5 @@
 import getTopSongs from '@/api/getTopSongs';
-import SongCard from '@/components/SongCard';
+import SongCard from '@/components/user/SongCard';
 import {SimpleGrid} from '@chakra-ui/react';
 
 export default async function TopSongsSection({username}: {username: string}) {
